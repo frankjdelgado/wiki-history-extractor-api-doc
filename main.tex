@@ -1,13 +1,48 @@
 \documentclass[12pt,a4paper]{article}
+\usepackage[spanish=nohyphenation]{hyphsubst}
+\usepackage[spanish]{babel}
 \usepackage{selinput}
+\usepackage{sectsty}
+\usepackage{tikz}
+\usepackage{blindtext}
+\allsectionsfont{\mdseries\scshape}
 \SelectInputMappings{%
   aacute={á},
-  ntilde={ñ},
-  Euro={€}
+  ntilde={ñ}
 }
+\addto\captionsspanish{
+  \renewcommand{\listfigurename}
+    {índice de figuras}
+   \renewcommand{\listtablename}
+    {índice de tablas}
+}
+
 \begin{document}
 
-	% Cover
-	\input{cover.tex}
+% Justify content withoyt hyphens
+\sloppy
 
+% Cover
+\include{cover}
+
+% TOCs
+\include{tocs}
+
+\setlength{\parskip}{12pt}
+
+% Abstract
+\include{abstract}
+
+% Intro
+\include{intro}
+
+% Include all files at /chapters
+\foreach \c in {1,...,3}{
+	\IfFileExists{chapters/\c}{
+		\include{chapters/\c}
+	}
+}
+
+% references
+\include{bibliography}
 \end{document}
