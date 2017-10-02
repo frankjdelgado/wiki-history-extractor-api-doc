@@ -5,6 +5,7 @@
 \usepackage{sectsty}
 \usepackage{tikz}
 \usepackage{blindtext}
+\usepackage{csquotes}
 \allsectionsfont{\mdseries\scshape}
 \SelectInputMappings{%
   aacute={á},
@@ -16,6 +17,11 @@
    \renewcommand{\listtablename}
     {índice de tablas}
 }
+\usepackage[
+backend=biber,
+sorting=ynt
+]{biblatex}
+\addbibresource{bibliography.bib}
 
 \begin{document}
 
@@ -44,6 +50,8 @@
 }
 
 % references
-\include{bibliography}
+%\include{bibliography}
+\printbibliography
+
 
 \end{document}
