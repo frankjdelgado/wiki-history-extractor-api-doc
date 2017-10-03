@@ -2,94 +2,42 @@
 
 \subsection{Planteamiento Del Problema}
 
-Un “wiki” es una aplicación web de manejo de contenidos, que permite la
-colaboración de múltiples personas para la edición, adición o eliminación de su
-estructura y contenido. A su vez, un wiki está compuesto por artículos, los cuales son
-una página con contenido enciclopédico que hacen referencia a un tema en particular y
-se encuentran relacionados entre ellos a través de hipervínculos (hyperlinks) [48]. Los
-usuarios pueden crear nuevos artículos y editar los existentes. Para poder mantener un
-registro de cambios adecuado de los artículos, los mismos disponen de un historial de
-revisiones, el cual consiste en un listado con: texto, fecha y hora de cada versión del
-artículo wiki que se genera tras su modificación, el usuario que realizó dichas
-actualizaciones y otros valores relevantes [49].
-La aplicación Wikimetrics, tiene como objetivo la extracción de estos historiales de
-revisión para su almacenamiento y usar sus datos para el cálculo de diversas métricas.
-Para obtener estos historiales, Wikimetrics hace uso de técnicas de extracción web (web
-scraping) sobre los artículos wiki y, a través de un análisis sintáctico, almacena los datos
-obtenidos en una base de datos no relacional [2].
+Un \emph{wiki} es una página web que permite la colaboración de múltiples usuarios para 
+la creación y modificación de contenido que hacen referencia a un tema en particular y
+que pueden estar relacionados entre ellos a través de hipervínculos.
 
-La extracción de artículos wiki a través de web scraping puede implicar una carga
-pesada de cómputo, no sólo por la cantidad entradas que un solo artículo pueda tener,
-sino por el número de documentos que un repositorio wiki alberga. En aplicaciones
-como Wikimetrics, que corresponden a una solución de cómputo y almacenamiento
-centralizado, existen diversas limitantes que se presentan en la solución. Una de ellas es
+Un wiki es ejecutado por el medio del uso software wiki que permite a los usuarios la edición
+de estás paginas. El contenido de las páginas, también llamados artículos, es almacenado en conjunto
+con su historial de cambios en una base de datos. De esta forma se facilita recuperar el estado
+anterior de cualquier artículo y visualizar diversos datos de una actualización tal como el
+nombre del autor o la fecha de edición.
+
+Hoy en día el proyecto enciclopedia en línea Wikipedia es una de las paginas web basadas en wiki
+mas populares, albergando miles de colecciones de artículos wiki en múltiples idiomas \cite{3}.
+
+La aplicación Wiki-Metrics-UCV tiene como objetivo la extracción de estos historiales de
+de los artículos wiki para su almacenamiento y posteriormente usar sus datos para 
+el cálculo de diversas métricas. Wiki-Metrics-UCV hace uso de técnicas de extracción web (web
+scraping) sobre los artículos wiki y, a través de un análisis sintáctico, almacena los datos
+obtenidos en una base de datos no relacional \cite{4}.
+
+El proceso de extracción de historiales de artículos wiki puede llegar a tomar
+una cantidad considerable de tiempo, no sólo por la cantidad entradas,
+sino por el número de documentos que un repositorio wiki alberga. 
+
+En aplicaciones como Wiki-Metrics-UCV, que corresponden a una solución de cómputo y almacenamiento
+centralizado, existen diversas limitaciones que se presentan en la solución. Entre ellas es
 que el proceso se realiza de manera secuencial, lo cual obliga a la aplicación a terminar
 de procesar un artículo antes de pasar al siguiente, y como consecuencia, el tiempo
 empleado para procesar grandes volúmenes de historiales no se encuentra dentro de un
-rango aceptable para la cantidad de artículos previstos a procesar; en este caso, esta
-limitante viene ligada a la capacidad de procesamiento del equipo (hardware). Otra
-limitante es que, debido a que la cantidad de cómputo necesario es considerable, se usa
-un tiempo mucho mayor para la realización del proceso de extracción web y análisis
-sintáctico de los artículos, que para realizar las peticiones HTTP. Sin embargo, estas
-limitantes pueden ser solventadas ofreciendo el desarrollo de una alternativa de
-escalabilidad horizontal para distribuir la carga de tareas.
+intervalo aceptable para la cantidad de revisiones previstas a procesar.
 
-La adaptación de Wikimetrics a un sistema distribuido disminuye las limitantes antes
-mencionadas. Con la presencia de varios nodos en el sistema, es posible procesar
-diversos artículos de forma paralela, lo que incrementa el poder de procesamiento y
-disminuye el cuello de botella encontrado en la solución secuencial. Este cuello de
-botella es provocado por la diferencia entre el tiempo de extracción web y la petición29
-HTTP, ya que, por ejemplo, mientras un nodo realiza las solicitudes HTTP y obtiene el
-código HTML resultante, los demás nodos pueden estar ejecutando extracción web y
-haciendo el análisis sintáctico de historiales que ya fueron visitados y asignados a cada
-nodo. Sin embargo, el escalamiento horizontal de Wikimetrics trae consigo problemas
-adicionales e intrínsecos de todo sistema distribuido, por lo tanto es necesario que esta
-adaptación provea características de escalabilidad, alta disponibilidad, desempeño,
-confiabilidad, consistencia y de tolerancia a fallos para el correcto funcionamiento de la
-aplicación [50]. Lamentablemente estas propiedades pueden entrar en conflicto entre
-sí, por lo tanto es necesario identificar y elegir qué características deben ser acopladas a
-esta nueva solución. Esta elección se basará, tal como lo explica el teorema CAP [51], en
-garantizar de dos de tres propiedades: disponibilidad, consistencia y tolerancia a fallos
-en la red.
+Adicionalmente, los repositorios wiki tales como Wikipedia limitan la cantidad de peticiones HTTP que se 
+realizan sobre sus servicios. Por lo tanto, existe la posibilidad de que
+un sistema distribuido lleve a cabo una cantidad peticiones concurrentes que puedan
+ser vistas como un ataques de denegación de servicio (DDoS).
 
-Lamentablemente, el sacrificio de una propiedad por la elección de otra conlleva a
-problemas en el sistema que no podrán ser tratados como: problemas de red que
-pueden detener el funcionamiento del sistema, lectura no consistente de datos y por
-último, clientes que no siempre podrán ejecutar operaciones.
-En cualquier sistema distribuido los fallos en la red siempre estarán presentes y son
-un problema recurrente. La tolerancia a estas fallas, también denominadas tolerancia a
-particiones, es una de las propiedades que debe garantizarse de forma obligatoria dado
-que eventualmente un sistema presentará suficiente fallas para afectar su rendimiento
-[52]. En Wikimetrics, estos fallos pueden presentarse de la siguiente manera:
-
-\begin{itemize}
-\item Fallas de red. Uno o más nodos no fueron capaces de hacer el pase de mensajes
-necesario para indicar las actualizaciones sobre las tareas asignadas al nodo.
-
-\item Fallas de componente. Un nodo se detiene inesperadamente y no responde a las
-solicitudes recibidas, ya sea para el procesamiento de artículos wiki o para
-operaciones en la base de datos. Este tipo de fallas puede causar graves
-problemas de sincronización en la base de datos que deben ser tratadas con los
-algoritmos pertinentes de recuperación específicos de un sistema distribuido.
-\end{itemize}
-
-Debido a estas fallas cada nodo deberá reaccionar de forma apropiada para
-solucionar el problema, por lo que la consistencia en el sistema se podrá ver afectada.
-Los diferentes enfoques para recuperar esta consistencia dependen de los
-requerimientos de la aplicación, qué tan rápido los nodos manejan los eventos y cómo
-son resueltos los conflictos entre cada evento.
-
-El escalamiento horizontal de Wikimetrics amerita tomar en cuenta diversos
-aspectos propios al funcionamiento de la aplicación que deben ser modificados, tales
-como: concurrencia de peticiones HTTP, el almacenamiento de datos, la adaptación de
-sus funciones, procedimientos y, por último, la comunicación entre los nodos como
-elemento primordial de cualquier sistema distribuido.30
-
-A pesar de que no existe un límite en las peticiones HTTP que se realizan sobre una
-página web pública en el momento de hacer extracción web, existe la posibilidad de que
-un sistema distribuido, de N nodos que realizan peticiones concurrentes a un servidor,
-sea visto como un atacante que ejecuta una denegación de servicio distribuido (DDoS).
-Dado que en la solución implementada por Wikimetrics se establecen tiempos definidos
+Dado que en la solución implementada por Wiki-Metrics-UCV se establecen tiempos definidos
 de espera entre petición pensados únicamente para el caso centralizado, es necesario
 considerar y adaptar ciertos aspectos para su adaptación en un escalamiento horizontal,
 tales como: la cantidad de nodos que ejecutan peticiones HTTP sobre un URL; la
@@ -97,12 +45,13 @@ concurrencia y el tiempo de espera entre cada petición; y por último los permi
 presentes en los términos y condiciones de uso de cada repositorio de artículos wiki en
 el aspecto de la extracción web.
 
-En términos legales, los permisos definidos en cada repositorio indicarán de qué
-forma la extracción de los datos públicos de cada wiki puede violentar sus condiciones
-de uso y derechos de autor [53] [54]. En el caso de Wikipedia, por medio de sus
-términos de uso, se indica que un individuo debe evadir cualquier actividad, ya sea legal
-o ilegal, que pueda comprometer su infraestructura tecnológica o violar derechos de
-autor [55]. Dado que Wikimetrics no recolecta la información contenida en un wiki, ni
+En términos legales, y en las clausulas de los términos y condiciones de uso, cada repositorio
+wiki indican como el uso de sus servicios y la extracción de sus datos públicos puede ser considerado
+inapropiado. En el caso de Wikipedia, por medio de sus términos de uso se indica que un individuo debe 
+evadir cualquier actividad, ya sea legal o ilegal, que pueda comprometer su infraestructura tecnológica o 
+violar derechos de autor \cite{7}. 
+
+Dado que Wiki-Metrics-UCV no recolecta la información contenida en un wiki, ni
 existe una cláusula específica sobre la recolección de datos de los historiales de edición,
 las actividades ejecutadas por esta aplicación no violentan los términos de uso de
 Wikipedia mientras que las peticiones HTTP realizadas no comprometan su sistema.
@@ -110,15 +59,26 @@ Actualmente Wikimedia, quien es el creador del proyecto Wikipedia, ofrece una
 herramienta para la recolección y consulta de datos de un wiki, incluyendo su historial,
 llamado MediaWiki. MediaWiki provee de una interfaz de programación de aplicaciones
 (Aplication Program Interface - API) que puede ser usada por la aplicación de un tercero
-para consultar estos datos [56]. Este API se presta como alternativa a las técnicas de
-web scraping usadas por Wikimetrics y tiene ciertas limitaciones con respecto al límite
+para consultar estos datos. Este API se presta como alternativa a las técnicas de
+web scraping usadas por Wiki-Metrics-UCV y tiene ciertas limitaciones con respecto al límite
 de peticiones HTTP ejecutadas sobre este servicio, similares a las relacionadas con la
 extracción web. A pesar de que MediaWiki no define límites específicos sobre estas
 peticiones, sí indica que la cantidad y frecuencia de las mismas sean moderadas,
 especialmente si las peticiones son ejecutadas de forma paralela. En caso de que estas
 consultas comprometan el sistema, MediaWiki especifica que sus administradores de
 sistema (sysadmin) están en la potestad de bloquear la dirección IP de quien realice
-estas peticiones.
+estas peticiones \cite{8}.
+
+La adaptación de Wiki-Metrics-UCV a un sistema distribuido disminuye varias de las limitaciones previamente
+mencionadas. Con la presencia de varios nodos en el sistema es posible procesar diversos 
+artículos de forma paralela, evitando cuellos de botella, y ademas, dividir la carga de almacenamiento 
+entre los componentes del sistema.
+
+Este escalamiento horizontal, tal como lo explica el teorema CAP, trae consigo problemas 
+adicionales e  intrínsecos de todo sistema distribuido. Es imposible para un servicio garantizar las tres
+siguientes características: consistencia, disponibilidad y tolerancia a fallos. A pesar de que estas 
+propiedades son esenciales, es necesario identificar qué características deben ser acopladas a
+esta nueva solución y cual debe ser sacrificada \cite{6}.
 
 Por otra parte, teniendo en cuenta que con un escalamiento horizontal existen N
 nodos independientes, es innecesario mantener una comunicación entre ellos para
@@ -135,24 +95,10 @@ existente en el sistema también se incrementará; por ello, es necesario consid
 sistema de comunicación a emplear, y estimar su fiabilidad en casos adecuados a lo que
 se determinará en relación al número de nodos para la solución.
 
-Con respecto al almacenamiento, basados en el tipo escalamiento que se plantea
-realizar, y el tipo de base de datos usada para almacenar la información anteriormente,
-se debe tomar en cuenta de qué forma se van a manejar los datos durante esta nueva
-solución, sea distribuyendo la base de datos entre los nodos, trabajando a través de
-protocolos de comunicación con una BD centralizada, o alguna otra manera. Además, se
-debe considerar los aspectos de fragmentación y replicación de la base de datos, que a
-pesar de que el manejador escogido (MongoDB) brinda las herramientas necesarias
-para facilitar la implementación de estas tareas, es necesario establecer las
-configuraciones necesarias para la implementación del sistema distribuido en el
-escalamiento horizontal.
-
-Por último, debido al cambio de entorno para la resolución del problema planteado,
-es necesario verificar si las funciones implementadas durante la solución centralizada
-contemplan o no la posibilidad del escalamiento horizontal del sistema actual; por tanto
-se deben estudiar, y de ser necesario, adaptar de alguna manera las funciones y
-procedimientos en varios aspectos relacionados con el escalamiento, la comunicación
-entre nodos, y por ultimo selección y distribución de los datos para que así puedan ser
-usadas en el nuevo ambiente presentado.
+Por último, se debe tomar en cuenta la arquitectura y la forma en la cual los datos
+serán distribuidos entre los componentes del sistema. Determinar bajo que estrategia
+los datos serán fragmentados y si será posible ofrecer tolerancia a fallos, consistencia y/o alta
+disponibilidad. 
 
 \subsection{Justificación}
 
@@ -177,8 +123,8 @@ artículo [57].32
 
 Para llevar a cabo estos procesos de recolección y procesamiento de datos de un
 historial basado en Wikimedia, son necesarias diversas herramientas, las cuales fueron
-desarrolladas en el Trabajo Especial de Grado “Wikimetrics”. Sin embargo, la solución
-que Wikimetrics otorga posee limitaciones, debido a que está desarrollada para ser
+desarrolladas en el Trabajo Especial de Grado “Wiki-Metrics-UCV”. Sin embargo, la solución
+que Wiki-Metrics-UCV otorga posee limitaciones, debido a que está desarrollada para ser
 ejecutada en un ambiente centralizado. Por ende, los procesos ejecutados por esta
 aplicación pueden llegar a un punto en el cual exijan más capacidad de lo que brinda el
 computador que los lleva a cabo, puesto que la cantidad datos albergados en cada
@@ -203,17 +149,17 @@ lineamientos sólidos, que permitan que el sistema sea capaz de lidiar con las f
 puedan presentarse. También existe un cambio de enfoque inherente cuando se realiza
 una aplicación distribuida, el cual incluye las comunicaciones entre los distintos nodos,
 la selección de un nodo líder, o el esquema en que los datos serán manejados. La
-implementación del escalamiento horizontal sobre Wikimetrics es un enfoque que trae
+implementación del escalamiento horizontal sobre Wiki-Metrics-UCV es un enfoque que trae
 consigo todas las ventajas y complejidades mencionadas anteriormente.
 
 En el Capítulo 1 de este documento fueron descritas una serie de tecnologías que
 pueden ser usadas para la implementación de este escalamiento horizontal y todas las
-demás tareas que conlleva Wikimetrics. El conjunto de estas tecnologías ayuda a la
-resolución de las limitaciones, ya antes mencionadas, presentes en Wikimetrics. Estas
+demás tareas que conlleva Wiki-Metrics-UCV. El conjunto de estas tecnologías ayuda a la
+resolución de las limitaciones, ya antes mencionadas, presentes en Wiki-Metrics-UCV. Estas
 limitaciones implican que se dificulte mantener la arquitectura de esta solución y se
 implemente una ampliación de la misma, por lo tanto, es necesario desarrollador una
 nueva aplicación basada en todos los fundamentos de la original y manteniendo los
-algoritmos principales de Wikimetrics.
+algoritmos principales de Wiki-Metrics-UCV.
 
 \subsection{Objetivos}
 
@@ -242,7 +188,7 @@ distribuido.
 implementación de réplicas.
 
 \item Adaptar los algoritmos de revisita sobre los artículos wiki basados en la solución
-brindada por Wikimetrics.
+brindada por Wiki-Metrics-UCV.
 
 \item Diseñar y configurar los métodos de asignación de tareas para el balance de
 carga entre los nodos del sistema.
