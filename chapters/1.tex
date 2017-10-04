@@ -102,64 +102,30 @@ disponibilidad.
 
 \subsection{Justificación}
 
-Actualmente, la extracción de datos es una práctica difuminada por todo el mundo, la
-cual bajo algunas circunstancias, roza con los aspectos legales por derechos de autor y
-políticas de privacidad. Sin embargo, esta técnica, usada bajo lineamientos legales y con
-moderación, permite una gran ventaja para la recolección de datos, que puede ser
-utilizada en un sinfín de aplicaciones.
+Actualmente la extracción de datos es una práctica difuminada por todo el mundo, la
+cual, bajo algunas circunstancias, roza con los aspectos legales por derechos de autor y
+políticas de privacidad. Sin embargo, el uso de esta técnica, bajo lineamientos legales y con
+moderación, permite una gran ventaja para la recolección de datos que puede ser
+utilizados en un sinfín de aplicaciones.
 
 En el caso de los artículos wiki de la Fundación Wikimedia, existe un campo poco
 explorado con respecto a las estadísticas de los artículos, las cuales permitirían resaltar
-características difíciles de visualizar a primera vista. De estos artículos ellos es posible
-obtener, a través del estudio de su historial de revisiones, información muy relevante,
-por ejemplo: el colaborador que más ha editado un artículo en particular, las fechas y
+características difíciles de visualizar a primera vista. De estos artículos es posible
+obtener información muy relevante a través del estudio de su historial de revisiones, por ejemplo:
+el colaborador que más ha editado un artículo en particular, las fechas y
 horas cuando más se ha editado un artículo o a qué país o continente pertenecen las
 personas que más han colaborado en los artículos. Incluso, es posible determinar ciertos
 patrones de interés de los usuarios sobre un tema, lo cual puede ser usado por diversos
 analistas para elaborar alguna estrategia de mercadeo y publicidad. La cantidad de
 revisiones realizadas sobre un artículo wiki reflejan el uso y la manipulación de datos
 sobre un recurso lo cual puede ser usado para determinar tendencias sobre el tema del
-artículo [57].32
+artículo.
 
-Para llevar a cabo estos procesos de recolección y procesamiento de datos de un
-historial basado en Wikimedia, son necesarias diversas herramientas, las cuales fueron
-desarrolladas en el Trabajo Especial de Grado “Wiki-Metrics-UCV”. Sin embargo, la solución
-que Wiki-Metrics-UCV otorga posee limitaciones, debido a que está desarrollada para ser
-ejecutada en un ambiente centralizado. Por ende, los procesos ejecutados por esta
-aplicación pueden llegar a un punto en el cual exijan más capacidad de lo que brinda el
-computador que los lleva a cabo, puesto que la cantidad datos albergados en cada
-historial de Wikimedia puede ser muy grande para que un solo computador los procese.
-Debido a esto, surge la necesidad desarrollar ciertos cambios que permitan ampliar
-las capacidades que brinda la aplicación con respecto al incremento en la velocidad de
-extracción de los datos, su procesamiento y posterior almacenamiento. Para que esto
-sea posible, es necesario la implementación de una serie de cambios en las estrategias y
-tecnologías a utilizar. En este caso, la implementación de un escalamiento horizontal, en
-donde un grupo de computadores que comparten la carga de todas las tareas a ejecutar,
-permite incrementar la cantidad de datos que se pueden almacenar y procesar, gracias a
-la multiplicidad de nodos abocados a esas tareas. Esta solución es llamada Sistema
-Distribuido.
-
-El uso de tecnologías distribuidas para la realización de ciertas tareas, toma provecho
-de los avances tecnológicos presentes, incrementando la cantidad de trabajo a ser
-procesada por unidad de tiempo. Por supuesto, debe considerarse que, así como existen
-ventajas asociadas al uso de estas tecnologías, también implican un nuevo nivel de
-complejidad, debido a las configuraciones que deben ser creadas para que un sistema
-distribuido posea una buena sincronización entre sus nodos, así como cumplir con unos
-lineamientos sólidos, que permitan que el sistema sea capaz de lidiar con las fallas que
-puedan presentarse. También existe un cambio de enfoque inherente cuando se realiza
-una aplicación distribuida, el cual incluye las comunicaciones entre los distintos nodos,
-la selección de un nodo líder, o el esquema en que los datos serán manejados. La
-implementación del escalamiento horizontal sobre Wiki-Metrics-UCV es un enfoque que trae
-consigo todas las ventajas y complejidades mencionadas anteriormente.
-
-En el Capítulo 1 de este documento fueron descritas una serie de tecnologías que
-pueden ser usadas para la implementación de este escalamiento horizontal y todas las
-demás tareas que conlleva Wiki-Metrics-UCV. El conjunto de estas tecnologías ayuda a la
-resolución de las limitaciones, ya antes mencionadas, presentes en Wiki-Metrics-UCV. Estas
-limitaciones implican que se dificulte mantener la arquitectura de esta solución y se
-implemente una ampliación de la misma, por lo tanto, es necesario desarrollador una
-nueva aplicación basada en todos los fundamentos de la original y manteniendo los
-algoritmos principales de Wiki-Metrics-UCV.
+Debido a las limitaciones de un sistema centralizado, surge la necesidad implementar una nueva solución
+que permita ampliar las capacidades de almacenamiento y disminuir los cuellos de botella que se puedan
+producir durante la extracción de los historiales. Por medio de de un escalamiento horizontal
+es posible hacer uso de un grupo de computadores que comparten la carga de todas las tareas a ejecutar,
+permitiendo de esta manera incrementar la cantidad de datos que se pueden almacenar y procesar.
 
 \subsection{Objetivos}
 

@@ -4,6 +4,7 @@
 *.toc
 *.bcf
 *.xml
+*.lof
 
 # PDF output - usually a bad idea to keep this in Git
 *.pdf
