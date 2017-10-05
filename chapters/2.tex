@@ -1,24 +1,55 @@
-\section{Second Attempt}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\section{Tecnologías}
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\subsection{Mongo}
 
-lorem
-lorem
+MongoDB es una base de datos NoSQL (no solo SQL) orientada a documentos. Almacena
+datos en una representación binaria llamada BSON (Binary JSON), la cual extiende
+las capacidades de un objeto JSON (JavaScript Object Notation) para representar
+tipos de datos como enteros, punto flotante, fechas, datos binarios, arreglos y sub-documentos o
+documentos embebidos.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+MongoDB posee un conjunto de  características que permiten la escalabilidad de una aplicación, entre ellas,
+provee la habilidad e implementar la distribución geográfica de datos (sharding). Esto permite a la
+base de datos ser escalada de forma horizontal con el uso de un conjunto de componentes de hardware o mediante
+de la nube (cloud).
+
+Adicionalmente, MongoDB esta diseñado para ser ejecutado en un sistema de múltiples nodos, por lo tanto,
+en la presencia de un escalamiento horizontal, incluye la capacidad para la replicación
+y sincronización de datos entre todos los componentes del sistema. De esta manera se garantiza la posibilidad
+de implementar un servicio con alta disponibilidad \cite{10}.
+
+\subsubsection{Replicación}
+
+MongoDB maintains multiple copies of data called replica
+sets using native replication. A replica set is a fully
+self-healing shard that helps prevent database downtime
+and can be used to scale read operations. Replica failover
+is fully automated, eliminating the need for administrators
+to intervene manually.
+A replica set consists of multiple replicas. At any given time
+one member acts as the primary replica set member and
+the other members act as secondary replica set members.
+MongoDB is strongly consistent by default: reads and
+writes are issued to a primary copy of the data. If the
+primary member fails for any reason (e.g., hardware failure,
+network partition) one of the secondary members is
+automatically elected to primary, typically within several
+seconds. As discussed below, sophisticated rules govern
+which secondary replicas are evaluated for promotion to
+the primary member
+
+
+\subsubsection{Sharding}
+
+
+\subsection{Celery}
+
+\subsection{RabbitMQ}
+
+\subsection{Flask}
+
+\subsubsection{Flask AutoDoc}
+
+% Is this subsection necessary?
+\subsection{Wikipedia API}
+
