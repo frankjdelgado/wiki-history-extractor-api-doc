@@ -220,7 +220,7 @@ En la siguiente figura se puede apreciar un flujo de trabajo simple en la emisi�
 
 \begin{figure}[H]
 	\centering
-		\includegraphics[width=.9\textwidth]{figures/workflow_rabbitmq}
+		\includegraphics[width=1\textwidth]{figures/workflow_rabbitmq}
 	\caption{Flujo de trabajo de la emisión y suscripción de mensajes en RabbitMQ.}
 	\label{fig:workflow_rabbitmq}
 \end{figure}
@@ -241,3 +241,45 @@ implementado por el desarrollador o por la inclusión de extensiones \cite{20}.
 
 \subsection{Docker}
 
+Docker es una plataforma para la automatización en el despliegue de aplicaciones dentro de paquetes llamados contenedores de software,
+los cuales contienen todos los elementos que permiten su ejecución en cualquier sistema operativo.
+
+Un contenedor de software es una manera de empaquetar software en un formato en el cual puede ser ejecutado de forma aislada en un sistema
+operativo. Solo se empaqueta el código, sus librerías, dependencias y configuraciones necesarias para que el 
+software funcione de forma adecuada sin ejecutar un sistema operativo por completo.
+De esta manera se generan sistemas independientes, eficientes y ligeros que garantizan
+que el software siempre se ejecutará de la misma manera sin importar el ambiente \cite{21}.
+
+Los contenedores de software están conformados por dos componentes: una imagen y un contenedor.
+
+\begin{itemize}
+\item Imagen: es un paquete ejecutable aislado que incluye todo lo necesario para ejecutar un software, incluyendo código,
+librerías, variables de entorno y archivos de configuración.
+
+\item Contenedor: es una instancia de una imagen. Su ejecución, por defecto, esta aislada del ambiente de la maquina anfitrión,
+de tal forma que solo accede a los archivos y/o puertos del anfitrión si fue configurado para ello.
+\end{itemize}
+
+Los contenedores ejecutan aplicaciones directamente en el kernel de la maquina anfitrión, por lo que tienen mejor
+rendimiento que una maquina virtual que solo tiene acceso virtual a los recursos del anfitrión.
+
+
+La siguiente figura muestra como las maquinas virtuales ejecutan sistemas operativos completos sobre la maquina anfitrión:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=.9\textwidth]{figures/docker_vm}
+	\caption{Diagrama de componentes de una Maquina Virtual.}
+	\label{fig:docker_vm}
+\end{figure}
+
+En cambio, los contenedores pueden compartir un mismo kernel, la única información que necesita tener la imagen del contenedor es el
+ejecutable y sus dependencias. En la siguiente figura se puede apreciar como cada contenedor se ejecutara como una aplicación aislada
+sobre el sistema operativo:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=.9\textwidth]{figures/docker_container}
+	\caption{Diagrama de componentes de un Contenedor}
+	\label{fig:docker_container}
+\end{figure}
