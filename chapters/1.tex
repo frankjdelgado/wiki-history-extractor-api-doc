@@ -102,12 +102,6 @@ disponibilidad.
 
 \subsection{Justificación}
 
-Actualmente la extracción de datos es una práctica difuminada por todo el mundo, la
-cual, bajo algunas circunstancias, roza con los aspectos legales por derechos de autor y
-políticas de privacidad. Sin embargo, el uso de esta técnica, bajo lineamientos legales y con
-moderación, permite una gran ventaja para la recolección de datos que puede ser
-utilizados en un sinfín de aplicaciones.
-
 En el caso de los artículos wiki de la Fundación Wikimedia, existe un campo poco
 explorado con respecto a las estadísticas de los artículos, las cuales permitirían resaltar
 características difíciles de visualizar a primera vista. De estos artículos es posible
@@ -124,8 +118,22 @@ artículo.
 Debido a las limitaciones de un sistema centralizado, surge la necesidad implementar una nueva solución
 que permita ampliar las capacidades de almacenamiento y disminuir los cuellos de botella que se puedan
 producir durante la extracción de los historiales. Por medio de de un escalamiento horizontal
-es posible hacer uso de un grupo de computadores que comparten la carga de todas las tareas a ejecutar,
-permitiendo de esta manera incrementar la cantidad de datos que se pueden almacenar y procesar.
+es posible hacer uso de un grupo de computadores que comparten la carga de todas las tareas a ejecutar e
+incrementar la cantidad de datos que se pueden almacenar.
+
+El escalamiento horizontal involucra dividir los datos en grupos y almacenarlos en los multiples nodos
+que se requieran agregar al sistema para incrementar su capacidad. Aunque la capacidad de uno de estos
+nodos sea limitada, cada uno de ellos solo manejera un subconjunto de la carga total, permitiendo
+de forma potencial que se obtenga una mayor eficiencia que un solo servidor de alta capacidad y potencia.
+Expandir la capacidad del sistema solo requiere agregar tantos nodos sea necesario, que por lo general
+suele ser de menor costo que adquerir componentes de alta gama en una sola maquina.
+
+Contar con multiples nodos permite aumentar la disponibilidad del servicio, caracteristica
+definida como alta disponibilidad. Con al menos dos miembros es posible recuperar de errores tales como
+la detención abrupta de un servidor, en este caso, el miembro restante puede manejar la carga de trabajo
+mientras el primero reinicia sus operaciones. Incluso, se pueden obtener beneficios dependiendo de
+la ubicación geográfica de estos miembros. El consumidor de un servicio puede obtener una respuesta
+más rápida a sus peticiones con la implementacion de servidores cache cercanos a su ubicación geográfica.
 
 \subsection{Objetivos}
 
