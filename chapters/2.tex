@@ -1,5 +1,25 @@
 \section{Tecnologías}
 
+En este capitulo se describen las tecnologías, librerías y servicios utilizados para el desarrollo
+del sistema. Entre ellas, las siguientes:
+
+La base de datos seleccionada para almacenar las revisiones de los artículos wiki, llamada MongoDB,
+y la definición de las características que facilitan el escalamiento horizontal de los datos, tales como: la replicación,
+que permite brindar un servicio con alta disponibilidad; y las particiones, que se refieren a la capacidad
+que tiene MongoDB para dividir los datos almacenados en subgrupos entre los múltiples miembros del sistema.
+
+Celery y RabbitMQ, que permiten la creación de una cola de tareas para que puedan ser ejecutadas de forma asíncrona,
+disminuyendo los cuellos de botella y así optimizar de cierta manera los tiempos de respuesta y la eficiencia 
+general del sistema.
+
+Flask, el microframework de python, que con su implementación minimista facilita la creación de aplicaciones web
+sin componentes innecesarios, y en este caso, permite la creación de un servicio API que aplicaciones
+de terceros pueden consumir para la extracción y consulta de las revisiones de los artículos wiki.
+
+Y por último, Docker, que sirve como una herramienta para emular un ambiente distribuido en donde
+se van a ejecutar los múltiples nodos tanto de la base de datos, como los servicios de Celery y RabbitMQ, y
+las múltiples instancias del servicio API.
+
 \subsection{Mongo}
 
 MongoDB es una base de datos NoSQL (no solo SQL) orientada a documentos. Almacena
@@ -238,6 +258,8 @@ estas funcionalidades a la aplicación de tal forma que parecieran ser implement
 El objetivo de Flask es permitir la construcción de una base sólida para todas las
 aplicaciones, y que cualquier otro requerimiento o modulo necesario, que sea
 implementado por el desarrollador o por la inclusión de extensiones \cite{20}.
+
+\subsection{Nginx}
 
 \subsection{Docker}
 
