@@ -164,6 +164,20 @@ por capas.
 
 \end{itemize}
 
+\subsubsection{PyMongo}
+
+PyMongo es una librería que permite la interacción con MongoDB a través de Python.
+Básicamente se encarga de mantener una conexión y permitir la interacción con la base
+de datos \cite{17}.
+
+PyMongo posee la cualidad de funcionar correctamente si es ejecutado
+simultáneamente por múltiples hilos, esta característica es llamada: segura en hilos
+(thread-safe) \cite{18}. PyMongo, tiene incorporado una agrupación de conexiones abiertas a
+la base de datos para que los hilos de una aplicación puedan reutilizar dichas
+conexiones al momento de ejecutar múltiples consultas o actualizaciones. Esta
+característica ayuda a incrementar el rendimiento puesto que PyMongo no establece
+una nueva conexión con la base de datos por cada que necesite ejecutar, de esta forma
+se evita la sobrecarga que la apertura de conexión pueda causar.
 
 \subsection{Celery}
 
