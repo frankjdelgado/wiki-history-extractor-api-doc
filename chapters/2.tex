@@ -167,10 +167,51 @@ por capas.
 
 \subsection{Celery}
 
+Celery es una herramienta que permite creación de colas y tareas asíncronas basada en la transmisión de mensajes distribuidos.
+Esta concentrado en la ejecución de operaciones en tiempo real, y a su vez, también soporta la planificación de tareas.
+
+Las colas de tareas son usadas como un mecanismo para la distribución de trabajo entre múltiples hilos o maquinas. Las entradas
+de estas colas son ejecutadas de forma concurrente en uno o más componentes llamados workers, quien constantemente verifican
+si existe una tarea en la cola para ser ejecutada. Estas tareas pueden ser ejecutadas en segundo plano o de forma sincrónica, 
+es decir, que esperan a que la tarea anterior culmine.
+
+Celery realiza la transmisión de mensajes haciendo uso de un agente intermediario llamado broker. Para iniciar una tarea un cliente
+agrega un mensaje a la cola, el broker toma este mensaje y se lo envía a algún worker disponible, por último, una vez el worker
+recibe el mensaje ejecuta la tarea. Este proceso se puede observar en la siguiente figura:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=.9\textwidth]{figures/celery}
+	\caption{Flujo de trabajo en la asignación de tareas de Celery.}
+	\label{fig:celery}
+\end{figure}
+
 \subsection{RabbitMQ}
+
+RabbitMQ es un intermediario para la transmisión de mensajes que sirve como plataforma para que los mensajes enviados
+en una aplicación sean almacenados de forma temporal durante el proceso de comunicación \cite{14}.
+
+El uso de la mensajería en una aplicación permite la conexión entre múltiples componentes de la misma, ya sea para enviar
+notificaciones, datos, tareas asíncronas o suscripción a un servicio. Un mensaje puede incluir cualquier tipo de información, por ejemplo,
+puede contener datos relacionados con un proceso o tarea, una notificación, e incluso el resultado de una operación. RabbitMQ
+almacena estos mensajes y los coloca en una cola hasta que alguna aplicación se conecta a el y toma dicho mensaje de la cola.
+
+RabbitMQ hace uso del protocolo AMPQP (Advanced Message Queuing Protocol), el cual esta diseñado para la transmisión
+de mensajes de aplicación entre sistemas usando, entre otras, una combinación de técnicas como: almacenamiento-y-reenvío, en donde
+los datos son almacenados en un componente intermediario de forma temporal y después enviados al destinatario final u a otro
+intermediario \cite{15}; y el patrón publicación-suscripción, en donde el emisor del mensaje no envía datos a un destinatario
+en específico, sino que existe un miembro llamado suscriptor quien decide o no si recibir los mensajes publicados por el emisor \cite{16}.
+
+En la siguiente figura se puede apreciar un flujo de trabajo simple en la emisión y suscripción de mensajes usando RabbitMQ:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=.9\textwidth]{figures/workflow_rabbitmq}
+	\caption{Flujo de trabajo de la emisión y suscripción de mensajes en RabbitMQ.}
+	\label{fig:workflow_rabbitmq}
+\end{figure}
 
 \subsection{Flask}
 
-% Is this subsection necessary?
-\subsection{Wikipedia API}
+\subsection{Docker}
 
