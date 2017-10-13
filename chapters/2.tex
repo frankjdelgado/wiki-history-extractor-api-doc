@@ -261,6 +261,38 @@ implementado por el desarrollador o por la inclusión de extensiones \cite{20}.
 
 \subsection{Nginx}
 
+Nginx es un servidor HTTP que también funciona como: un proxy reverso, servidor
+proxy IMAP/POP3 e inclusive como software para el manejo de balance de carga [16].
+Puede ser usado para servir contenido HTTP estático y dinámico en la red haciendo uso
+de FASTCGI, manejadores SCGI para scripts, servidores de aplicación WSGI o módulos
+de Phusion Passenger.
+
+Nginx no utiliza múltiples hilos para manejar solicitudes, en cambio, hace uso de un
+solo hilo y la implementación del paradigma de la programación dirigida por eventos,
+en donde el manejo de las peticiones recibidas por este servidor van determinados por
+los sucesos que ocurran en el sistema. La arquitectura modular dirigida por eventos de
+Nginx permite proveer un rendimiento predecible en ambientes de alta carga de
+trabajo.
+
+La capacidad de Nginx de ser utilizado como proxy reverso tiene diversos usos.
+El uso de un proxy es típicamente usando para distribuir la carga de peticiones
+entre múltiples servidores, mostrar contenido de múltiples servicios web de forma transparente,
+e incluso transferir peticiones a un servidor por protocoles diferentes a HTTP \cite{22}.
+
+Un ejemplo de como seria el flujo de trabajo para atender una petición con un proxy reverso se puede apreciar en la siguiente figura.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=.9\textwidth]{figures/nginx_reverse_proxy}
+	\caption{Atención de peticiones con el uso de proxy reverso de Nginx.}
+	\label{fig:nginx_reverse_proxy}
+\end{figure}
+
+Dado una aplicación cliente que emite una petición al servicio, es Nginx es quien recibe la petición y procede a elegir cual servidor
+atenderá la petición. Cada servidor ejecuta la aplicación haciendo uso de tecnologías como UWSGI, FASTCGI, SCGI, etc. Una vez que el
+servidor atiende la petición, envía la respuesta devuelta a Nginx y este último la reenvía al cliente.
+
+
 \subsection{Docker}
 
 Docker es una plataforma para la automatización en el despliegue de aplicaciones dentro de paquetes llamados contenedores de software,
