@@ -55,7 +55,7 @@ destinarlo como inaccesibles.
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=.6\textwidth]{figures/heartbeat}
-	\caption{Hearbeats en un grupo de replicación de MongoDB.}
+	\caption{Heartbeats en un grupo de replicación de MongoDB.}
 	\label{fig:heartbeat}
 \end{figure}
 
@@ -283,3 +283,9 @@ sobre el sistema operativo:
 	\caption{Diagrama de componentes de un Contenedor}
 	\label{fig:docker_container}
 \end{figure}
+
+Docker permite la creación de redes y espacios de almacenamiento, llamados volúmenes, que pueden ser asignados a uno o múltiples
+contenedores a la vez. De esta forma, es posible conectar varios contenedores entre sí mediante una red y compartir archivos.
+Esto permite gestionar múltiples contenedores para que se ejecuten como un sistema distribuido, en donde es posible, y si los recursos
+lo permiten, desplegar nuevos nodos que cumplan las funciones como: un miembro en una replica de base de datos, un worker de celery e
+incluso un servicio como RabbitMQ.
