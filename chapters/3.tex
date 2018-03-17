@@ -4,7 +4,7 @@
 
 Para lograr cumplir con los objetivos planteados en el Capítulo 2, es necesario definir un
 esquema o metodología de trabajo que permita la elaboración de un conjunto de
-lineamientos de manera estructurada y organizada. Por lo tanto, se hace uso de el método de 
+lineamientos de manera estructurada y organizada. Por lo tanto, se hace uso de el método de
 Desarrollo Rápido de Aplicaciones (RAD), el cual permite la iteración rápida y continua
 de pequeños objetivos para alcanzar la meta final.
 
@@ -32,20 +32,41 @@ La misma está desarrollada como un servicio web API conformado por:
 \end{itemize}
 
 La siguiente figura representa la vista general de la arquitectura de la aplicación, y como la misma interactuá con
-las aplicaciones clientes que consumen el servicio.
+las aplicaciones clientes que consumen el servicio:
 
 \begin{figure}[H]
 	\centering
-		\includegraphics[width=.6\textwidth]{figures/diagram_general}
+		\includegraphics[width=1\textwidth]{figures/diagram_general}
 	\caption{Arquitectura general de la aplicación.}
-	\label{fig:diagram_general}}
+	\label{fig:diagram_general}
 
 \end{figure}
+
+\subsection{Servidor Web}
+
+El servidor web que atiende las solicitudes en primera instancia es Nginx,
+el cual funciona como un intermediario entre el cliente y el API que responde dicha solicitud.
+Nginx permite balancear la carga de trabajo entre múltiples servidores que contienen la aplicación mediante el algoritmo de round robin,
+de tal forma que cada servidor es utilizado de forma equitativa, tal como se muestra en la siguiente figura:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.9\textwidth]{figures/round_robin}
+	\caption{Algoritmo de round robin para la distribución de peticiones de Nginx.}
+	\label{fig:round_robin}
+\end{figure}
+
+Una vez la petición ha sido asignada el servidor web, donde el API esta alojado, este procesa la solicitud y genera una respuesta de vuelta al cliente.
+Este servidor web es UWSGI, y en conjunto con Flask y el resto de las tecnologías que trabajan en conjunto con el API.
+
+
+
 
 
 \subsection{API}
 
-El servicio web, diseñado para atender las solicitudes de extracción y consulta de las revisiones, hace uso del lenguaje de programación Python en su versión 2.7.10 y el uso del framework Flask v0.12. 
+El servicio web, diseñado para atender las solicitudes de extracción y consulta de las revisiones, hace uso del lenguaje de programación Python
+en su versión \texttt{2.7.10} y el uso del framework Flask \texttt{v0.12}.
 Ambas tecnologías permiten la asignación de rutas específicas para cada módulo
 y la atención de peticiones.
 
@@ -63,25 +84,28 @@ otro tipo de entrada que sea necesaria para procesar la solicitud; por ejemplo, 
 
 
 
-Algunos de estos procesos como el de extracción de historiales son llevados a cabo por medio de Celery. Entre los componentes de la 
-aplicación existen múltiples computadores denominados nodos que están conectados entre si por medio de RabbitMQ.
-Cada nodo ejecuta un proceso de Celery llamado trabajador (worker), que constantemente esta en la búsqueda de tareas para su 
-ejecución. Estas tareas son generadas desde la aplicación principal que recibe las peticiones de un cliente, en donde se 
-genera un identificador único para cada una de ellas y se colocan en una cola de espera por medio de RabbitMQ. Cuando un nodo 
-worker extrae una tarea de la cola de espera, el mismo la ejecuta en segundo plano y genera, de forma constante, mensajes que
-indican el progreso de ejecución hasta su culminación.
+Algunos de estos procesos como el de extracción de historiales son llevados a cabo por medio de Celery.
+Entre los componentes de la aplicación existen múltiples computadores denominados nodos que están
+conectados entre si por medio de RabbitMQ.
+Cada nodo ejecuta un proceso de Celery llamado trabajador (worker), que constantemente esta en la
+búsqueda de tareas para su ejecución.
+Estas tareas son generadas desde la aplicación principal que recibe las peticiones de un cliente,
+en donde se genera un identificador único para cada una de ellas y se colocan en una cola de espera
+por medio de RabbitMQ.
+Cuando un nodo worker extrae una tarea de la cola de espera, el mismo la ejecuta en segundo plano y
+ genera, de forma constante, mensajes que indican el progreso de ejecución hasta su culminación.
 
 
 El API consta de las siguientes rutas de acceso (endpoints):
 
 \begin{itemize}
-	\item /api/v1/articles
-	\item /api/v1/revisions
-	\item /api/v1/extract
-	\item /api/v1/avg
-	\item /api/v1/count
-	\item /api/v1/mode
-	\item /api/v1/status/<task_id>
+	\item \texttt{/api/v1/articles}
+	\item \texttt{/api/v1/revisions}
+	\item \texttt{/api/v1/extract}
+	\item \texttt{/api/v1/avg}
+	\item \texttt{/api/v1/count}
+	\item \texttt{/api/v1/mode}
+	\item \texttt{/api/v1/status}
 \end{itemize}
 
 * Nginx
@@ -89,13 +113,15 @@ El API consta de las siguientes rutas de acceso (endpoints):
 
 \subsubsection{Extracción de Historiales}
 
-Para la extracción de historiales se hace uso de la ruta de acceso /api/v1/extract, la cual tiene como parámetros:
-title, que se refiere al título del del artículo; url, representa la ruta completa de un artículo, por ejemplo: 
-https://en.wikipedia.org/wiki/The_Lord_of_the_Rings; y por último, locale, el cual índica el idioma del artículo y 
-es completamente opcional, puesto que el sistema asume el inglés como lenguaje por defecto o lo extrae del parámetro 
-url. Es necesario proporcionar el parámetro url o title de forma obligatoria para poder llevar a cabo la extracción.
+Para la extracción de historiales se hace uso de la ruta de acceso \texttt{/api/v1/extract}, la cual
+tiene como parámetros:
+\texttt{title}, que se refiere al título del del artículo; \texttt{url}, representa la ruta completa de un artículo, por ejemplo:
+\texttt{https://en.wikipedia.org/wiki/The\_Lord\_of\_the\_Rings}; y por último, \texttt{locale}, el cual índica el idioma del artículo y
+es completamente opcional, puesto que el sistema asume el inglés como lenguaje por defecto o lo extrae del parámetro
+\texttt{url}.
+Es necesario proporcionar el parámetro \texttt{url} o \texttt{title} de forma obligatoria para poder llevar a cabo la extracción.
 
-En la siguiente figura se puede apreciar dos ejemplos del uso de los parámetros url, title y locale.
+En la siguiente figura se puede apreciar dos ejemplos del uso de los parámetros \texttt{url}, \texttt{title} y \texttt{locale}.
 
 \begin{figure}[H]
 	\centering
@@ -104,8 +130,9 @@ En la siguiente figura se puede apreciar dos ejemplos del uso de los parámetros
 	\label{fig:extract_url_format}
 \end{figure}
 
-Una vez recibida la petición, se genera el id de la tarea, se coloca en la cola de espera y se construye la respuesta a la petición
-con un nuevo URL que contiene id anteriormente mencionado y el nombre del proceso, extrat_article. Este URL permite consultar el progreso del proceso de extracción y puede ser apreciado en la siguiente figura:
+Una vez recibida la petición, se genera el identificador de la tarea, se coloca en la cola de espera y se construye la respuesta a la petición
+con un nuevo URL que contiene id anteriormente mencionado y el nombre del proceso, \texttt{ extract\_article }.
+Este URL permite consultar el progreso del proceso de extracción y puede ser apreciado en la siguiente figura:
 
 \begin{figure}[H]
 	\centering
@@ -114,8 +141,11 @@ con un nuevo URL que contiene id anteriormente mencionado y el nombre del proces
 	\label{fig:extract_response}
 \end{figure}
 
- y se ubica en una cola de espera hasta que algún nodo worker la tome. Las tareas en cola de espera se les asocia un número de identificación único, 
-llamado id, y son atendidas por algún nodo de Celery que este desocupado. Este nodo inicia la tarea como un proceso  
+
+
+ y se ubica en una cola de espera hasta que algún nodo worker la tome. Las tareas en cola de espera se les asocia un número de
+ identificación único,
+llamado id, y son atendidas por algún nodo de Celery que este desocupado. Este nodo inicia la tarea como un proceso
 
 
 * Endpoints de extracción a wikipedia
@@ -127,9 +157,9 @@ llamado id, y son atendidas por algún nodo de Celery que este desocupado. Este 
 \subsubsection{Consultas}
 
 * Revisiones
-* Articulos
+* Artículos
 * Parametros de filtro
-* Paginacion
+* Paginación
 * Consultas AVG, COUNT, MODE
 
 \subsubsection{Almacenamiento}
