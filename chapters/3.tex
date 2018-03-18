@@ -56,24 +56,16 @@ de tal forma que cada servidor es utilizado de forma equitativa, tal como se mue
 	\label{fig:round_robin}
 \end{figure}
 
-Una vez la petición ha sido asignada el servidor web, donde el API esta alojado, este procesa la solicitud y genera una respuesta de vuelta al cliente.
-Este servidor web es UWSGI, y en conjunto con Flask y el resto de las tecnologías que trabajan en conjunto con el API.
-
-
-
-
+Una vez la petición ha sido reasignada, es atendida por medio del servidor web UWSGI, y en conjunto
+con Flask y el resto de las tecnologías incluidas en el API, genera una respuesta de vuelta al cliente.
 
 \subsection{API}
 
-El servicio web, diseñado para atender las solicitudes de extracción y consulta de las revisiones, hace uso del lenguaje de programación Python
-en su versión \texttt{2.7.10} y el uso del framework Flask \texttt{v0.12}.
+El API diseñado para realizar las labores de extracción y consulta de las revisiones, hace uso del lenguaje de programación Python \texttt{2.7.10} y el uso del framework Flask \texttt{v0.12}.
 Ambas tecnologías permiten la asignación de rutas específicas para cada módulo
 y la atención de peticiones.
 
 La interacción entre el servicio y una aplicación cliente puede ser apreciada en la figura \ref{fig:diagram_api_1}.
-Esta interacción se basa en la petición de un recurso o de un proceso, por parte de una aplicación cliente, a una ruta del servidor
-web (endpoint). La petición puede incluir parámetros opcionales para: la paginación de resultados, filtros o cualquier
-otro tipo de entrada que sea necesaria para procesar la solicitud; por ejemplo, el idioma del artículo a extraer.
 
 \begin{figure}[H]
 	\centering
@@ -82,34 +74,21 @@ otro tipo de entrada que sea necesaria para procesar la solicitud; por ejemplo, 
 	\label{fig:diagram_api_1}
 \end{figure}
 
+Esta interacción se basa en la petición de un recurso o de un proceso, por parte de una aplicación cliente, a una ruta del servidor web (endpoint).
+Cada petición puede incluir parámetros opcionales para la paginación, filtración de resultados, como por ejemplo, el idioma del artículo a extraer.
 
-
-Algunos de estos procesos como el de extracción de historiales son llevados a cabo por medio de Celery.
-Entre los componentes de la aplicación existen múltiples computadores denominados nodos que están
-conectados entre si por medio de RabbitMQ.
-Cada nodo ejecuta un proceso de Celery llamado trabajador (worker), que constantemente esta en la
-búsqueda de tareas para su ejecución.
-Estas tareas son generadas desde la aplicación principal que recibe las peticiones de un cliente,
-en donde se genera un identificador único para cada una de ellas y se colocan en una cola de espera
-por medio de RabbitMQ.
-Cuando un nodo worker extrae una tarea de la cola de espera, el mismo la ejecuta en segundo plano y
- genera, de forma constante, mensajes que indican el progreso de ejecución hasta su culminación.
-
-
-El API consta de las siguientes rutas de acceso (endpoints):
+Las rutas de acceso que ofrece el API son las siguientes:
 
 \begin{itemize}
-	\item \texttt{/api/v1/articles}
-	\item \texttt{/api/v1/revisions}
-	\item \texttt{/api/v1/extract}
-	\item \texttt{/api/v1/avg}
-	\item \texttt{/api/v1/count}
-	\item \texttt{/api/v1/mode}
-	\item \texttt{/api/v1/status}
+	\item \texttt{/api/v1/articles}. Listado de todos los artículos extraídos.
+	\item \texttt{/api/v1/revisions}. Listado de las revisiones de los artículos extraídos.
+	\item \texttt{/api/v1/extract}. Extracción de revisiones de artículos wiki.
+	\item \texttt{/api/v1/avg}. Cálculo del promedio de revisiones de un artículo por rango fechas.
+	\item \texttt{/api/v1/count}. Cálculo de número de revisiones de un artículo por fecha.
+	\item \texttt{/api/v1/mode}. Cálculo de las revisiones mas extraídas por rango de fecha.
+	\item \texttt{/api/v1/status}. Indica el estado del proceso de extracción.
+	\item \texttt{/api/v1/query}. Permite la ejecución de consultas personalizadas a la base de datos.
 \end{itemize}
-
-* Nginx
-* Flask
 
 \subsubsection{Extracción de Historiales}
 
@@ -121,7 +100,7 @@ es completamente opcional, puesto que el sistema asume el inglés como lenguaje 
 \texttt{url}.
 Es necesario proporcionar el parámetro \texttt{url} o \texttt{title} de forma obligatoria para poder llevar a cabo la extracción.
 
-En la siguiente figura se puede apreciar dos ejemplos del uso de los parámetros \texttt{url}, \texttt{title} y \texttt{locale}.
+En la siguiente figura se puede apreciar dos ejemplos del uso de los parámetros \texttt{url}, \texttt{title} y \texttt{locale}:
 
 \begin{figure}[H]
 	\centering
@@ -130,9 +109,13 @@ En la siguiente figura se puede apreciar dos ejemplos del uso de los parámetros
 	\label{fig:extract_url_format}
 \end{figure}
 
-Una vez recibida la petición, se genera el identificador de la tarea, se coloca en la cola de espera y se construye la respuesta a la petición
-con un nuevo URL que contiene id anteriormente mencionado y el nombre del proceso, \texttt{ extract\_article }.
-Este URL permite consultar el progreso del proceso de extracción y puede ser apreciado en la siguiente figura:
+La ejecución de esta tarea se lleva a cabo por medio de Celery y RabbitMQ.
+Con estas tecnologías, múltiples computadores ejecutan un proceso de Celery, los
+cuales están conectados entre si gracias a RabbitMQ, escuchando constantemente los mensajes entrantes de este servicio.
+Una vez recibida la petición por el API, se genera una tarea de extracción por medio de Celery, la cual tiene un identificador único. Esta tarea es encolada en una lista de
+espera que es atendida por uno de los trabajadores conectados a RabbitMQ y es ejecutada en segundo plano.
+Posteriormente, el API crea una respuesta a la petición generando una ruta para consultar el progreso
+del proceso de extracción, la cual luce de la siguiente manera:
 
 \begin{figure}[H]
 	\centering
@@ -140,19 +123,6 @@ Este URL permite consultar el progreso del proceso de extracción y puede ser ap
 	\caption{Respuesta a una petición de extracción de historiales de un artículo.}
 	\label{fig:extract_response}
 \end{figure}
-
-
-
- y se ubica en una cola de espera hasta que algún nodo worker la tome. Las tareas en cola de espera se les asocia un número de
- identificación único,
-llamado id, y son atendidas por algún nodo de Celery que este desocupado. Este nodo inicia la tarea como un proceso
-
-
-* Endpoints de extracción a wikipedia
-* Algoritmo de revisita
-* Celery
-* Tareas Background
-* RabbitMQ
 
 \subsubsection{Consultas}
 

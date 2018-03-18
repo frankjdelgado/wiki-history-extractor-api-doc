@@ -9,7 +9,7 @@ que permite brindar un servicio con alta disponibilidad; y las particiones, que 
 que tiene MongoDB para dividir los datos almacenados en subgrupos entre los múltiples miembros del sistema.
 
 Celery y RabbitMQ, que permiten la creación de una cola de tareas para que puedan ser ejecutadas de forma asíncrona,
-disminuyendo los cuellos de botella y así optimizar de cierta manera los tiempos de respuesta y la eficiencia 
+disminuyendo los cuellos de botella y así optimizar de cierta manera los tiempos de respuesta y la eficiencia
 general del sistema.
 
 Flask, el microframework de python, que con su implementación minimista facilita la creación de aplicaciones web
@@ -43,18 +43,18 @@ de implementar un servicio con alta disponibilidad \cite{10}.
 
 La replicación permite la redundancia de datos y el aumento de disponibilidad de los mismos en aplicaciones distribuidas.
 Hace uso de múltiples servidores conectados entre sí y genera una replica de los datos en cada uno de ellos, de
-esta manera se obtiene cierto nivel de tolerancia a fallos en caso de que un servidor de base de datos falle. 
+esta manera se obtiene cierto nivel de tolerancia a fallos en caso de que un servidor de base de datos falle.
 También es posible mantener copias adicionales para propósitos específicos como recuperación en casos de desastre,
 reportes o respaldos \cite{11}.
 
 En MongoDB se hace uso de grupos de replica (replica sets) para almacenar las copias de datos en múltiples
 servidores de base de datos. Un grupo de replica previene los tiempos de inactividad de la base de datos
 en caso de errores y ayuda a escalar las operaciones de lectura. La recuperación de un miembro del grupo de
-replica se realiza de forma automática. En un grupo de replica cualquier miembro puede actuar como nodo principal 
+replica se realiza de forma automática. En un grupo de replica cualquier miembro puede actuar como nodo principal
 y el resto como secundario, por lo tanto, en caso de fallas de red o de hardware, un miembro del grupo
 puede tomar el puesto de nodo primario después de haber sido elegido siguiendo un conjunto de reglas predefinidas.
 
-Un grupo de replicas esta conformado por un nodo principal que realizara todas las operaciones de escritura, múltiples nodos 
+Un grupo de replicas esta conformado por un nodo principal que realizara todas las operaciones de escritura, múltiples nodos
 secundarios y un nodo arbitro opcional, tal cual como lo muestra la siguiente figura:
 
 \begin{figure}[H]
@@ -64,11 +64,11 @@ secundarios y un nodo arbitro opcional, tal cual como lo muestra la siguiente fi
 	\label{fig:replicas}
 \end{figure}
 
-Para poder crear estos grupos es necesario tener un mínimo de tres nodos y escalar en números impares. Esto se 
+Para poder crear estos grupos es necesario tener un mínimo de tres nodos y escalar en números impares. Esto se
 debe a que cuando los componentes del grupo realicen la votación para elegir el nodo principal, se elimina la posibilidad de un
-empate y el ganador es elegido de inmediato. 
+empate y el ganador es elegido de inmediato.
 
-En la siguiente figura se puede observar como los nodos del grupo se envían mensajes de diagnostico (heartbeats) para determinar
+En la figura \ref{fig:heartbeat} se puede observar como los nodos del grupo se envían mensajes de diagnostico (heartbeats) para determinar
 si sus vecinos son accesibles o no. En caso de que uno de estos heartbeat no obtenga una respuesta en 10 segundos, se marca dicho
 destinarlo como inaccesibles.
 
@@ -81,7 +81,7 @@ destinarlo como inaccesibles.
 
 
 Los nodos secundarios se encargan de leer los datos presentes en el nodo primario y crear sus propia replica o copia del mismo.
-Si, por alguna razón, el nodo primario deja de estar disponible, un nodo secundario elegible ejecutará una votación para 
+Si, por alguna razón, el nodo primario deja de estar disponible, un nodo secundario elegible ejecutará una votación para
 elegir el siguiente nodo primario, tal como lo muestra la figura \ref{fig:failover}.
 El primer nodo secundario en llevar a cabo la elección y recibir la mayoría de los botos se convierte en el nuevo nodo primario.
 
@@ -122,7 +122,7 @@ En la siguiente figura se puede apreciar los componentes del cluster de particio
 	\label{fig:sharding}
 \end{figure}
 
-Para distribuir los documentos de un colección es necesario el uso de una llave de partición (shard key). Un shard key es uno o 
+Para distribuir los documentos de un colección es necesario el uso de una llave de partición (shard key). Un shard key es uno o
 múltiples campos inmutables que comparten todos los documentos de una colección. Una colección particionada solo puede tener un shard key
 y la misma no puede ser cambiada después de haberse ejecutado el proceso de sharding.
 
@@ -147,7 +147,7 @@ o desarrollador distribuir los datos entre los miembros del cluster.
 
 \begin{itemize}
 
-\item Range Sharding. Los documentos son divididos en rangos contiguos determinados por el valor del shard key. Se toma el valor 
+\item Range Sharding. Los documentos son divididos en rangos contiguos determinados por el valor del shard key. Se toma el valor
 mínimo y máximo de todos las particiones y se generan N grupos, ordenados de menor a mayor por el shard key y separados por rangos,
 tal cual se puede observar en la siguiente figura:
 
@@ -206,7 +206,7 @@ Esta concentrado en la ejecución de operaciones en tiempo real, y a su vez, tam
 
 Las colas de tareas son usadas como un mecanismo para la distribución de trabajo entre múltiples hilos o maquinas. Las entradas
 de estas colas son ejecutadas de forma concurrente en uno o más componentes llamados workers, quien constantemente verifican
-si existe una tarea en la cola para ser ejecutada. Estas tareas pueden ser ejecutadas en segundo plano o de forma sincrónica, 
+si existe una tarea en la cola para ser ejecutada. Estas tareas pueden ser ejecutadas en segundo plano o de forma sincrónica,
 es decir, que esperan a que la tarea anterior culmine.
 
 Celery realiza la transmisión de mensajes haciendo uso de un agente intermediario llamado broker. Para iniciar una tarea un cliente
@@ -279,7 +279,7 @@ El uso de un proxy es típicamente usando para distribuir la carga de peticiones
 entre múltiples servidores, mostrar contenido de múltiples servicios web de forma transparente,
 e incluso transferir peticiones a un servidor por protocoles diferentes a HTTP \cite{22}.
 
-Un ejemplo de como seria el flujo de trabajo para atender una petición con un proxy reverso se puede apreciar en la siguiente figura.
+Un ejemplo de como seria el flujo de trabajo para atender una petición con un proxy reverso se puede apreciar en la siguiente figura:
 
 \begin{figure}[H]
 	\centering
@@ -299,7 +299,7 @@ Docker es una plataforma para la automatización en el despliegue de aplicacione
 los cuales contienen todos los elementos que permiten su ejecución en cualquier sistema operativo.
 
 Un contenedor de software es una manera de empaquetar software en un formato en el cual puede ser ejecutado de forma aislada en un sistema
-operativo. Solo se empaqueta el código, sus librerías, dependencias y configuraciones necesarias para que el 
+operativo. Solo se empaqueta el código, sus librerías, dependencias y configuraciones necesarias para que el
 software funcione de forma adecuada sin ejecutar un sistema operativo por completo.
 De esta manera se generan sistemas independientes, eficientes y ligeros que garantizan
 que el software siempre se ejecutará de la misma manera sin importar el ambiente \cite{21}.
