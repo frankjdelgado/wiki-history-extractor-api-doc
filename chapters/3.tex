@@ -124,15 +124,54 @@ del proceso de extracción, la cual luce de la siguiente manera:
 	\label{fig:extract_response}
 \end{figure}
 
+La siguiente tabla muestra la historia asociada a la extracción de revisiones:
+
+\input{tables/extract}
+
 \subsubsection{Consultas}
 
 El API consta de una ruta de acceso para consultar las revisiones extraídas y
-los artículos asociados
-* Revisiones
-* Artículos
-* Parametros de filtro
-* Paginación
-* Consultas AVG, COUNT, MODE
+los artículos asociados a través de las rutas \texttt{/api/v1/articles} y \texttt{/api/v1/revisions}.
+
+Para consultar los artículos es posible hacer uso de diversos parámetros de búsqueda,
+entre ellas están: los parámetros de paginación \texttt{page} y \texttt{page\_size},
+y los parámetros de búsqueda que corresponden a los atributos del artículo,
+tales como: \texttt{title}, \texttt{first\_extraction\_date}, \texttt{last\_extraction\_date}, \texttt{last\_revision\_extracted} y \texttt{locale}.
+
+Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciado en la siguiente figura:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.8\textwidth]{figures/response_articles}
+	\caption{Respuesta a una petición de consulta de artículos.}
+	\label{fig:response_articles}
+\end{figure}
+
+En el caso de la consulta de las revisiones, adicionalmente a los parámetros de búsqueda, esta el parámetro \texttt{sort} que permite, por fecha de extracción, el
+ordenamiento ascendente o descendiente de las revisiones, y la elección de cuales
+atributos se desean mostrar por cada revisión.
+
+En la siguiente figura se puede apreciar una respuesta del servidor en la consulta de
+revisiones:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=1\textwidth]{figures/response_revisions}
+	\caption{Respuesta a una petición de consulta de revisiones.}
+	\label{fig:response_revisions}
+\end{figure}
+
+Por otro lado, existen mas rutas de acceso al API para la consulta de diversas métricas predefinidas, tales como: promedio, conteo de revisiones y moda.
+
+El cálculo de estas métricas toma como parámetros múltiples atributos
+como el título del artículo o la fecha de extracción, para poder filtrar el numero total revisiones de la consulta.
+Estos parámetros pasan por un proceso de aceptación, en donde solo son aceptados aquellos que estén ya incluidos en una lista llamada lista blanca, aquellos parámetros que no estén dentro de esta lista son ignorados.
+Después de esta etapa, se genera una tarea de Celery para poder ser procesada en segundo plano hasta obtener el resultado.
+
+En las siguientes tablas se puede apreciar con detalle, por medio de sus historias, los filtros aceptados por cada métrica:
+
+\input{tables/count}
+
 * Query
 
 \subsection{Almacenamiento}
@@ -149,6 +188,6 @@ los artículos asociados
 
 \subsection{Docker}
 
-* Emulacion
+* Emulación
 * Nodos
 * Digital Ocean?

@@ -1,0 +1,33 @@
+
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|l|r|}
+			\hline
+			\multicolumn{2}{|r|}{\textbf{Historia}} \\
+			\hline
+			\textbf{Desarrollador} & Marvin Bernal\\
+			\hline
+			\textbf{Nombre} & Extracción de revisiones por API\\
+			\hline
+			\textbf{Sección} & Extracción\\
+			\hline
+			\textbf{Descripción} & \parbox[t]{3in}{Extracción de todas las revisiones de un artículo
+				wiki dado su título a través del API que ofrece mediawiki \par
+				Se realiza una petición sobre el URL
+				\texttt{https://en.wikipedia.org/w/api.php} y se agregan parámetros
+				extra, incluyendo el título del artículo, para obtener todos los
+				metadatos posibles de una revisión.
+				\par
+				Cada petición al API obtiene un máximo de 50 revisiones se llevan
+				a cabo con una diferencia de 2 segundos.}\\
+			\hline
+			\textbf{Observaciones} & \parbox[t]{3in}{Se extraen los siguientes datos: id de la revisión, tipo de revisión,
+			fecha, nombre de usuario, id de usuario, tamaño, comentarios,
+			contenido y etiquetas}\\
+			\hline
+		\end{tabular}
+		\caption{Extracción de Revisiones}
+		\label{tab:extract_revisions}
+	\end{center}
+\end{table}
