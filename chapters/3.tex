@@ -172,7 +172,32 @@ En las siguientes tablas se puede apreciar con detalle, por medio de sus histori
 
 \input{tables/count}
 
-* Query
+Por último, el API provee la ruta \texttt{/api/v1/query} que permite ejecutar consultas a la base de datos directamente de los parámetros recibidos por la petición.
+El cuerpo de las peticiones realizadas sobre esta ruta debe tener un formato json, en conjunto con el atributo de cabecera
+\texttt{content-type} que debe tener como valor \texttt{application/json}.
+La estructura del cuerpo de la petición debe coincidir con el formato aceptado para la creación de consultas por medio de PyMongo.
+Un ejemplo de este formato puede ser apreciado en la siguiente figura, en donde cada clave de la dupla clave-valor del json representa una función de agregación valida de MongoDB:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=1\textwidth]{figures/query_body_format}
+	\caption{Estructura del cuerpo de la petición a la ruta /api/v1/query}
+	\label{fig:query_body_format}
+\end{figure}
+
+Adicionalmente, la ruta permite especificar la colección de la base de datos a la cual consultar, y de forma opcional,
+el formato de fecha de alguna columna en caso de ser necesario.
+Un ejemplo, del uso de estos parámetros es el siguiente:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=1\textwidth]{figures/query_url}
+	\caption{Estructura del cuerpo de la petición a la ruta /api/v1/query}
+	\label{fig:query_url}
+\end{figure}
+
+Por medio de esta ruta es posible realizar cualquier tipo de consulta sobre la base de datos, y así, obtener métricas
+adicionales para su análisis posterior.
 
 \subsection{Almacenamiento}
 

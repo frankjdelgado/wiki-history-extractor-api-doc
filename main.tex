@@ -10,6 +10,8 @@
 \usepackage[font=footnotesize,labelfont=bf,justification=centering,textfont=it]{caption}
 \usepackage{float}
 \usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{longtable}
 \allsectionsfont{\mdseries\scshape}
 \SelectInputMappings{%
   aacute={á},
@@ -22,6 +24,7 @@
     {índice de tablas}
 }
 \renewcommand\spanishtablename{Tabla}
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
 \usepackage[
 backend=biber,
 sorting=ynt
