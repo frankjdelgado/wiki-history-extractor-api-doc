@@ -238,17 +238,37 @@ adicionales para su análisis posterior.
 \subsection{Almacenamiento}
 
 Como fue mencionado en el Capitulo 2, la base de datos utilizada para almacenar las revisiones y artículos wiki, es MongoDB.
-A través del proceso de extracción se almacenan dos colleciones:
-revisions, que representa las revisiones o historial de modificaciones
-del artículo wiki;
+A través del proceso de extracción se almacenan dos colecciones:
+revisions, que representa las revisiones o historial de modificaciones del artículo wiki;
  y articles, que se refiere a los artículos de dichas revisiones.
 
+Estas colecciones están distribuidas entre múltiples de shards que contienen un subgrupo de los datos fragmentados en el cluster, y adicionalmente, la unión de estos subgrupos conforman la totalidad de los datos almacenados por la aplicación.
+Esta estructura puede ser apreciada en la siguiente figura:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.4\textwidth]{figures/sharded_database}
+	\caption{División de la base de datos en subgrupos.}
+	\label{fig:sharded_database}
+\end{figure}
+
+Cada uno de estos subgrupos, tal como lo demuestra la figura \ref{fig:diagram_api_1}, esta siendo almacenado un servidor físico diferente, garantizando el escalamiento horizontal.
+Para la creación de estos grupos, el sharding se lleva a cabo a través del Hashed Sharding, de esta manera es
+posible alcanzar una distribución homogénea de los datos entre los servidores.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.5\textwidth]{figures/shards_distributed}
+	\caption{Shards de la base de datos distribuidos físicamente.}
+	\label{fig:shards_distributed}
+\end{figure}
 
 
-* MongoDB
-* Sharding
 * Replicas
-* Nodos
+
+* Config Server
+
+* Query Server
 
 
 \subsection{Pruebas}
