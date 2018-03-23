@@ -240,10 +240,13 @@ adicionales para su análisis posterior.
 Como fue mencionado en el Capitulo 2, la base de datos utilizada para almacenar las revisiones y artículos wiki, es MongoDB.
 A través del proceso de extracción se almacenan dos colecciones:
 revisions, que representa las revisiones o historial de modificaciones del artículo wiki;
- y articles, que se refiere a los artículos de dichas revisiones.
+y articles, que se refiere a los artículos de dichas revisiones.
+La arquitectura elejida para esta solución contiene la cantidad de elementos minimos para implementar un cluster de base de datos en MongoDB.
+La misma cuenta con dos sets de replicas de shards, un set de replicas para el servidor de configuración, y por último,
+un servidor de consultar.
 
-Estas colecciones están distribuidas entre múltiples de shards que contienen un subgrupo de los datos fragmentados en el cluster, y adicionalmente, la unión de estos subgrupos conforman la totalidad de los datos almacenados por la aplicación.
-Esta estructura puede ser apreciada en la siguiente figura:
+En detalle, las colecciones están distribuidas entre dos fragmentos o shards que contienen un subgrupo de los datos fragmentados en el cluster, y la unión de estos subgrupos conforman la totalidad de los datos almacenados por la aplicación.
+Esta división de datos, en grupos, puede ser apreciada en la siguiente figura:
 
 \begin{figure}[H]
 	\centering
@@ -263,13 +266,31 @@ posible alcanzar una distribución homogénea de los datos entre los servidores.
 	\label{fig:shards_distributed}
 \end{figure}
 
+Para poder crear un shard es necesario que este pertenezca a un set de replica de un mínimo de tres miembros,
+por lo tanto, por cada shard se tienen tres servidores físicos que permiten la replicación de ese subgrupo de datos, garantizando
+así la alta disponibilidad de los mismos.
+Para poder fragmentar la base de datos, se necesita de un minimo de dos shards, por lo que se tiene un total mínimo de 6 servidores
+que solo cumplen las labores de fragmentación y replicación.
 
-* Replicas
+Para poder coordinar las funciones de estos shards, como la autenticación, almacenamiento de los metadatos y consultas sobre el cluster de shards,
+es necesario hacer uso del servicio de un servidor de configuración.
+Este servidor, al igual que los shards, debe pertenecer a un grupo de replicas, sumando tres servidores físicos mas, que ademas,
+tienen la capacidad de recuperarse en caso de fallos, y nuevamente, permitir la alta disponibilidad.
 
-* Config Server
+Finalmente, se tiene un último servidor de base de datos cuya única labor es la ejecución de operaciones de lectura y escritura sobre la base de datos.
+Este servidor es denominado servidor de consultas y no es necesaria su replicación.
+Las aplicaciones clientes que deseen realizar alguna consulta sobre la base de datos, realizan sus peticiones únicamente a este servidor.
+Así mismo, una vez es recibida la petición de consulta, este se comunica con servidor de configuración para que este le brinde apoyo a la hora de ejecutar las operaciones.
+Con este último servidor, el conteo total de servidores de MongoDB para esta arquitectura es de diez nodos.
 
-* Query Server
+La siguiente figura muestra el diagrama de la arquitectura del cluster:
 
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.9\textwidth]{figures/mongo_cluster}
+	\caption{Arquitectura del cluster de base de datos.}
+	\label{fig:mongo_cluster}
+\end{figure}
 
 \subsection{Pruebas}
 
