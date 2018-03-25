@@ -1,0 +1,120 @@
+\subsection{Revisita}
+
+Una vez el proceso de extracción esta completo,
+es necesario mantener una actualización constante de los historiales declaración articulo.
+Para ello se hace uso de un algoritmo de revisita de estos artículos
+el cual se ejecuta en segundo plano a través del uso de cronjobs.
+
+Este algoritmo hace uso de un modelo probabilístico que calcula el coeficiente del tiempo revisita de cada artículo wiki de manera independiente haciendo uso de la distribución probabilística exponencial.
+
+El objetivo es buscar un valor esperado de tiempo que mida la distancia entre dos revisiones para ejecutar una revisita de una articulo wiki.
+Para ello, se plantea utilizar la fórmula de la esperanza matemática proveniente de la distribución de probabilidad exponencial, la cual es adecuada para estos casos, puesto que la misma estudia la longitud de los intervalos de una variable.
+
+Siendo $x$  una variable aleatoria que sigue una distribución exponencial, la cual mide el intervalo de tiempo transcurrido entre dos revisiones de un artículo de wiki;
+y sea  el promedio de revisiones por unidad de tiempo, podemos obtener valor medio o esperanza  matemática de $x$ con la siguiente fórmula:
+
+\begin{gather*}
+E(x) = 1 / \lambda
+\end{gather*}
+
+Para calcular el promedio de revisiones por unidad de tiempo, se toma una muestra de las revisiones almacenadas en el sistema.
+Es necesario que se tome en cuenta que cada artículo wiki tiene una frecuencia de revisiones que la distingue de las demás.
+Por ejemplo, para eventos deportivos recurrentes como las olimpiadas o copas mundiales de fútbol, la cantidad de revisiones que se ejercen sobre dichos artículos disminuyen drásticamente una vez culminado el evento, por lo que su frecuencia varía dependiendo de qué intervalos de tiempo se tome en cuenta a la hora de evaluarlos.
+Por lo tanto, para poder obtener el valor más adecuado a la frecuencia actual de los artículos, se toma como muestra el mayor número entre: las últimas 20 revisiones del artículo y el más reciente 10\% de la cantidad total de revisiones del artículo.
+
+Una vez vez extraída la muestra, es posible calcular  con la siguiente fórmula:
+
+\begin{gather*}
+\lambda = n / (t1 - t0)
+\end{gather*}
+
+Siendo $n$ el número de revisiones de la muestra;
+$t1$ la fecha de la revisión más reciente en la muestra;
+y $t2$ la fecha de la revisión más antigua en la muestra.
+
+Por último, se toma la fecha de la última revisión y se calcula la diferencia entre la fecha actual.
+Si dicho valor es mayor a la esperanza matemática $E(x)$, entonces se volverá a visitar el artículo.
+A medida que el  se eleve, menor es el intervalo de tiempo entre cada ocurrencia, y por lo tanto, el intervalo de tiempo entre cada revisita del artículo es menor.
+
+Usemos 2 casos de ejemplo:
+
+El artículo A tiene 280 revisiones almacenadas en el sistema.
+
+Se determina el valor más alto entre 20 y el 10\% de 280.
+
+\begin{gather*}
+100\% = 280 \text{revisiones}\\
+10\% = x\\
+x = (280 \text{revisiones} \times 10\%) / 100\%\\
+x = 28 \text{revisiones}
+\end{gather*}
+
+Se toma 28 como el número de la muestra a evaluar.
+
+Se calcula el intervalo de tiempo entre la primera y la última revisión $(t1 - t0)$ de la muestra de 28 revisiones.
+Asumamos que dicho valor es de 14 días, con el cual podemos calcular  de la siguiente manera:
+
+\begin{gather*}
+\lambda = n / (t1 - t0)\\
+\lambda = 28 \text{revisiones} / 14 \text{días}\\
+\lambda = 2 \text{revisiones} / \text{día}
+\end{gather*}
+
+Ahora, para calcular el valor de la esperanza:
+
+\begin{gather*}
+E(x)= 1 / \lambda\\
+E(x)= 1 / (2 \text{revisiones} / \text{día})\\
+E(x)= 0.5 (\text{días} / \text{revisión})
+\end{gather*}
+
+A continuación, podemos convertir la esperanza a otra unidad de tiempo más conveniente, por ejemplo horas, haciendo una conversión básica:
+
+\begin{gather*}
+E(x)= (0.5 \text{días} / \text{revisión}) * (24\text{horas}/1 \text{día})\\
+E(x)= 0.5*24 \text{horas} / \text{revisión} \\
+E(x) = 12 \text{horas}/ \text{revisión}
+\end{gather*}
+
+Si han pasado más de 12 horas desde la fecha de la última revisión, el artículo será encolado para su extracción.
+
+El artículo B tiene 1350 revisiones almacenadas en el sistema.
+
+Se determina el valor más alto entre 20 y el 10\% de 1350.
+
+\begin{gather*}
+100\% = 1350 \text{revisiones}\\
+10\% = x\\
+x = (1350 \text{revisiones} *10\%) / 100\% \\
+x = 135 \text{revisiones}
+\end{gather*}
+
+Se toma 135 como el número de la muestra a evaluar.
+
+Se calcula el intervalo de tiempo entre la primera y la última revisión $(t1 - t0)$ de la muestra de 135 revisiones.
+Asumamos que dicho valor es de 13 días, con el cual podemos calcular  de la siguiente manera:
+
+\begin{gather*}
+\lambda = n / (t1 - t0)\\
+\lambda = 135 \text{revisiones} / 13 \text{días} \\
+\lambda = 10.38 \text{revisiones} / \text{día}\\
+\text{Ahora, para calcular el valor de la esperanza:}\\
+E(x)= 1 / \lambda\\
+E(x)= 1/ ( 10.38 \text{revisiones} / \text{día})\\
+E(x)= 0.096 (\text{días} / \text{revisión})
+\end{gather*}
+
+A continuación, podemos convertir la esperanza a otra unidad de tiempo más conveniente, por ejemplo horas, haciendo una conversión básica:
+
+\begin{gather*}
+E(x) = (0.096 \text{días} / \text{revisión}) * (24\text{horas}/1 \text{día})\\
+E(x) = 0.096*24 \text{horas} / \text{revisión}\\
+E(x) = 2.31 \text{horas}/ \text{revisión}
+\end{gather*}
+
+Con esto, se puede verificar que en intervalos de mayor actividad, el algoritmo de revisita puede mantener un buen rendimiento.
+
+Un aspecto importante a vigilar es el porcentaje de revisiones que se tomará para la muestra.
+Al tomar el 10\% se puede tomar un periodo de revisiones que no están en el grupo de la tendencia, es decir, intervalos de tiempo donde la frecuencia de revisiones creció o disminuyó la afluencia en gran medida.
+Esto se podría controlar colocando un valor máximo de revisiones a extraer para el promedio, en vez de uno mínimo.
+Otra opción sería tomar un porcentaje menor, entre el 1 y el 5 porciento.
