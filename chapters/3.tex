@@ -241,7 +241,7 @@ Como fue mencionado en el Capitulo 2, la base de datos utilizada para almacenar 
 A través del proceso de extracción se almacenan dos colecciones:
 revisions, que representa las revisiones o historial de modificaciones del artículo wiki;
 y articles, que se refiere a los artículos de dichas revisiones.
-La arquitectura elejida para esta solución contiene la cantidad de elementos minimos para implementar un cluster de base de datos en MongoDB.
+La arquitectura elejida para esta solución contiene la cantidad de elementos mínimos para implementar un cluster de base de datos en MongoDB.
 La misma cuenta con dos sets de replicas de shards, un set de replicas para el servidor de configuración, y por último,
 un servidor de consultar.
 
@@ -269,10 +269,10 @@ posible alcanzar una distribución homogénea de los datos entre los servidores.
 Para poder crear un shard es necesario que este pertenezca a un set de replica de un mínimo de tres miembros,
 por lo tanto, por cada shard se tienen tres servidores físicos que permiten la replicación de ese subgrupo de datos, garantizando
 así la alta disponibilidad de los mismos.
-Para poder fragmentar la base de datos, se necesita de un minimo de dos shards, por lo que se tiene un total mínimo de 6 servidores
+Para poder fragmentar la base de datos, se necesita de un mínimo de dos shards, por lo que se tiene un total mínimo de 6 servidores
 que solo cumplen las labores de fragmentación y replicación.
 
-Para poder coordinar las funciones de estos shards, como la autenticación, almacenamiento de los metadatos y consultas sobre el cluster de shards,
+Para poder coordinar las funciones de estos shards, como la autenticación, almacenamiento de los meta datos y consultas sobre el cluster de shards,
 es necesario hacer uso del servicio de un servidor de configuración.
 Este servidor, al igual que los shards, debe pertenecer a un grupo de replicas, sumando tres servidores físicos mas, que ademas,
 tienen la capacidad de recuperarse en caso de fallos, y nuevamente, permitir la alta disponibilidad.
