@@ -38,7 +38,7 @@ las aplicaciones clientes que consumen el servicio:
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=1\textwidth]{figures/diagram_general}
-	\caption{Arquitectura general de la aplicación.}
+	\caption{Arquitectura general de la aplicación}
 	\label{fig:diagram_general}
 
 \end{figure}
@@ -53,7 +53,7 @@ de tal forma que cada servidor es utilizado de forma equitativa, tal como se mue
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=0.9\textwidth]{figures/round_robin}
-	\caption{Algoritmo de round robin para la distribución de peticiones de Nginx.}
+	\caption{Algoritmo de round robin para la distribución de peticiones de Nginx}
 	\label{fig:round_robin}
 \end{figure}
 
@@ -71,7 +71,7 @@ La interacción entre el servicio y una aplicación cliente puede ser apreciada 
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=1\textwidth]{figures/diagram_api_1}
-	\caption{Interacción entre una aplicación cliente y el API.}
+	\caption{Interacción entre una aplicación cliente y el API}
 	\label{fig:diagram_api_1}
 \end{figure}
 
@@ -106,7 +106,7 @@ En la siguiente figura se puede apreciar dos ejemplos del uso de los parámetros
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=1\textwidth]{figures/extract_url_format}
-	\caption{Parámetros para la extracción de historiales.}
+	\caption{Parámetros para la extracción de historiales}
 	\label{fig:extract_url_format}
 \end{figure}
 
@@ -121,7 +121,7 @@ del proceso de extracción, la cual luce de la siguiente manera:
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=1\textwidth]{figures/extract_response}
-	\caption{Respuesta a una petición de extracción de historiales de un artículo.}
+	\caption{Respuesta a una petición de extracción de historiales de un artículo}
 	\label{fig:extract_response}
 \end{figure}
 
@@ -151,7 +151,7 @@ En la siguiente figura se puede apreciar un ejemplo de la consulta del progreso 
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=0.8\textwidth]{figures/response_status}
-	\caption{Respuesta a una petición para consultar de progreso de una tarea de extracción.}
+	\caption{Respuesta a una petición para consultar de progreso de una tarea de extracción}
 	\label{fig:response_status}
 \end{figure}
 
@@ -174,7 +174,7 @@ Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciado en la sigu
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=0.8\textwidth]{figures/response_articles}
-	\caption{Respuesta a una petición de consulta de artículos.}
+	\caption{Respuesta a una petición de consulta de artículos}
 	\label{fig:response_articles}
 \end{figure}
 
@@ -188,7 +188,7 @@ revisiones:
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=1\textwidth]{figures/response_revisions}
-	\caption{Respuesta a una petición de consulta de revisiones.}
+	\caption{Respuesta a una petición de consulta de revisiones}
 	\label{fig:response_revisions}
 \end{figure}
 
@@ -251,7 +251,7 @@ Esta división de datos, en grupos, puede ser apreciada en la siguiente figura:
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=0.4\textwidth]{figures/sharded_database}
-	\caption{División de la base de datos en subgrupos.}
+	\caption{División de la base de datos en subgrupos}
 	\label{fig:sharded_database}
 \end{figure}
 
@@ -262,7 +262,7 @@ posible alcanzar una distribución homogénea de los datos entre los servidores.
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=0.5\textwidth]{figures/shards_distributed}
-	\caption{Shards de la base de datos distribuidos físicamente.}
+	\caption{Shards de la base de datos distribuidos físicamente}
 	\label{fig:shards_distributed}
 \end{figure}
 
@@ -288,7 +288,7 @@ La siguiente figura muestra el diagrama de la arquitectura del cluster:
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=0.9\textwidth]{figures/mongo_cluster}
-	\caption{Arquitectura del cluster de base de datos.}
+	\caption{Arquitectura del cluster de base de datos}
 	\label{fig:mongo_cluster}
 \end{figure}
 
@@ -297,6 +297,61 @@ La siguiente figura muestra el diagrama de la arquitectura del cluster:
 
 \subsection{Docker}
 
-* Emulación
-* Nodos
-* Digital Ocean?
+Para poder poner en funcionamiento esta aplicación distribuida y el cluster de la base de datos, se hace uso de la herramienta Docker.
+Docker permite levantar servicios que emulan un servidor físico, los cuales pueden ser conectados en una red para que puedan comunicarse y llevar a cabo todas las tareas de extracción y consultas.
+
+Docker permite generar ambientes tanto de producción como de desarrollo, en este caso, se hace uso de la versión \texttt{17.12.0-ce} en conjunto con Docker-Compose para facilitar el levantamiento de los servicios en ambos ambientes.
+
+En primera instancia se genera una imagen para la aplicación flask, los trabajadores de Celery y el resto de los servicios.
+El nombre de las imágenes esta definido bajo el siguiente formato: \texttt{nombre:version}, y pueden ser generadas por medio de un archivo llamado Dockerfile, cuyo contenido puede ser apreciado a continuación:
+
+\begin{lstlisting}[language=docker,caption={Contenido del archivo Dockerfile para la imagen del API},breaklines=true,label={code:dockerfile}]
+# Dockerfile
+FROM python:2.7-alpine
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+COPY . .
+
+CMD python manage.py runserver --host 0.0.0.0 --port=80
+\end{lstlisting}
+
+Para los servicios de Nginx, RabbitMQ y MongoDB se hace uso de imágenes provenientes del repositorio oficial llamado Docker Hub,
+las imágenes utilizadas son las siguientes: \texttt{rabbitmq:3.6.11}, \texttt{mongo:3.6.2} y \texttt{nginx:1.13.3}.
+
+La configuración de los contenedores se realiza a través del archivo \texttt{docker-compose.yml}, en el cual se especifican
+las imágenes a utilizar por cada servicio, variables de entorno, nombre de la red, entre otros.
+
+Las imágenes de RabbitMQ y MongoDB tienen la característica que permite utilizar variables de entorno para establecer el usuario y clave de acceso sin ningún tipo de configuración manual por parte del desarrollador,
+por lo tanto, las credenciales usadas para ambos servicios son agregadas en el archivo \texttt{docker-compose.yml} para restringir su acceso.
+Por ejemplo, para RabbitMQ las credenciales son las siguientes: \verb|RABBITMQ_DEFAULT_USER=wiki| y \verb|RABBITMQ_DEFAULT_PASS=wiki123|.
+Adicionalmente, se establecieron una serie reglas adicionales, como por ejemplo,
+declaración de volúmenes para mantener la persistencia de datos y
+la exposición de los puertos de RabbitMQ, MongoDB y Nginx;
+lo cual permite a las aplicaciones externas acceder a estos servicios, y en el caso de Nginx, permite que otras aplicaciones puedan ejecutar peticiones al API.
+
+Pare de la configuración de los servicios y contendedores de Docker puede ser apreciada a continuación:
+
+\begin{lstlisting}[language=docker-compose-2,caption={Declaración de servicios con Docker Compose},breaklines=true,label={code:dockercompose}]
+version: '3'
+
+services:
+
+    rabbit:
+        image: rabbitmq:3.6.11
+        restart: always
+        hostname: rabbit
+        environment:
+            - RABBITMQ_DEFAULT_USER=wiki
+            - RABBITMQ_DEFAULT_PASS=wiki123
+        ports:
+            - "5673:5672"
+        networks:
+            - wiki_network
+        volumes:
+            - 'wiki_rabbit:/data'
+\end{lstlisting}
