@@ -161,7 +161,6 @@ La siguiente tabla muestra la historia asociada a la extracción de revisiones:
 
 \input{chapters/revisit}
 
-
 \subsubsection{Consultas}
 
 El API consta de una ruta de acceso para consultar las revisiones extraídas y
@@ -233,15 +232,13 @@ Un ejemplo, del uso de estos parámetros es el siguiente, en donde se realiza un
 Por medio de esta ruta es posible realizar cualquier tipo de consulta sobre la base de datos, y así, obtener métricas
 adicionales para su análisis posterior.
 
-\input{tables/count}
-
 \subsection{Almacenamiento}
 
 Como fue mencionado en el Capitulo 2, la base de datos utilizada para almacenar las revisiones y artículos wiki, es MongoDB.
 A través del proceso de extracción se almacenan dos colecciones:
-revisions, que representa las revisiones o historial de modificaciones del artículo wiki;
-y articles, que se refiere a los artículos de dichas revisiones.
-La arquitectura elejida para esta solución contiene la cantidad de elementos mínimos para implementar un cluster de base de datos en MongoDB.
+\texttt{revisions}, que representa las revisiones o historial de modificaciones del artículo wiki;
+y \texttt{articles}, que se refiere a los artículos de dichas revisiones.
+La arquitectura elegida para esta solución contiene la cantidad de elementos mínimos para implementar un cluster de base de datos en MongoDB.
 La misma cuenta con dos sets de replicas de shards, un set de replicas para el servidor de configuración, y por último,
 un servidor de consultar.
 
