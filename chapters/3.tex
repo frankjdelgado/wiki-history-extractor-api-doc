@@ -16,30 +16,35 @@ contiene las nuevas funcionalidades esperadas.
 Cada una de estas tareas cuenta con instrumento de documentación al cuál llamaremos historias.
 Estas historias describen los detalles técnicos e categorizan las tareas en subgrupos.
 
-Por medio de RAD, fue posible la implementación de la solución al problema previamente planteado, lo cuál fue desarrollada como un servicio web API conformado por:
-
-\begin{itemize}
-
-\item Un módulo de extracción de revisiones de artículos wiki.
-
-\item Un módulo de almacenamiento de datos distribuido por medio de MongoDB.
-
-\item Un módulo de consulta de los artículos wiki extraídos y sus correspondientes revisiones.
-
-\item Y, por último, un módulo de consulta de métricas generales de las revisiones extraídas, incluyendo: totalizaciones, promedios y moda.
-
-\end{itemize}
-
-La siguiente figura representa la vista general de la arquitectura de la aplicación, y como la misma interactuá con
-las aplicaciones clientes que consumen el servicio:
+Por medio de RAD, fue posible la implementación de la solución al problema previamente planteado a través del desarrollo de múltiples componentes relacionados entre si, para
+brindar un servicio web como un API.
+La figura \ref{fig:diagram_general} muestra la arquitectura general del servicio web, y como la misma interactuá con las aplicaciones clientes que lo consumen.
 
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=1\textwidth]{figures/diagram_general}
 	\caption{Arquitectura general de la aplicación}
 	\label{fig:diagram_general}
-
 \end{figure}
+
+Los componentes que conforman este servicio son los siguientes
+
+\begin{itemize}
+
+\item Un servidor web (Nginx) que atiende, en primera instancia, las peticiones de las aplicaciones clientes y balancea la carga entre múltiple nodos que almacenan el API.
+
+\item Una o más aplicaciones Flask, almacenadas en máquinas separadas, que ejecutan el API e inician las tareas de consulta y extracción de revisiones.
+
+\item Un servicio de mensajería (RabbitMQ) que recibe las tareas iniciadas por el API
+y las encola para su posterior ejecución.
+
+\item Uno o más nodos que ejecutan un proceso trabajador de Celery para la ejecución de las tareas almacenadas en RabbitMQ.
+Estos nodos mantienen una comunicación con RabbitMQ para actualizar el estado y progreso de las tareas.
+
+\item Y, por último, un componente de almacenamiento de artículos wiki y sus revisiones. Para ello se hace uso de MongoDB y esta implementado como un cluster de base de datos distribuidos
+entre múltiples máquinas conectadas entre sí que permiten la fragmentación de los datos.
+
+\end{itemize}
 
 \subsection{Servidor Web}
 
