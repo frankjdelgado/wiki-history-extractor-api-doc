@@ -158,7 +158,7 @@ En la figura \ref{fig:response_status} se puede apreciar un ejemplo de la consul
 	\label{fig:response_status}
 \end{figure}
 
-La siguiente tabla muestra la historia asociada a la extracción de revisiones:
+La tabla \ref{tab:extract} muestra la historia asociada a la extracción de revisiones.
 
 \input{tables/extract}
 
@@ -200,7 +200,7 @@ El cálculo de estas métricas toma como parámetros múltiples atributos, tales
 Estos parámetros pasan por un proceso de aceptación, en donde solo son aceptados aquellos que estén ya incluidos en una lista llamada lista blanca, mientras que el resto son ignorados.
 Después de esta etapa, se genera una tarea de Celery para poder ser procesada en segundo plano hasta obtener el resultado.
 
-En las siguientes tablas se puede apreciar con detalle, por medio de sus historias, los filtros aceptados por cada métrica:
+En la tabla \ref{tab:count} se puede apreciar con detalle, por medio de sus historias, los filtros aceptados por cada métrica.
 
 \input{tables/count}
 
@@ -241,7 +241,11 @@ A través del proceso de extracción se almacenan dos colecciones:
 y \texttt{articles}, que se refiere a los artículos de dichas revisiones.
 La arquitectura elegida para esta solución contiene la cantidad de elementos mínimos para implementar un cluster de base de datos en MongoDB, y cuenta con: dos sets de réplicas de shards, un set de réplicas para el servidor de configuración, y por último, un servidor de consultar.
 
-En detalle, las colecciones están distribuidas entre dos fragmentos o shards que contienen un subgrupo de los datos fragmentados en el cluster, y la unión de estos subgrupos conforman la totalidad de los datos almacenados por la aplicación.
+La tabla \ref{tab:database} representa la historia asociada al almacenamiento de los datos en MongoDB.
+
+\input{tables/database}
+
+Las colecciones están distribuidas entre dos fragmentos o shards que contienen un subgrupo de los datos fragmentados en el cluster, y la unión de estos subgrupos conforman la totalidad de los datos almacenados por la aplicación.
 Esta separación de los datos puede ser apreciada en la figura \ref{fig:sharded_database} que se presenta a continuación:
 
 \begin{figure}[H]
@@ -288,16 +292,25 @@ La figura \ref{fig:mongo_cluster}, que se muestra a continuación, demuestra el 
 	\label{fig:mongo_cluster}
 \end{figure}
 
+En tabla \ref{tab:cluster} se puede apreciar la historia asociada a la configuración del cluster de MongoDB.
+
+\input{tables/cluster}
+
 \subsection{Docker}
 
 Para poder poner en funcionamiento esta aplicación distribuida y el cluster de la base de datos, se hace uso de la herramienta Docker.
 Docker permite levantar servicios que emulan un servidor físico, los cuales pueden ser conectados en una red para que puedan comunicarse y llevar a cabo todas las tareas de extracción y consultas.
 
-Docker permite generar ambientes tanto de producción como de desarrollo, en este caso, se hace uso de la versión \texttt{17.12.0-ce} en conjunto con Docker-Compose para facilitar el levantamiento de los servicios en ambos ambientes.
+Adicionalmente, permite generar ambientes tanto de producción como de desarrollo, en este caso, se hace uso de la versión \texttt{17.12.0-ce} en conjunto con Docker-Compose para facilitar el levantamiento de los servicios en ambos ambientes.
+
+En la tabla \ref{tab:docker}, que se presenta a continuación, se puede apreciar la historia asociada al uso de docker para el levantamiento de la aplicación.
+
+\input{tables/docker}
 
 En primera instancia se genera una imagen para la aplicación flask, los trabajadores de Celery y el resto de los servicios.
 El nombre de las imágenes está definido bajo el siguiente formato: \texttt{nombre:version}, y pueden ser generadas por medio de un archivo llamado Dockerfile, cuyo contenido puede ser apreciado a continuación:
 
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[language=docker,caption={Contenido del archivo Dockerfile para la imagen del API},breaklines=true,label={code:dockerfile}]
 # Dockerfile
 FROM python:2.7-alpine
@@ -312,6 +325,7 @@ COPY . .
 
 CMD python manage.py runserver --host 0.0.0.0 --port=80
 \end{lstlisting}
+\end{minipage}
 
 Para los servicios de Nginx, RabbitMQ y MongoDB se hace uso de imágenes provenientes del repositorio oficial llamado Docker Hub,
 las imágenes utilizadas son las siguientes: \texttt{rabbitmq:3.6.11}, \texttt{mongo:3.6.2} y \texttt{nginx:1.13.3}.
@@ -329,6 +343,7 @@ lo cual permite a las aplicaciones externas acceder a estos servicios, y en el c
 
 Pare de la configuración de los servicios y contendedores de Docker puede ser apreciada a continuación:
 
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[language=docker-compose-2,caption={Declaración de servicios con Docker Compose},breaklines=true,label={code:dockercompose}]
 version: '3'
 
@@ -348,3 +363,4 @@ services:
         volumes:
             - 'wiki_rabbit:/data'
 \end{lstlisting}
+\end{minipage}

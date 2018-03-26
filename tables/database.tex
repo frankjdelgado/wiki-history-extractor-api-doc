@@ -1,0 +1,36 @@
+\begin{longtable}{|l|m{4in}|}
+
+\hline
+\multicolumn{2}{|r|}{\textbf{Historia}} \\
+\hline
+\endfirsthead
+
+\multicolumn{2}{c}%
+{{\bfseries \tablename\ \thetable{} -- continuación de la página anterior}} \\
+\hline \multicolumn{2}{|r|}{\textbf{Historia}} \\ \hline
+\endhead
+
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Almacenamiento de Revisiones \\
+\hline
+\textbf{Sección} & Base de Datos \\
+\hline
+\textbf{Descripción} & Conjunto de funciones para la conexión, consulta e inserción de
+datos en la base de datos (MongoDB). Realizada con el lenguaje
+Python y definidas dentro de una clase, se encarga de brindar una
+capa de interacción entre MongDB y todas las operaciones de
+lectura/escritura de revisiones de un articulo wiki.
+\\
+\hline
+\textbf{Observaciones} & Las operaciones de escritura detectan si la revisión a insertar es
+un duplicado por medio del identificador único de la revisión
+(revid), y posteriormente procede a actualizar los datos ya existentes con los de la nueva entrada.
+\par
+Se genera una nueva conexión con la base de datos por cada
+operación que se requiera ejecutar en vez de utilizar una o más
+conexiones en común para llevar a cabo las tareas.\\
+\hline
+\caption{Almacenamiento de revisiones de artículos wiki}
+\label{tab:database}
+\end{longtable}

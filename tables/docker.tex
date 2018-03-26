@@ -1,0 +1,29 @@
+\begin{longtable}{|l|m{4in}|}
+
+\hline
+\multicolumn{2}{|r|}{\textbf{Historia}} \\
+\hline
+\endfirsthead
+
+\multicolumn{2}{c}%
+{{\bfseries \tablename\ \thetable{} -- continuación de la página anterior}} \\
+\hline \multicolumn{2}{|r|}{\textbf{Historia}} \\ \hline
+\endhead
+
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Automatización de levantamiento de la aplicación \\
+\hline
+\textbf{Sección} & Configuración de aplicación distribuida \\
+\hline
+\textbf{Descripción} & Configuración de las imágenes y contenedores de docker para el levantamiento
+de la aplicación, distribución de las tareas entre diversos nodos, y levantamiento del cluster de MongoDB.
+\\
+\hline
+\textbf{Observaciones} & La configuración de los contenedores se realiza por medio del archivo \texttt{docker-compose.yml}. Se implementó un archivo por cada ambiente de desarrollo, los cuales son: Digital Ocean, el cual es un servicio de alojamiento web y sirve como ambiente de producción sin la inclusion de las replicas de mongo;
+Desarrollo, para es el ambiente para desarrollo continuo de la aplicación;
+y por ultimo, Replica, el cual define la configuración completa del cluster de MongoDB y sirve como ambiente de producción \\
+\hline
+\caption{Configuración del levantamiento de la aplicación por medio de Docker}
+\label{tab:docker}
+\end{longtable}

@@ -12,6 +12,7 @@ El código fuente \ref{code:crontab} muestra el proceso de edición del archivo 
 para acceder fácilmente al archivo, y ademas, se muestra el formato aceptado por Cron
 para asignar la frecuencia de ejecución.
 
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[caption={Edición del archivo de configuración de Cron},breaklines=true,label={code:crontab}]
 $ crontab -e
 #---------------- Minutos (0 - 59)
@@ -22,13 +23,16 @@ $ crontab -e
 |  |  |  |  |
 *  *  *  *  *  ejemplo-script.sh
 \end{lstlisting}
+\end{minipage}
 
 La configuración de Cron para el algoritmo de revisita puede ser apreciado en el código fuente \ref{code:crontab_revisit}, en el cual el comando \texttt{python -m app.cronjobs.revisit} se ejecuta de forma diaria a las 12:00AM.
 
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[caption={Edición del archivo de configuración de Cron},breaklines=true,label={code:crontab_revisit}]
 $ crontab -e
 0 0 * * * python -m app.cronjobs.revisit
 \end{lstlisting}
+\end{minipage}
 
 El algoritmo de revisita hace uso de un modelo probabilístico que calcula el coeficiente del tiempo revisita de cada artículo wiki de manera independiente haciendo uso de la distribución probabilística exponencial.
 
@@ -153,7 +157,6 @@ Usemos 2 casos de ejemplo:
 
 Con esto, se puede verificar que en intervalos de mayor actividad, el algoritmo de revisita puede mantener un buen rendimiento.
 
-Un aspecto importante a vigilar es el porcentaje de revisiones que se tomará para la muestra.
-Al tomar el 10\% se puede tomar un periodo de revisiones que no están en el grupo de la tendencia, es decir, intervalos de tiempo donde la frecuencia de revisiones creció o disminuyó la afluencia en gran medida.
-Esto se podría controlar colocando un valor máximo de revisiones a extraer para el promedio, en vez de uno mínimo.
-Otra opción sería tomar un porcentaje menor, entre el 1\% y el 5\%.
+La tabla \ref{tab:revisit}, mostrada a continuación, representa la historia asociada al algoritmo de revisita.
+
+\input{tables/revisit}
