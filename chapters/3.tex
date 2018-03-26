@@ -2,11 +2,9 @@
 
 \subsection{Método de Desarrollo}
 
-Para llevar a cabo el cumplimiento de los objetivos planteados en el Capítulo 2, es necesario definir un
-esquema o metodología de trabajo que permita la elaboración de un conjunto de
-lineamientos de manera estructurada y organizada. Por lo tanto, se hace uso de el método de
-Desarrollo Rápido de Aplicaciones (RAD), el cual permite la iteración rápida y continua
-de pequeños objetivos para alcanzar la meta final.
+Para llevar a cabo el cumplimiento de los objetivos planteados en el Capítulo 2, es necesario definir un esquema o metodología de trabajo que permita la elaboración de un conjunto de
+lineamientos de manera estructurada y organizada.
+Por lo tanto, se hace uso de el método de Desarrollo Rápido de Aplicaciones (RAD), el cual permite la iteración rápida y continua de pequeños objetivos para alcanzar la meta final.
 
 RAD es un proceso de desarrollo de software que
 integra un conjunto de técnicas, lineamientos y herramientas que permiten llevar a cabo, en
@@ -22,13 +20,13 @@ Por medio de RAD, fue posible la implementación de la solución al problema pre
 
 \begin{itemize}
 
-\item Un modulo de extracción de revisiones de artículos wiki.
+\item Un módulo de extracción de revisiones de artículos wiki.
 
-\item Un modulo de almacenamiento de datos distribuido por medio de MongoDB.
+\item Un módulo de almacenamiento de datos distribuido por medio de MongoDB.
 
-\item Un modulo de consulta de los artículos wiki extraídos y sus correspondientes revisiones.
+\item Un módulo de consulta de los artículos wiki extraídos y sus correspondientes revisiones.
 
-\item Y, por último, un modulo de consulta de métricas generales de las revisiones extraídas, incluyendo: totalizaciones, promedios y moda.
+\item Y, por último, un módulo de consulta de métricas generales de las revisiones extraídas, incluyendo: totalizaciones, promedios y moda.
 
 \end{itemize}
 
@@ -48,7 +46,7 @@ las aplicaciones clientes que consumen el servicio:
 El servidor web que atiende las solicitudes en primera instancia es Nginx,
 el cual funciona como un intermediario entre el cliente y el API que responde dicha solicitud.
 Nginx permite balancear la carga de trabajo entre múltiples servidores que contienen la aplicación mediante el algoritmo de round robin,
-de tal forma que cada servidor es utilizado de forma equitativa, tal como se muestra en la siguiente figura:
+de tal forma que cada servidor es utilizado de forma equitativa, tal como se muestra en la figura \ref{fig:round_robin}:
 
 \begin{figure}[H]
 	\centering
@@ -101,7 +99,7 @@ es completamente opcional, puesto que el sistema asume el inglés como lenguaje 
 \texttt{url}.
 Es necesario proporcionar el parámetro \texttt{url} o \texttt{title} de forma obligatoria para poder llevar a cabo la extracción.
 
-En la siguiente figura se puede apreciar dos ejemplos del uso de los parámetros \texttt{url}, \texttt{title} y \texttt{locale}:
+En la figura \ref{fig:extract_url_format} se puede apreciar dos ejemplos del uso de los parámetros \texttt{url}, \texttt{title} y \texttt{locale}:
 
 \begin{figure}[H]
 	\centering
@@ -116,7 +114,7 @@ cuales están conectados entre si gracias a RabbitMQ, escuchando constantemente 
 Una vez recibida la petición por el API, se genera una tarea de extracción por medio de Celery, la cual tiene un identificador único. Esta tarea es encolada en una lista de
 espera que es atendida por uno de los trabajadores conectados a RabbitMQ y es ejecutada en segundo plano.
 Posteriormente, el API crea una respuesta a la petición generando una ruta para consultar el progreso
-del proceso de extracción, la cual luce de la siguiente manera:
+del proceso de extracción, la cual luce como se muestra en la figura \ref{fig:extract_response}:
 
 \begin{figure}[H]
 	\centering
@@ -126,12 +124,12 @@ del proceso de extracción, la cual luce de la siguiente manera:
 \end{figure}
 
 Durante el proceso de extracción, se realizan peticiones hacia el API de Wikipedia.
-Se toma como URL por defecto la dirección https://en.wikipedia.org/w/api.php, en conjunto con diversos parametros, tales como:
+Se toma como URL por defecto la dirección https://en.wikipedia.org/w/api.php, en conjunto con diversos parámetros, tales como:
 
 \begin{itemize}
 	\item \textbf{action}: tipo de petición que se realiza sobre este API, en este caso se hace uso del valor \texttt{query} para indicar que solo se realizará una consulta.
 
-	\item \textbf{format}: formato de la respuesta obtenida, la cual puede ser xml o json.
+	\item \textbf{format}: formato de la respuesta obtenida, la cual puede ser XML o JSON.
 
 	\item \textbf{props}: la propiedad del articulo al cual se desea consultar, en este caso se usa el valor \texttt{revisions} para poder extraer el historial de modificaciones del mismo.
 
@@ -146,7 +144,7 @@ Justo antes de enviar la solicitud al API de wikipedia, se verifica que el artí
 Posteriormente, se extraen sus revisiones, y puesto que la respuesta del API coloca las revisiones mas recientes al principio, el extractor culmina su ejecución una vez determina que alcanzo una revisión que ya ha sido almacenada.
 Al almacenar las revisiones en la base de datos, se actualiza el documento del artículo con la fecha de la ultima extracción y el identificador de la revisión extraída, y por ultimo, se actualiza el progreso de la tarea.
 
-En la siguiente figura se puede apreciar un ejemplo de la consulta del progreso de las tareas:
+En la figura \ref{fig:response_status} se puede apreciar un ejemplo de la consulta del progreso de las tareas:
 
 \begin{figure}[H]
 	\centering
@@ -159,8 +157,6 @@ La siguiente tabla muestra la historia asociada a la extracción de revisiones:
 
 \input{tables/extract}
 
-\input{chapters/revisit}
-
 \subsubsection{Consultas}
 
 El API consta de una ruta de acceso para consultar las revisiones extraídas y
@@ -171,7 +167,7 @@ entre ellas están: los parámetros de paginación \texttt{page} y \texttt{page\
 y los parámetros de búsqueda que corresponden a los atributos del artículo,
 tales como: \texttt{title}, \texttt{first\_extraction\_date}, \texttt{last\_extraction\_date}, \texttt{last\_revision\_extracted} y \texttt{locale}.
 
-Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciado en la siguiente figura:
+Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciada en la figura \ref{fig:response_articles}:
 
 \begin{figure}[H]
 	\centering
@@ -180,12 +176,11 @@ Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciado en la sigu
 	\label{fig:response_articles}
 \end{figure}
 
-En el caso de la consulta de las revisiones, adicionalmente a los parámetros de búsqueda, esta el parámetro \texttt{sort} que permite, por fecha de extracción, el
+En el caso de la consulta de las revisiones, adicionalmente a los parámetros de búsqueda, está el parámetro \texttt{sort} que permite, por fecha de extracción, el
 ordenamiento ascendente o descendiente de las revisiones, y la elección de cuales
 atributos se desean mostrar por cada revisión.
 
-En la siguiente figura se puede apreciar una respuesta del servidor en la consulta de
-revisiones:
+En la figura \ref{fig:response_revisions} se puede apreciar una respuesta del servidor en la consulta de revisiones:
 
 \begin{figure}[H]
 	\centering
@@ -196,9 +191,8 @@ revisiones:
 
 Por otro lado, existen mas rutas de acceso al API para la consulta de diversas métricas predefinidas, tales como: promedio, conteo de revisiones y moda.
 
-El cálculo de estas métricas toma como parámetros múltiples atributos
-como el título del artículo o la fecha de extracción, para poder filtrar el numero total revisiones de la consulta.
-Estos parámetros pasan por un proceso de aceptación, en donde solo son aceptados aquellos que estén ya incluidos en una lista llamada lista blanca, aquellos parámetros que no estén dentro de esta lista son ignorados.
+El cálculo de estas métricas toma como parámetros múltiples atributos, tales como: el título del artículo o la fecha de extracción, para poder filtrar el numero total revisiones de la consulta.
+Estos parámetros pasan por un proceso de aceptación, en donde solo son aceptados aquellos que estén ya incluidos en una lista llamada lista blanca, mientras que el resto son ignorados.
 Después de esta etapa, se genera una tarea de Celery para poder ser procesada en segundo plano hasta obtener el resultado.
 
 En las siguientes tablas se puede apreciar con detalle, por medio de sus historias, los filtros aceptados por cada métrica:
@@ -206,10 +200,10 @@ En las siguientes tablas se puede apreciar con detalle, por medio de sus histori
 \input{tables/count}
 
 Por último, el API provee la ruta \texttt{/api/v1/query} que permite ejecutar consultas a la base de datos directamente de los parámetros recibidos por la petición.
-El cuerpo de las peticiones realizadas sobre esta ruta debe tener un formato json, en conjunto con el atributo de cabecera
+El cuerpo de las peticiones realizadas sobre esta ruta debe tener un formato JSON, en conjunto con el atributo de cabecera
 \texttt{content-type} que debe tener como valor \texttt{application/json}.
 La estructura del cuerpo de la petición debe coincidir con el formato aceptado para la creación de consultas por medio de PyMongo.
-Un ejemplo de este formato puede ser apreciado en la siguiente figura, en donde cada clave de la dupla clave-valor del json representa una función de agregación valida de MongoDB:
+Un ejemplo de este formato puede ser apreciado en la figura \ref{fig:query_body_format}, en donde cada clave de la dupla clave-valor del archivo JSON representa una función de agregación valida de MongoDB:
 
 \begin{figure}[H]
 	\centering
@@ -220,7 +214,7 @@ Un ejemplo de este formato puede ser apreciado en la siguiente figura, en donde 
 
 Adicionalmente, la ruta permite especificar la colección de la base de datos a la cual consultar, y de forma opcional,
 el formato de fecha de alguna columna en caso de ser necesario.
-Un ejemplo, del uso de estos parámetros es el siguiente, en donde se realiza una consulta de la colección llamada revisions:
+Un ejemplo, del uso de estos parámetros es el que se muestra en la figura \ref{fig:query_url}, en donde se realiza una consulta de la colección llamada \texttt{revisions}
 
 \begin{figure}[H]
 	\centering
@@ -232,18 +226,18 @@ Un ejemplo, del uso de estos parámetros es el siguiente, en donde se realiza un
 Por medio de esta ruta es posible realizar cualquier tipo de consulta sobre la base de datos, y así, obtener métricas
 adicionales para su análisis posterior.
 
+\input{chapters/revisit}
+
 \subsection{Almacenamiento}
 
-Como fue mencionado en el Capitulo 2, la base de datos utilizada para almacenar las revisiones y artículos wiki, es MongoDB.
+Como fue mencionado en el Capítulo 2, la base de datos utilizada para almacenar las revisiones y artículos wiki, es MongoDB.
 A través del proceso de extracción se almacenan dos colecciones:
 \texttt{revisions}, que representa las revisiones o historial de modificaciones del artículo wiki;
 y \texttt{articles}, que se refiere a los artículos de dichas revisiones.
-La arquitectura elegida para esta solución contiene la cantidad de elementos mínimos para implementar un cluster de base de datos en MongoDB.
-La misma cuenta con dos sets de replicas de shards, un set de replicas para el servidor de configuración, y por último,
-un servidor de consultar.
+La arquitectura elegida para esta solución contiene la cantidad de elementos mínimos para implementar un cluster de base de datos en MongoDB, y cuenta con: dos sets de réplicas de shards, un set de réplicas para el servidor de configuración, y por último, un servidor de consultar.
 
 En detalle, las colecciones están distribuidas entre dos fragmentos o shards que contienen un subgrupo de los datos fragmentados en el cluster, y la unión de estos subgrupos conforman la totalidad de los datos almacenados por la aplicación.
-Esta división de datos, en grupos, puede ser apreciada en la siguiente figura:
+Esta separación de los datos puede ser apreciada en la figura \ref{fig:sharded_database} que se presenta a continuación:
 
 \begin{figure}[H]
 	\centering
@@ -252,7 +246,7 @@ Esta división de datos, en grupos, puede ser apreciada en la siguiente figura:
 	\label{fig:sharded_database}
 \end{figure}
 
-Cada uno de estos subgrupos, tal como lo demuestra la figura \ref{fig:diagram_api_1}, esta siendo almacenado un servidor físico diferente, garantizando el escalamiento horizontal.
+Cada uno de estos subgrupos está siendo almacenado un servidor físico diferente, garantizando el escalamiento horizontal, tal como lo demuestra la figura \ref{fig:shards_distributed},
 Para la creación de estos grupos, el sharding se lleva a cabo a través del Hashed Sharding, de esta manera es
 posible alcanzar una distribución homogénea de los datos entre los servidores.
 
@@ -263,7 +257,7 @@ posible alcanzar una distribución homogénea de los datos entre los servidores.
 	\label{fig:shards_distributed}
 \end{figure}
 
-Para poder crear un shard es necesario que este pertenezca a un set de replica de un mínimo de tres miembros,
+Para poder crear un shard es necesario que este pertenezca a un set de réplica de un mínimo de tres miembros,
 por lo tanto, por cada shard se tienen tres servidores físicos que permiten la replicación de ese subgrupo de datos, garantizando
 así la alta disponibilidad de los mismos.
 Para poder fragmentar la base de datos, se necesita de un mínimo de dos shards, por lo que se tiene un total mínimo de 6 servidores
@@ -271,16 +265,16 @@ que solo cumplen las labores de fragmentación y replicación.
 
 Para poder coordinar las funciones de estos shards, como la autenticación, almacenamiento de los meta datos y consultas sobre el cluster de shards,
 es necesario hacer uso del servicio de un servidor de configuración.
-Este servidor, al igual que los shards, debe pertenecer a un grupo de replicas, sumando tres servidores físicos mas, que ademas,
+Este servidor, al igual que los shards, debe pertenecer a un grupo de réplicas, sumando tres servidores físicos mas, que ademas,
 tienen la capacidad de recuperarse en caso de fallos, y nuevamente, permitir la alta disponibilidad.
 
 Finalmente, se tiene un último servidor de base de datos cuya única labor es la ejecución de operaciones de lectura y escritura sobre la base de datos.
 Este servidor es denominado servidor de consultas y no es necesaria su replicación.
 Las aplicaciones clientes que deseen realizar alguna consulta sobre la base de datos, realizan sus peticiones únicamente a este servidor.
 Así mismo, una vez es recibida la petición de consulta, este se comunica con servidor de configuración para que este le brinde apoyo a la hora de ejecutar las operaciones.
-Con este último servidor, el conteo total de servidores de MongoDB para esta arquitectura es de diez nodos.
+Con este último servidor, el conteo total de servidores de MongoDB para está arquitectura es de diez nodos.
 
-La siguiente figura muestra el diagrama de la arquitectura del cluster:
+La figura \ref{fig:mongo_cluster}, que se muestra a continuación, demuestra el diagrama de la arquitectura del cluster de base de datos implementado:
 
 \begin{figure}[H]
 	\centering
@@ -297,7 +291,7 @@ Docker permite levantar servicios que emulan un servidor físico, los cuales pue
 Docker permite generar ambientes tanto de producción como de desarrollo, en este caso, se hace uso de la versión \texttt{17.12.0-ce} en conjunto con Docker-Compose para facilitar el levantamiento de los servicios en ambos ambientes.
 
 En primera instancia se genera una imagen para la aplicación flask, los trabajadores de Celery y el resto de los servicios.
-El nombre de las imágenes esta definido bajo el siguiente formato: \texttt{nombre:version}, y pueden ser generadas por medio de un archivo llamado Dockerfile, cuyo contenido puede ser apreciado a continuación:
+El nombre de las imágenes está definido bajo el siguiente formato: \texttt{nombre:version}, y pueden ser generadas por medio de un archivo llamado Dockerfile, cuyo contenido puede ser apreciado a continuación:
 
 \begin{lstlisting}[language=docker,caption={Contenido del archivo Dockerfile para la imagen del API},breaklines=true,label={code:dockerfile}]
 # Dockerfile

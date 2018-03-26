@@ -1,8 +1,8 @@
-\section{Problema}
+\section{Problema a Resolver y Objetivos}
 
 \subsection{Planteamiento Del Problema}
 
-Un \emph{wiki} es una página web que permite la colaboración de múltiples usuarios para 
+Un \emph{wiki} es una página web que permite la colaboración de múltiples usuarios para
 la creación y modificación de contenido que hacen referencia a un tema en particular y
 que pueden estar relacionados entre ellos a través de hipervínculos.
 
@@ -15,15 +15,15 @@ nombre del autor o la fecha de edición.
 Hoy en día el proyecto enciclopedia en línea Wikipedia es una de las paginas web basadas en wiki
 mas populares, albergando miles de colecciones de artículos wiki en múltiples idiomas \cite{3}.
 
-La aplicación Wiki-Metrics-UCV tiene como objetivo la extracción de estos historiales de
-de los artículos wiki para su almacenamiento y posteriormente usar sus datos para 
+La aplicación Wiki-Metrics-UCV tiene como objetivo la extracción de estos historiales
+de los artículos wiki para su almacenamiento y posteriormente usar sus datos para
 el cálculo de diversas métricas. Wiki-Metrics-UCV hace uso de técnicas de extracción web (web
 scraping) sobre los artículos wiki y, a través de un análisis sintáctico, almacena los datos
 obtenidos en una base de datos no relacional \cite{4}.
 
 El proceso de extracción de historiales de artículos wiki puede llegar a tomar
 una cantidad considerable de tiempo, no sólo por la cantidad entradas,
-sino por el número de documentos que un repositorio wiki alberga. 
+sino por el número de documentos que un repositorio wiki alberga.
 
 En aplicaciones como Wiki-Metrics-UCV, que corresponden a una solución de cómputo y almacenamiento
 centralizado, existen diversas limitaciones que se presentan en la solución. Entre ellas es
@@ -32,7 +32,7 @@ de procesar un artículo antes de pasar al siguiente, y como consecuencia, el ti
 empleado para procesar grandes volúmenes de historiales no se encuentra dentro de un
 intervalo aceptable para la cantidad de revisiones previstas a procesar.
 
-Adicionalmente, los repositorios wiki tales como Wikipedia limitan la cantidad de peticiones HTTP que se 
+Adicionalmente, los repositorios wiki tales como Wikipedia limitan la cantidad de peticiones HTTP que se
 realizan sobre sus servicios. Por lo tanto, existe la posibilidad de que
 un sistema distribuido lleve a cabo una cantidad peticiones concurrentes que puedan
 ser vistas como un ataques de denegación de servicio (DDoS).
@@ -47,9 +47,9 @@ el aspecto de la extracción web.
 
 En términos legales, y en las clausulas de los términos y condiciones de uso, cada repositorio
 wiki indican como el uso de sus servicios y la extracción de sus datos públicos puede ser considerado
-inapropiado. En el caso de Wikipedia, por medio de sus términos de uso se indica que un individuo debe 
-evadir cualquier actividad, ya sea legal o ilegal, que pueda comprometer su infraestructura tecnológica o 
-violar derechos de autor \cite{7}. 
+inapropiado. En el caso de Wikipedia, por medio de sus términos de uso se indica que un individuo debe
+evadir cualquier actividad, ya sea legal o ilegal, que pueda comprometer su infraestructura tecnológica o
+violar derechos de autor \cite{7}.
 
 Dado que Wiki-Metrics-UCV no recolecta la información contenida en un wiki, ni
 existe una cláusula específica sobre la recolección de datos de los historiales de edición,
@@ -70,13 +70,13 @@ sistema (sysadmin) están en la potestad de bloquear la dirección IP de quien r
 estas peticiones \cite{8}.
 
 La adaptación de Wiki-Metrics-UCV a un sistema distribuido disminuye varias de las limitaciones previamente
-mencionadas. Con la presencia de varios nodos en el sistema es posible procesar diversos 
-artículos de forma paralela, evitando cuellos de botella, y ademas, dividir la carga de almacenamiento 
+mencionadas. Con la presencia de varios nodos en el sistema es posible procesar diversos
+artículos de forma paralela, evitando cuellos de botella, y ademas, dividir la carga de almacenamiento
 entre los componentes del sistema.
 
-Este escalamiento horizontal, tal como lo explica el teorema CAP, trae consigo problemas 
+Este escalamiento horizontal, tal como lo explica el teorema CAP, trae consigo problemas
 adicionales e  intrínsecos de todo sistema distribuido. Es imposible para un servicio garantizar las tres
-siguientes características: consistencia, disponibilidad y tolerancia a fallos. A pesar de que estas 
+siguientes características: consistencia, disponibilidad y tolerancia a fallos. A pesar de que estas
 propiedades son esenciales, es necesario identificar qué características deben ser acopladas a
 esta nueva solución y cual debe ser sacrificada \cite{6}.
 
@@ -122,19 +122,19 @@ producir durante la extracción de los historiales. Por medio de de un escalamie
 es posible hacer uso de un grupo de computadores que comparten la carga de todas las tareas a ejecutar e
 incrementar la cantidad de datos que se pueden almacenar.
 
-El escalamiento horizontal involucra dividir los datos en grupos y almacenarlos en los multiples nodos
-que se requieran agregar al sistema para incrementar su capacidad. Aunque la capacidad de uno de estos
-nodos sea limitada, cada uno de ellos solo manejera un subconjunto de la carga total, permitiendo
+El escalamiento horizontal involucra dividir los datos en grupos y almacenarlos en los múltiples nodos
+que se requieran agregar al sistema para incrementar su capacidad.
+Aunque la capacidad de uno de estos nodos sea limitada, cada uno de ellos solo manejara un subconjunto de la carga total, permitiendo
 de forma potencial que se obtenga una mayor eficiencia que un solo servidor de alta capacidad y potencia.
 Expandir la capacidad del sistema solo requiere agregar tantos nodos sea necesario, que por lo general
-suele ser de menor costo que adquerir componentes de alta gama en una sola maquina.
+suele ser de menor costo que adquirir componentes de alta gama en una sola máquina.
 
-Contar con multiples nodos permite aumentar la disponibilidad del servicio, caracteristica
-definida como alta disponibilidad. Con al menos dos miembros es posible recuperar de errores tales como
-la detención abrupta de un servidor, en este caso, el miembro restante puede manejar la carga de trabajo
-mientras el primero reinicia sus operaciones. Incluso, se pueden obtener beneficios dependiendo de
-la ubicación geográfica de estos miembros. El consumidor de un servicio puede obtener una respuesta
-más rápida a sus peticiones con la implementacion de servidores cache cercanos a su ubicación geográfica.
+Contar con múltiples nodos permite aumentar la disponibilidad del servicio, característica
+definida como alta disponibilidad.
+Con al menos dos miembros es posible recuperar de errores tales como
+la detención abrupta de un servidor, en este caso, el miembro restante puede manejar la carga de trabajo mientras el primero reinicia sus operaciones.
+Incluso, se pueden obtener beneficios dependiendo de la ubicación geográfica de estos miembros.
+El consumidor de un servicio puede obtener una respuesta más rápida a sus peticiones con la implementación de servidores cache cercanos a su ubicación geográfica.
 
 \subsection{Objetivos}
 
@@ -146,8 +146,6 @@ técnicas de web scraping y el uso de Wikimedia API.
 
 \subsubsection{Objetivo Específicos}
 
-Desarrollar un algoritmo de web scraping de bajo impacto sobre las revisiones
-de un artículo wiki.
 
 \begin{itemize}
 \item Desarrollar de un módulo para la recolección y de consulta de los datos sobre el

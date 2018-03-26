@@ -1,10 +1,10 @@
-\section{Tecnologías}
+\section{Tecnologías Utilizadas}
 
-En este capitulo se describen las tecnologías, librerías y servicios utilizados para el desarrollo
-del sistema. Entre ellas, las siguientes:
+En este capítulo se describen las tecnologías, librerías y servicios utilizados para el desarrollo
+del sistema.
 
 La base de datos seleccionada para almacenar las revisiones de los artículos wiki, llamada MongoDB,
-y la definición de las características que facilitan el escalamiento horizontal de los datos, tales como: la replicación,
+y la definición de las características que facilitan el escalamiento horizontal de los datos, tales como: la réplicación,
 que permite brindar un servicio con alta disponibilidad; y las particiones, que se refieren a la capacidad
 que tiene MongoDB para dividir los datos almacenados en subgrupos entre los múltiples miembros del sistema.
 
@@ -12,8 +12,8 @@ Celery y RabbitMQ, que permiten la creación de una cola de tareas para que pued
 disminuyendo los cuellos de botella y así optimizar de cierta manera los tiempos de respuesta y la eficiencia
 general del sistema.
 
-Flask, el microframework de python, que con su implementación minimista facilita la creación de aplicaciones web
-sin componentes innecesarios, y en este caso, permite la creación de un servicio API que aplicaciones
+Flask, el microframework de Python, el cual permite el desarrollo de aplicaciones web
+sin la inclusión componentes innecesarios, y en este caso, permite la creación de un servicio API que aplicaciones
 de terceros pueden consumir para la extracción y consulta de las revisiones de los artículos wiki.
 
 Y por último, Docker, que sirve como una herramienta para emular un ambiente distribuido en donde
@@ -34,28 +34,28 @@ provee la habilidad e implementar la distribución geográfica de datos (shardin
 base de datos ser escalada de forma horizontal con el uso de un conjunto de componentes de hardware o mediante
 de la nube (cloud).
 
-Adicionalmente, MongoDB esta diseñado para ser ejecutado en un sistema de múltiples nodos, por lo tanto,
+Adicionalmente, MongoDB \cite{10} está diseñado para ser ejecutado en un sistema de múltiples nodos, por lo tanto,
 en la presencia de un escalamiento horizontal, incluye la capacidad para la replicación
 y sincronización de datos entre todos los componentes del sistema. De esta manera se garantiza la posibilidad
-de implementar un servicio con alta disponibilidad \cite{10}.
+de implementar un servicio con alta disponibilidad.
 
 \subsubsection{Replicación}
 
 La replicación permite la redundancia de datos y el aumento de disponibilidad de los mismos en aplicaciones distribuidas.
-Hace uso de múltiples servidores conectados entre sí y genera una replica de los datos en cada uno de ellos, de
+Hace uso de múltiples servidores conectados entre sí y genera una réplica de los datos en cada uno de ellos, de
 esta manera se obtiene cierto nivel de tolerancia a fallos en caso de que un servidor de base de datos falle.
 También es posible mantener copias adicionales para propósitos específicos como recuperación en casos de desastre,
 reportes o respaldos \cite{11}.
 
-En MongoDB se hace uso de grupos de replica (replica sets) para almacenar las copias de datos en múltiples
+En MongoDB se hace uso de grupos de réplica (replica sets) para almacenar las copias de datos en múltiples
 servidores de base de datos. Un grupo de replica previene los tiempos de inactividad de la base de datos
 en caso de errores y ayuda a escalar las operaciones de lectura. La recuperación de un miembro del grupo de
 replica se realiza de forma automática. En un grupo de replica cualquier miembro puede actuar como nodo principal
 y el resto como secundario, por lo tanto, en caso de fallas de red o de hardware, un miembro del grupo
 puede tomar el puesto de nodo primario después de haber sido elegido siguiendo un conjunto de reglas predefinidas.
 
-Un grupo de replicas esta conformado por un nodo principal que realizara todas las operaciones de escritura, múltiples nodos
-secundarios y un nodo arbitro opcional, tal cual como lo muestra la siguiente figura:
+Un grupo de réplicas esta conformado por un nodo principal que realizará todas las operaciones de escritura, múltiples nodos
+secundarios y un nodo árbitro opcional, tal cual como lo muestra figura \ref{fig:replicas}:
 
 \begin{figure}[H]
 	\centering
@@ -68,8 +68,8 @@ Para poder crear estos grupos es necesario tener un mínimo de tres nodos y esca
 debe a que cuando los componentes del grupo realicen la votación para elegir el nodo principal, se elimina la posibilidad de un
 empate y el ganador es elegido de inmediato.
 
-En la figura \ref{fig:heartbeat} se puede observar como los nodos del grupo se envían mensajes de diagnostico (heartbeats) para determinar
-si sus vecinos son accesibles o no. En caso de que uno de estos heartbeat no obtenga una respuesta en 10 segundos, se marca dicho
+En la figura \ref{fig:heartbeat} se puede observar como los nodos del grupo se envían mensajes de diagnostico (heartbeats) para determinar si sus vecinos son accesibles o no.
+En caso de que uno de estos heartbeat no obtenga una respuesta en 10 segundos, se marca dicho
 destinarlo como inaccesibles.
 
 \begin{figure}[H]
@@ -81,10 +81,8 @@ destinarlo como inaccesibles.
 
 
 Los nodos secundarios se encargan de leer los datos presentes en el nodo primario y crear sus propia replica o copia del mismo.
-Si, por alguna razón, el nodo primario deja de estar disponible, un nodo secundario elegible ejecutará una votación para
-elegir el siguiente nodo primario, tal como lo muestra la figura \ref{fig:failover}.
-El primer nodo secundario en llevar a cabo la elección y recibir la mayoría de los botos se convierte en el nuevo nodo primario.
-
+Si, por alguna razón, el nodo primario deja de estar disponible, un nodo secundario elegible ejecutará una votación para elegir el siguiente nodo primario, tal como lo muestra la figura \ref{fig:failover}.
+El primer nodo secundario en llevar a cabo la elección y recibir la mayoría de los votos se convierte en el nuevo nodo primario.
 
 \begin{figure}[H]
 	\centering
@@ -93,27 +91,25 @@ El primer nodo secundario en llevar a cabo la elección y recibir la mayoría de
 	\label{fig:failover}
 \end{figure}
 
-
 \subsubsection{Particiones}
 
-El proceso de partición (sharding) es un método de escalamiento horizontal que distribuye datos entre múltiples maquinas.
-Cada conjunto de datos alojado en una maquina es llamado partición (shards), y su acceso es completamente transparente
-para las aplicaciones. Este método permite atacar las limitaciones de hardware provenientes del uso de un solo servidor, tales como
-los cuellos de botella o capacidad de almacenamiento \cite{13}.
+El proceso de partición (sharding) es un método de escalamiento horizontal que distribuye datos entre múltiples máquinas.
+Cada conjunto de datos alojado en una máquina es llamado partición (shards), y su acceso es completamente transparente para las aplicaciones.
+Este método permite atacar las limitaciones de hardware provenientes del uso de un solo servidor, tales como los cuellos de botella o capacidad de almacenamiento \cite{13}.
 
 En MongoDB, un grupo de partición (sharded cluster) consiste de tres componentes:
 
 \begin{itemize}
-\item Partición: Cada partición contiene un subconjunto de los datos y pueden ser implementados como un grupo de replica.
+\item Partición: Cada partición contiene un subconjunto de los datos y pueden ser implementados como un grupo de réplica.
 
 \item mongos: mongos es un servicio que actuá como interfaz entre las aplicaciones cliente y el grupo de partición, también es llamado
 query router.
 
 \item Servidores de Configuración: Los servidores de configuración almacenan meta datos y los atributos de configuración del cluster, y
-al igual que las particiones, también pueden ser implementados como un grupo de replica.
+al igual que las particiones, también pueden ser implementados como un grupo de réplica.
 \end{itemize}
 
-En la siguiente figura se puede apreciar los componentes del cluster de particiones y la interacción entre los mismos:
+En la figura \ref{fig:sharding} se puede apreciar los componentes del cluster de particiones y la interacción entre los mismos:
 
 \begin{figure}[H]
 	\centering
@@ -133,7 +129,7 @@ almacenadas en una partición especial llamada primaria.
 
 El acceso a una base de datos particionada en MongoDB es completamente transparente para cualquier aplicación de cliente, tan
 solo es necesario saber la dirección IP o nombre del equipo (hostname) y el puerto en el cual se ejecutará el query router.
-La siguiente figura detalla la interacción entre una aplicación de cliente con una base de datos MongoDB con particiones:
+La figura \ref{fig:sharding_apps} detalla la interacción entre una aplicación de cliente con una base de datos MongoDB con particiones:
 
 \begin{figure}[H]
 	\centering
@@ -149,7 +145,7 @@ o desarrollador distribuir los datos entre los miembros del cluster.
 
 \item Range Sharding. Los documentos son divididos en rangos contiguos determinados por el valor del shard key. Se toma el valor
 mínimo y máximo de todos las particiones y se generan N grupos, ordenados de menor a mayor por el shard key y separados por rangos,
-tal cual se puede observar en la siguiente figura:
+tal cual se puede observar en la figura \ref{fig:ranged_sharding}:
 
 \begin{figure}[H]
 	\centering
@@ -160,7 +156,8 @@ tal cual se puede observar en la siguiente figura:
 
 \item Hash Sharding. Los documentos son distribuidos acorde al valor del hash MD5 del shard key. Una vez calculado el valor del hash, se
 dividen los datos en subgrupos separados en rangos. Este método garantiza la distribución uniforme de los documentos entre las particiones.
-MongoDB es quien calcula el valor del hash, por lo que las aplicaciones que interactúen con la base de datos no necesitan llevar a cabo este paso. Un ejemplo de esto se puede apreciar en la siguiente figura:
+MongoDB es quien calcula el valor del hash, por lo que las aplicaciones que interactúen con la base de datos no necesitan llevar a cabo este paso.
+Un ejemplo de esto se puede apreciar en la figura \ref{fig:hashed_sharding}:
 
 \begin{figure}[H]
 	\centering
@@ -186,13 +183,14 @@ por capas.
 
 \subsubsection{PyMongo}
 
-PyMongo es una librería que permite la interacción con MongoDB a través de Python.
-Básicamente se encarga de mantener una conexión y permitir la interacción con la base
-de datos \cite{17}.
+PyMongo es una librería  de Python que permite la interacción con una base de datos MongoDB.
+Básicamente se encarga de mantener un canal de comunicación con la base de datos
+y ejecutar consultas \cite{17}.
 
 PyMongo posee la cualidad de funcionar correctamente si es ejecutado
 simultáneamente por múltiples hilos, esta característica es llamada: segura en hilos
-(thread-safe) \cite{18}. PyMongo, tiene incorporado una agrupación de conexiones abiertas a
+(thread-safe) \cite{18}.
+PyMongo, tiene incorporado una agrupación de conexiones abiertas a
 la base de datos para que los hilos de una aplicación puedan reutilizar dichas
 conexiones al momento de ejecutar múltiples consultas o actualizaciones. Esta
 característica ayuda a incrementar el rendimiento puesto que PyMongo no establece
@@ -204,14 +202,13 @@ se evita la sobrecarga que la apertura de conexión pueda causar.
 Celery es una herramienta que permite creación de colas y tareas asíncronas basada en la transmisión de mensajes distribuidos.
 Esta concentrado en la ejecución de operaciones en tiempo real, y a su vez, también soporta la planificación de tareas.
 
-Las colas de tareas son usadas como un mecanismo para la distribución de trabajo entre múltiples hilos o maquinas. Las entradas
-de estas colas son ejecutadas de forma concurrente en uno o más componentes llamados workers, quien constantemente verifican
-si existe una tarea en la cola para ser ejecutada. Estas tareas pueden ser ejecutadas en segundo plano o de forma sincrónica,
-es decir, que esperan a que la tarea anterior culmine.
+Las colas de tareas son usadas como un mecanismo para la distribución de trabajo entre múltiples hilos o máquinas.
+Las entradas de estas colas son ejecutadas de forma concurrente en uno o más componentes llamados workers, quien constantemente verifican si existe una tarea en la cola para ser ejecutada.
+Estas tareas pueden ser ejecutadas en segundo plano o de forma sincrónica, es decir, que esperan a que la tarea anterior culmine.
 
-Celery realiza la transmisión de mensajes haciendo uso de un agente intermediario llamado broker. Para iniciar una tarea un cliente
-agrega un mensaje a la cola, el broker toma este mensaje y se lo envía a algún worker disponible, por último, una vez el worker
-recibe el mensaje ejecuta la tarea. Este proceso se puede observar en la siguiente figura:
+Celery realiza la transmisión de mensajes haciendo uso de un agente intermediario llamado broker.
+Para iniciar una tarea un cliente agrega un mensaje a la cola, el broker toma este mensaje y se lo envía a algún worker disponible, por último, una vez el worker recibe el mensaje ejecuta la tarea.
+Este proceso se puede observar en la figura \ref{fig:celery}:
 
 \begin{figure}[H]
 	\centering
@@ -225,10 +222,9 @@ recibe el mensaje ejecuta la tarea. Este proceso se puede observar en la siguien
 RabbitMQ es un intermediario para la transmisión de mensajes que sirve como plataforma para que los mensajes enviados
 en una aplicación sean almacenados de forma temporal durante el proceso de comunicación \cite{14}.
 
-El uso de la mensajería en una aplicación permite la conexión entre múltiples componentes de la misma, ya sea para enviar
-notificaciones, datos, tareas asíncronas o suscripción a un servicio. Un mensaje puede incluir cualquier tipo de información, por ejemplo,
-puede contener datos relacionados con un proceso o tarea, una notificación, e incluso el resultado de una operación. RabbitMQ
-almacena estos mensajes y los coloca en una cola hasta que alguna aplicación se conecta a el y toma dicho mensaje de la cola.
+El uso de la mensajería en una aplicación permite la conexión entre múltiples componentes de la misma, ya sea para enviar notificaciones, datos, tareas asíncronas o suscripción a un servicio.
+Un mensaje puede incluir cualquier tipo de información, por ejemplo, puede contener datos relacionados con un proceso o tarea, una notificación, e incluso el resultado de una operación.
+RabbitMQ almacena estos mensajes y los coloca en una cola hasta que alguna aplicación se conecta a él y toma dicho mensaje de la cola.
 
 RabbitMQ hace uso del protocolo AMPQP (Advanced Message Queuing Protocol), el cual esta diseñado para la transmisión
 de mensajes de aplicación entre sistemas usando, entre otras, una combinación de técnicas como: almacenamiento y reenvío, en donde
@@ -236,7 +232,7 @@ los datos son almacenados en un componente intermediario de forma temporal y des
 intermediario \cite{15}; y el patrón publicación-suscripción, en donde el emisor del mensaje no envía datos a un destinatario
 en específico, sino que existe un miembro llamado suscriptor quien decide o no si recibir los mensajes publicados por el emisor \cite{16}.
 
-En la siguiente figura se puede apreciar un flujo de trabajo simple en la emisión y suscripción de mensajes usando RabbitMQ:
+En la figura \ref{fig:workflow_rabbitmq} se puede apreciar un flujo de trabajo simple en la emisión y suscripción de mensajes usando RabbitMQ:
 
 \begin{figure}[H]
 	\centering
@@ -247,16 +243,17 @@ En la siguiente figura se puede apreciar un flujo de trabajo simple en la emisi�
 
 \subsection{Flask}
 
-Flask es un framework minimalista (microframework) para el desarrollo aplicaciones
-web. Esta característica minimalista se refiere a que tiene como objetivo mantener
+Flask es un framework (microframework) para el desarrollo aplicaciones
+web. Esta característica se refiere a que tiene como objetivo mantener
 el núcleo de la aplicación de simple pero extensible \cite{19}.
 Es decir, no tiene limitaciones ni ofrece herramientas en el uso de servidores de
 bases de dato a usar, motores de plantillas, manejadores de correos o validaciones de
-formulario. En cambio, es capaz de soportar extensiones y librerías que agregan
+formulario.
+En cambio, es capaz de soportar extensiones y librerías que agregan
 estas funcionalidades a la aplicación de tal forma que parecieran ser implementadas por Flask.
 
 El objetivo de Flask es permitir la construcción de una base sólida para todas las
-aplicaciones, y que cualquier otro requerimiento o modulo necesario, que sea
+aplicaciones, y que cualquier otro requerimiento o módulo necesario, que sea
 implementado por el desarrollador o por la inclusión de extensiones \cite{20}.
 
 \subsection{Nginx}
@@ -270,7 +267,8 @@ de Phusion Passenger.
 Nginx no utiliza múltiples hilos para manejar solicitudes, en cambio, hace uso de un
 solo hilo y la implementación del paradigma de la programación dirigida por eventos,
 en donde el manejo de las peticiones recibidas por este servidor van determinados por
-los sucesos que ocurran en el sistema. La arquitectura modular dirigida por eventos de
+los sucesos que ocurran en el sistema.
+La arquitectura modular dirigida por eventos de
 Nginx permite proveer un rendimiento predecible en ambientes de alta carga de
 trabajo.
 
@@ -279,7 +277,7 @@ El uso de un proxy es típicamente usando para distribuir la carga de peticiones
 entre múltiples servidores, mostrar contenido de múltiples servicios web de forma transparente,
 e incluso transferir peticiones a un servidor por protocoles diferentes a HTTP \cite{22}.
 
-Un ejemplo de como seria el flujo de trabajo para atender una petición con un proxy reverso se puede apreciar en la siguiente figura:
+Un ejemplo de como seria el flujo de trabajo para atender una petición con un proxy reverso se puede apreciar en la figura \ref{fig:nginx_reverse_proxy}:
 
 \begin{figure}[H]
 	\centering
@@ -310,15 +308,13 @@ Los contenedores de software están conformados por dos componentes: una imagen 
 \item Imagen: es un paquete ejecutable aislado que incluye todo lo necesario para ejecutar un software, incluyendo código,
 librerías, variables de entorno y archivos de configuración.
 
-\item Contenedor: es una instancia de una imagen. Su ejecución, por defecto, esta aislada del ambiente de la maquina anfitrión,
+\item Contenedor: es una instancia de una imagen. Su ejecución, por defecto, esta aislada del ambiente de la máquina anfitrión,
 de tal forma que solo accede a los archivos y/o puertos del anfitrión si fue configurado para ello.
 \end{itemize}
 
-Los contenedores ejecutan aplicaciones directamente en el kernel de la maquina anfitrión, por lo que tienen mejor
-rendimiento que una maquina virtual que solo tiene acceso virtual a los recursos del anfitrión.
+Los contenedores ejecutan aplicaciones directamente en el kernel de la máquina anfitrión, por lo que tienen mejor rendimiento que una máquina virtual que solo tiene acceso virtual a los recursos del anfitrión.
 
-
-La siguiente figura muestra como las maquinas virtuales ejecutan sistemas operativos completos sobre la maquina anfitrión:
+La figura \ref{fig:docker_vm} muestra cómo las máquinas virtuales ejecutan sistemas operativos completos sobre la máquina anfitrión:
 
 \begin{figure}[H]
 	\centering
@@ -327,19 +323,18 @@ La siguiente figura muestra como las maquinas virtuales ejecutan sistemas operat
 	\label{fig:docker_vm}
 \end{figure}
 
-En cambio, los contenedores pueden compartir un mismo kernel, la única información que necesita tener la imagen del contenedor es el
-ejecutable y sus dependencias. En la siguiente figura se puede apreciar como cada contenedor se ejecutara como una aplicación aislada
-sobre el sistema operativo:
+En cambio, los contenedores pueden compartir un mismo kernel, la única información que necesita tener la imagen del contenedor es el ejecutable y sus dependencias.
+En la figura \ref{fig:docker_container} se puede apreciar como cada contenedor se ejecutará como una aplicación aislada sobre el sistema operativo:
 
 \begin{figure}[H]
 	\centering
-		\includegraphics[width=.9\textwidth]{figures/docker_container}
+		\includegraphics[width=.8\textwidth]{figures/docker_container}
 	\caption{Diagrama de componentes de un Contenedor}
 	\label{fig:docker_container}
 \end{figure}
 
-Docker permite la creación de redes y espacios de almacenamiento, llamados volúmenes, que pueden ser asignados a uno o múltiples
-contenedores a la vez. De esta forma, es posible conectar varios contenedores entre sí mediante una red y compartir archivos.
-Esto permite gestionar múltiples contenedores para que se ejecuten como un sistema distribuido, en donde es posible, y si los recursos
-lo permiten, desplegar nuevos nodos que cumplan las funciones como: un miembro en una replica de base de datos, un worker de celery e
-incluso un servicio como RabbitMQ.
+Docker permite la creación de redes y espacios de almacenamiento, llamados volúmenes, que pueden ser asignados a uno o múltiples contenedores a la vez.
+De esta forma, es posible conectar varios contenedores entre sí mediante una red y compartir archivos.
+Esto permite gestionar múltiples contenedores para que se ejecuten como un sistema distribuido,
+en donde es posible, y si los recursos lo permiten, desplegar nuevos nodos que cumplan las funciones como:
+un miembro en una réplica de base de datos, un worker de celery e incluso un servicio como RabbitMQ.

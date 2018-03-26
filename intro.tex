@@ -1,30 +1,30 @@
 \section*{introducción}
 
-Hoy en día Wikipedia, la enciclopedia libre, se ha posicionado como una de las herramientas de 
-referencia más grandes e indispensables para todo aquel en busca de información.
+Hoy en día Wikipedia, la enciclopedia libre, se ha posicionado como una de las herramientas de
+referencia más grandes e indispensables para todo aquel en busqueda de información.
 
-Wikipedia cuenta con 30 millones de usuarios registrados, de los cuales mas de 130 mil son 
-usuarios activos que contribuyen en hasta 270 idiomas generando nuevo contenido, perfeccionándolo, 
+Wikipedia cuenta con 30 millones de usuarios registrados, de los cuales mas de 130 mil son
+usuarios activos que contribuyen en hasta 270 idiomas generando nuevo contenido, perfeccionándolo,
 removiendo errores e incluso vandalismos en los artículos \cite{1}.
 
 Cada uno de estos cambios son almacenados en un historial en conjunto con una serie de datos
 adicionales tales como el autor de la actualización, la fecha, notas, entre otras. Existen
-aplicaciones, tales como Wiki-Metrics-UCV, que tienen como objetivo la recolección, almacenamiento 
-y procesamiento de estos historiales para el cálculo y visualización de métricas de sus atributos.
+aplicaciones, tales como Wiki-Metrics-UCV, que tienen como objetivo la recolección, almacenamiento
+y procesamiento de historiales para el cálculo y visualización de métricas de sus atributos \cite{4}.
 
 Para la fecha, Wikipedia alberga alrededor de 5.5 millones de artículos, y que
 por cada uno de ellos existe un promedio de 20 mil actualizaciones \cite{2}. Las aplicaciones de terceros,
-como Wiki-Metrics-UCV, que están enfocadas en la extracción de estos estos y son desarrolladas
-en un esquema centralizado, no tienen la capacidad de escalar sus servicios una vez alcancen 
+como Wiki-Metrics-UCV, que están enfocadas en la extracción de estos y son desarrolladas
+en un esquema centralizado, no tienen la capacidad de escalar sus servicios una vez alcancen
 los limites de sus unidades de almacenamiento.
 
-Por suerte, existe el modelo de cómputo distribuido en el cual la carga de datos y las tareas llevadas a 
+Por suerte, existe el modelo de cómputo distribuido en el cual la carga de datos y las tareas llevadas a
 cabo en un sistema de software son compartidas por múltiples componentes para aumentar la
 eficiencia y el rendimiento.
 
 La aplicación de los sistemas distribuidos se adapta a diversos campos, tales como:
 redes de telecomunicaciones, computación paralela y procesos de monitoreo en tiempo
-real, entre otros. El uso de este tipo de sistemas puede llegar a ser muy beneficioso por 
+real, entre otros. El uso de este tipo de sistemas puede llegar a ser muy beneficioso por
 razones de rendimiento o de costo, por ejemplo, puede ser menos costoso el uso de un grupo de varios
 computadores con componentes de gama baja, que un solo computador con componentes gama alta. Ademas,
 un sistema distribuido puede llegar proporcionar más fiabilidad que un sistema centralizado, ya
@@ -38,9 +38,8 @@ almacenar los datos recolectados en su propia unidad de almacenamiento y así ga
 sea escalable.
 
 Este trabajo documenta el desarrollo de un sistema distribuido, basado en Wiki-Metrics-UCV,
-para la extracción, almacenamiento y procesamiento del historial de los artículos wiki.
+para la extracción, almacenamiento y procesamiento del historial de artículos wikis basados en MediaWiki (por ejemplo, Wikipedia).
 
-% TODO: cambiar "que se llevaron a cabo" ??
 En el Capítulo 1 se presenta en detalle la descripción del problema, la justificación del por qué
 desarrollar una alternativa distribuida al mismo, y por último, los objetivos tantos generales como
 específicos que se llevaron a cabo.
@@ -48,5 +47,5 @@ específicos que se llevaron a cabo.
 En el Capítulo 2 se describen tecnologías utilizadas en el desarrollo del sistema, incluyendo servicios,
 las librerías usadas y las bases de datos elegidas.
 
-Por último, en el Capítulo 3 se muestra la arquitectura completa de la solución, anexos de las tareas
-implementadas y diagramas que describen cada uno de los componentes del sistema.
+Por último, en el Capítulo 3 se presenta el marco aplicativo del sistema desarrollado para la solución al problema planteado,
+en donde se describen sus componentes y el método de desarrollo.
