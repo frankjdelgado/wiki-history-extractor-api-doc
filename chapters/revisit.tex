@@ -1,11 +1,36 @@
-\subsection{Revisita}
+\subsection{Algoritmo de Revisita}
 
 Una vez el proceso de extracción esta completo,
 es necesario mantener una actualización constante de los historiales declaración articulo.
-Para ello se hace uso de un algoritmo de revisita de estos artículos
-el cual se ejecuta en segundo plano a través del uso de cronjobs.
+Para ello se hace uso de un algoritmo, al cual llamaremos algoritmo de revisita, que determine, acorde a ciertos coeficientes, si
+es necesarios ejecutar una petición de extracción de los historiales de un artículo.
+Este algoritmo es ejecutado en segundo plano como una tarea programada, y para ello
+se hace uso del programa llamado Cron.
+Cron es un planificador de tareas, basado en tiempo, para sistemas operativos basados en Unix, que permite la ejecución de programas o comandos de forma automática en una fecha o frecuencia de tiempo determinado \cite{24}.
 
-Este algoritmo hace uso de un modelo probabilístico que calcula el coeficiente del tiempo revisita de cada artículo wiki de manera independiente haciendo uso de la distribución probabilística exponencial.
+El código fuente \ref{code:crontab} muestra el proceso de edición del archivo de configuración previamente mencionado, en donde se hace uso del comando \texttt{crontab -e}
+para acceder fácilmente al archivo, y ademas, se muestra el formato aceptado por Cron
+para asignar la frecuencia de ejecución.
+
+\begin{lstlisting}[caption={Edición del archivo de configuración de Cron},breaklines=true,label={code:crontab}]
+$ crontab -e
+#---------------- Minutos (0 - 59)
+|  #------------- Horas (0 - 23)
+|  |  #---------- Dia del mes (1 - 31)
+|  |  |  #------- Mes (1 - 12)
+|  |  |  |  #---- Dia de la semana (0 - 6) (Domingo=0)
+|  |  |  |  |
+*  *  *  *  *  ejemplo-script.sh
+\end{lstlisting}
+
+La configuración de Cron para el algoritmo de revisita puede ser apreciado en el código fuente \ref{code:crontab_revisit}, en el cual el comando \texttt{python -m app.cronjobs.revisit} se ejecuta de forma diaria a las 12:00AM.
+
+\begin{lstlisting}[caption={Edición del archivo de configuración de Cron},breaklines=true,label={code:crontab_revisit}]
+$ crontab -e
+0 0 * * * python -m app.cronjobs.revisit
+\end{lstlisting}
+
+El algoritmo de revisita hace uso de un modelo probabilístico que calcula el coeficiente del tiempo revisita de cada artículo wiki de manera independiente haciendo uso de la distribución probabilística exponencial.
 
 El objetivo es buscar un valor esperado de tiempo que mida la distancia entre dos revisiones para ejecutar una revisita de una articulo wiki.
 Para ello, se plantea utilizar la fórmula de la esperanza matemática proveniente de la distribución de probabilidad exponencial, la cual es adecuada para estos casos, puesto que la misma estudia la longitud de los intervalos de una variable.
