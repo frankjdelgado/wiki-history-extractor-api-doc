@@ -1,0 +1,34 @@
+\section{Conclusiones}
+
+El análisis de los historiales de los artículos wiki basados en Wikimedia permite
+descubrir diversos indicadores y características que no pueden ser detalladas a simple
+vista.
+Sin embargo, para llevar a cabo estos análisis, es necesario almacenarlos en una base
+de datos, los cuales, debido a la gran cantidad de datos que pueda envolver, resulta
+en una tarea complicada de ejecutar debido a las limitaciones de hardware de la
+máquina.
+Estas limitaciones pueden variar desde el espacio de almacenamiento hasta disponibilidad
+de servicios y recuperación de fallos, para lo casos de las aplicaciones o servicios como
+Wiki-Metrics-UCV.
+Hoy en día, la necesidad de diseñar aplicaciones con una arquitectura distribuida
+ha incrementado, puesto que, en muchos casos, facilita la resolución de estos problemas
+a menor costo económico que, por ejemplo, mejorar la capacidad individual de una sola máquina.
+
+Aunque la implementación de una arquitectura distribuida puede ser complicada,
+hoy en día existen herramientas facilitan esta tarea en gran medida.
+Tal es el caso del sistema de administración de bases de datos MongoDB, cuya gestión
+de datos permite implementar, de manera sencilla, aspectos como la replicación de
+de datos, que influye directamente en la habilidad de prestar un servicio de alta disponibilidad,
+y la fragmentación de la base de datos entre múltiples máquinas.
+
+El uso de MongoDB, en conjunto con herramientas como Celery y RabbitMQ, proporcionan
+una gran ayuda a la hora de mitigar las limitaciones que conlleva el uso de un sistema centralizado.
+Por medio de Celery es posible ejecutar múltiples tareas, cómo la extracción de métricas de los
+datos almacenados, evitando, por ejemplo, el colapso de un servicio web, e incluso, brinda
+de manera moderada la habilidad de recuperarse de fallos en tiempos de ejecución, puesto que gracias a RabbitMQ,
+es posible llevar un registro de las tareas pendientes a ejecutar por el servicio y su progreso.
+
+La arquitectura del sistema distribuido desarrollado, descrito en este documento, brinda
+una solución escalable a los problemas previamente planteados, en donde la capacidad
+de un sistema centralizado es insuficiente ante la demanda progresiva de las aplicaciones de
+extracción, consulta y procesamiento de historiales de artículos wiki.
