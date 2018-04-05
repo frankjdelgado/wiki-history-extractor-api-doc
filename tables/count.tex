@@ -3,18 +3,364 @@
 \hline
 \multicolumn{2}{|r|}{\textbf{Historia}} \\
 \hline
+\textbf{Sección} & Consulta\\
+\hline
 \endfirsthead
 
 \multicolumn{2}{c}%
 {{\bfseries \tablename\ \thetable{} -- continuación de la página anterior}} \\
 \hline \multicolumn{2}{|r|}{\textbf{Historia}} \\ \hline
+\textbf{Sección} & Consulta\\
+\hline
 \endhead
 
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Endpoint revisions\\
+\hline
+\textbf{Descripción} & Se añade el endpoint revisions a la solución. El mismo tiene por finalidad retornar como resultado las revisiones existentes en la base de datos. \par El endpoint recibe como parámetro el numero de página a retornar (page), puesto que los resultados son paginados debido a la cantidad de revisiones.
+\\
+\hline
+\textbf{Observaciones} & El tamaño de página es fijo hasta los momentos.\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Endpoint status\\
+\hline
+\textbf{Descripción} & Se añade el endpoint status a la solución. El mismo es utilizado para verificar el estado de las tareas asignadas a los nodos trabajadores de Celery. Las tareas tienen 2 estados posibles: 
+\par
+\tabitem pending: la tarea está aun pendiente y se está ejecutando o aún no ha empezado.
+\par
+\tabitem success: la tarea terminó de ejecutarse de manera satisfactoria.
+\par
+\tabitem failure: la tarea terminó de ejecutarse de manera incorrecta, o hubo un error durante su ejecución.
+
+\\
+\hline
+\textbf{Observaciones} & \\
+
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Incorporar documentación del api y endpoint docs \\
+\hline
+\textbf{Descripción} & Se incorpora documentación del api, así como el endpoint \texttt{/docs} para mostrar dicha documentación. La misma abarca todos los endpoints disponibles en el API, y la manera de utilizar sus distintas opciones, como filtros, paginación y ordenamiento.\\
+\hline
+\textbf{Observaciones} &\\
+
+\hline
+\hline
 \textbf{Desarrollador} & Marvin Bernal \\
 \hline
 \textbf{Nombre} & Endpoint para el cálculo de la cantidad de revisiones \\
 \hline
-\textbf{Sección} & Consulta\\
+\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/count}
+recibe como parámetros los atributos para restringir o filtrar el
+rango a tomar en cuenta como resultado. Los argumentos
+disponibles hasta el momento son:
+\par
+\tabitem user: nombre del usuario que realiza la revisiones.
+\par
+\tabitem tag: una etiqueta determinada que contenga las
+revisiones.
+\par
+\tabitem size: el tamaño de la revisión realizada.
+\par
+\tabitem sizematch: valor que acompaña a \texttt{size}. Si el valor es
+positivo, se filtrarán todas las revisiones de mayor
+tamaño que el valor de \texttt{size}. Si es negativo, se filtrarán
+todas las revisiones de menor tamaño que el valor de
+\texttt{size}. Si el valor es 0 o no se encuentra en los parámetros
+de la solicitud, se filtrarán todas las revisiones cuyo
+tamaño sea exactamente el valor de \texttt{size}.
+\par
+\tabitem date: la fecha exacta en que fueron realizadas las
+revisiones. El formato de fecha utilizado es: \texttt{YYYY-MM-DD}.
+\par
+\tabitem datestart: la fecha inicial a partir de la cual fueron
+realizadas las revisiones en un intervalo de tiempo. El
+formato de fecha utilizado es: \texttt{YYYY-MM-DD}. En caso de
+que no exista el parámetro \texttt{dateend} en la solicitud, la fecha final del intervalo será la fecha actual.
+\par
+\tabitem dateend: la fecha final hasta la cual fueron realizadas las
+revisiones en un intervalo de tiempo. El formato de
+fecha utilizado es: \texttt{YYYY-MM-DD}. En caso de que no
+exista el parámetro \texttt{datestart} en la solicitud, la fecha
+inicial del intervalo será la fecha de la primera revisión
+del artículo.
+\\
+\hline
+\textbf{Observaciones} &\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Endpoint para el cálculo del promedio de revisiones \\
+\hline
+\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/avg}
+recibe como parámetros los atributos para restringir o filtrar el
+rango a tomar en cuenta como resultado, adicionalmente es necesario un intervalo de fechas para el cálculo del promedio. Los argumentos
+disponibles hasta el momento son:
+\par
+\tabitem user: nombre del usuario que realiza la revisiones.
+\par
+\tabitem tag: una etiqueta determinada que contenga las
+revisiones.
+\par
+\tabitem size: el tamaño de la revisión realizada.
+\par
+\tabitem sizematch: valor que acompaña a \texttt{size}. Si el valor es
+positivo, se filtrarán todas las revisiones de mayor
+tamaño que el valor de \texttt{size}. Si es negativo, se filtrarán
+todas las revisiones de menor tamaño que el valor de
+\texttt{size}. Si el valor es 0 o no se encuentra en los parámetros
+de la solicitud, se filtrarán todas las revisiones cuyo
+tamaño sea exactamente el valor de \texttt{size}.
+\par
+\par
+\tabitem datestart: la fecha inicial a partir de la cual fueron
+realizadas las revisiones en un intervalo de tiempo. El
+formato de fecha utilizado es: \texttt{YYYY-MM-DD}. Este argumento es obligatorio.
+\par
+\tabitem dateend: la fecha final hasta la cual fueron realizadas las
+revisiones en un intervalo de tiempo. El formato de
+fecha utilizado es: \texttt{YYYY-MM-DD}. Este argumento es obligatorio.
+\\
+\hline
+\textbf{Observaciones} &\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Endpoint para el cálculo de moda de revisiones \\
+\hline
+\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/mode}
+recibe como parámetros los atributos para restringir o filtrar el
+rango a tomar en cuenta como resultado, adicionalmente se usa el parámetro \texttt{attribute} para señalar el atributo sobre el cual calcular la moda, que consiste en el valor mas repetido entre el conjunto de valores obtenidos. Los argumentos
+disponibles hasta el momento son:
+\par
+\tabitem user: nombre del usuario que realiza la revisiones.
+\par
+\tabitem tag: una etiqueta determinada que contenga las
+revisiones.
+\par
+\tabitem size: el tamaño de la revisión realizada.
+\par
+\tabitem sizematch: valor que acompaña a \texttt{size}. Si el valor es
+positivo, se filtrarán todas las revisiones de mayor
+tamaño que el valor de \texttt{size}. Si es negativo, se filtrarán
+todas las revisiones de menor tamaño que el valor de
+\texttt{size}. Si el valor es 0 o no se encuentra en los parámetros
+de la solicitud, se filtrarán todas las revisiones cuyo
+tamaño sea exactamente el valor de \texttt{size}.
+\par
+\tabitem date: la fecha exacta en que fueron realizadas las
+revisiones. El formato de fecha utilizado es: \texttt{YYYY-MM-DD}.
+\par
+\tabitem datestart: la fecha inicial a partir de la cual fueron
+realizadas las revisiones en un intervalo de tiempo. El
+formato de fecha utilizado es: \texttt{YYYY-MM-DD}. En caso de
+que no exista el parámetro \texttt{dateend} en la solicitud, la fecha final del intervalo será la fecha actual.
+\par
+\tabitem dateend: la fecha final hasta la cual fueron realizadas las
+revisiones en un intervalo de tiempo. El formato de
+fecha utilizado es: \texttt{YYYY-MM-DD}. En caso de que no
+exista el parámetro \texttt{datestart} en la solicitud, la fecha
+inicial del intervalo será la fecha de la primera revisión
+del artículo.
+\par
+\tabitem attribute: el atributo sobre el cual se calculará la moda. Su valor puede ser \texttt{user}, \texttt{size} o \texttt{date}.
+\\
+\hline
+\textbf{Observaciones} &\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Creación de tareas de Celery\\
+\hline
+\textbf{Descripción} & Se crean las tareas de los endpoints \texttt{/count}, \texttt{/avg} y \texttt{/mode}, que son asignadas a los nodos trabajadores de Celery, y devolverá el resultado en cuanto el trabajador termine la tarea.
+\\
+\hline
+\textbf{Observaciones} & \\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Añadir filtro por título.\\
+\hline
+\textbf{Descripción} & Se añade el filtro por título al api.
+\\
+\hline
+\textbf{Observaciones} &\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal, Francisco Delgado \\
+\hline
+\textbf{Nombre} & Añadir listas blancas.\\
+\hline
+\textbf{Descripción} & Se añaden listas blancas, para poder simplificar el proceso de filtrado, permitiendo sólo a los atributos listados ser usados como filtros. Adicionalmente se indica el tipo de dato de cada filtro, para las operaciones pertinentes a los mismos. Cada endpoint tiene su propia lista blanca.
+\\
+\hline
+\textbf{Observaciones} & Primero se realiza una comprobación de los parámetros de la
+solicitud contra una lista blanca con los parámetros permitidos.
+Luego, con los parámetros resultantes, se realiza el
+procesamiento a través de una tarea asignada, para luego
+devolver el resultado.\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Mejora de filtrado.\\
+\hline
+\textbf{Descripción} & Se modifica el algoritmo de filtrado, con lo cual se añade la capacidad de filtrar multiples atributos, no únicamente los predefinidos hasta el momento.
+\\
+\hline
+\textbf{Observaciones} & Para que los filtros puedan ser aplicados satisfactoriamente a la solicitud, es necesario que el atributo haya sido agregado a la lista blanca correspondiente al endpoint que se está utilizando.\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Agregar filtros a endpoint revisions\\
+\hline
+\textbf{Descripción} & Se añaden los argumentos opcionales para filtrar: 
+\par
+\tabitem pageid: el id de la página del artículo.
+\par
+\tabitem title: el título del artículo.
+\\
+\hline
+\textbf{Observaciones} & \\
+
+\hline
+\hline
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Agregar tamaño de página a endpoint revisions\\
+\hline
+\textbf{Descripción} & Se añade el argumento opcional \texttt{page size} , para elegir la cantidad de revisiones a mostrar por página. 
+\\
+\hline
+\textbf{Observaciones} & \\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal, Francisco Delgado \\
+\hline
+\textbf{Nombre} & Mejora del apidoc\\
+\hline
+\textbf{Descripción} & Se crea una plantilla personalizada para el apidoc, se crean docstring con multiples lineas, para mejorar la legibilidad de la documentación.
+\\
+\hline
+\textbf{Observaciones} & \\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Añadir endpoint artículos.\\
+\hline
+\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/articles} devuelve la información correspondiente a los artículos wiki que se encuentran en la base de datos a los que se les han extraido revisiones. Puede recibir como argumento el \texttt{page id} del artículo, en cuyo caso solo se mostrará la información de dicho artículo.
+\\
+\hline
+\textbf{Observaciones} & La información pertinente a los artículos se encuentra en la colección de artículos(\texttt{articles}) de la base de datos.\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Añadir paginación al cálculo de la moda.\\
+\hline
+\textbf{Descripción} & Se añade paginación para el cálculo de la moda, para evitar el congestionamiento por el manejo de grandes volumen de datos. Se coloca un valor de procesamiento por página de 1000 revisiones, para ejecutar el proceso con cada página y llegar a la moda del total de revisiones seleccionadas por los filtros.
+\\
+\hline
+\textbf{Observaciones} & Debido a que la moda, a diferencia de las otras consultas, almacena un volumen de datos mayor para revisar cuáles valores se repitieron con mayor frecuencia, se realiza la consulta con paginación en los datos.\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Agregar ordenamiento a endpoint revisions.\\
+\hline
+\textbf{Descripción} & Se añade el argumento opcional \texttt{sort}, para elegir la manera en que se ordenarán los resultados(por fecha), los valores posibles son:
+\par
+\tabitem asc: se ordena ascendentemente, de la mas antigua a la mas nueva.
+\par
+\tabitem desc: se ordena descendentemente, de la mas nueva a la mas antigua.
+\\
+\hline
+\textbf{Observaciones} & \\
+
+\hline
+\hline
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Agregar filtros a endpoint articles.\\
+\hline
+\textbf{Descripción} & Se añaden los argumentos opcionales para filtrar: 
+\par
+\tabitem pageid: el id de la página del artículo.
+\par
+\tabitem title: el título del artículo.
+\par
+\tabitem first extraction date: la fecha de la primera extracción del artículo.
+\par
+\tabitem last extraction date: la fecha de la última extracción del artículo.
+\par
+\tabitem last revision extracted: el id de la última revisión extraida.
+\\
+\hline
+\textbf{Observaciones} & \\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Modificar fechas en endpoint articles.\\
+\hline
+\textbf{Descripción} & Se modifica el endpoint articles, para retornar los resultados con fechas en formato ISO.
+\\
+\hline
+\textbf{Observaciones} & \\
+
+\hline
+\hline
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Añadir endpoint query.\\
+\hline
+\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/query} tiene como función recibir una entrada en formato JSON y aplicar la función aggregate de mongoDB. Allí se pueden realizar consultas con métodos mas avanzados, como proyecciones, agrupaciones de datos, entre otros. 
+\\
+\hline
+\textbf{Observaciones} & Para mayor detalles del uso de la función aggregate, referirse a la documentación de mongoDB en \hyperlink{https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/}{https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/}.\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Añadir endpoint mapreduce.\\
+\hline
+\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/mapreduce} tiene como función recibir una entrada en formato JSON, y argumentos que consistirán en una función map y una función reduce. Con todas las entradas, se realiza una consulta que se encuentra en el JSON, luego con estos datos se procesa el conjunto aplicando la función map a todos ellos, para luego realizar la función que reduce dichos datos a un resultado.
+\\
+\hline
+\textbf{Observaciones} & Para mayor detalles del uso de la función map-reduce, referirse a la documentación de mongoDB en \hyperlink{https://docs.mongodb.com/manual/core/map-reduce/index.html}{https://docs.mongodb.com/manual/core/map-reduce/index.html}.\\
+
+\hline
+\hline
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Endpoint para el cálculo de la cantidad de revisiones \\
 \hline
 \textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/count}
 recibe como parámetros los atributos para restringir o filtrar el
@@ -63,7 +409,9 @@ solicitud contra una lista blanca con los parámetros permitidos.
 Luego, con los parámetros resultantes, se realiza el
 procesamiento a través de una tarea asignada, para luego
 devolver el resultado.\\
+
 \hline
+
 \caption{Contabilización de Revisiones}
 \label{tab:count}
 \end{longtable}
