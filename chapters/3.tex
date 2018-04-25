@@ -164,8 +164,10 @@ La tabla \ref{tab:extract} muestra la historia asociada a la extracción de revi
 
 \subsubsection{Consultas}
 
-El API consta de una ruta de acceso para consultar las revisiones extraídas y
-los artículos asociados a través de las rutas \texttt{/api/v1/articles} y \texttt{/api/v1/revisions}.
+El API consta de métodos de acceso para consultar las revisiones extraídas y
+los artículos asociados a través de las rutas \texttt{/api/v1/revisions} y \texttt{/api/v1/articles} respectivamente. 
+
+La ruta \texttt{articles} tiene como finalidad devolver la información pertinente a los artículos que han sido extraídos a través del API. Para mostrar la información, se realiza una consulta a la base de datos, específicamente la colección \texttt{articles}. Debido a que esta operación no implica cálculo de métricas, esta consulta es realizada directamente, sin ser asignada a los nodos trabajadores de celery.
 
 Para consultar los artículos es posible hacer uso de diversos parámetros de búsqueda,
 entre ellas están: los parámetros de paginación \texttt{page} y \texttt{page\_size},
@@ -181,8 +183,10 @@ Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciada en la figu
 	\label{fig:response_articles}
 \end{figure}
 
-En el caso de la consulta de las revisiones, adicionalmente a los parámetros de búsqueda, está el parámetro \texttt{sort} que permite, por fecha de extracción, el
-ordenamiento ascendente o descendiente de las revisiones, y la elección de cuales
+Por su parte, la ruta \texttt{revisions} tiene como finalidad devolver la información pertinente de las revisiones que han sido extraídas. En comparación con la información de la ruta \texttt{articles}, la información en \texttt{revisions} es mucho mas detallada, y abarca desde el nombre del usuario que hizo la revisión, hasta la fecha en que se realizó y el contenido completo de la revisión. Como sucede con los artículos, la información de las revisiones es presentada gracias a una consulta a la colección \texttt{revisions} de la base de datos. De igual manera, la consulta de las revisiones no necesita calcular métricas, y por ello la consulta es realizada directamente.
+
+Para esta ruta, adicionalmente a los parámetros de búsqueda, está el parámetro \texttt{sort} que permite, por fecha de extracción, el
+ordenamiento ascendente o descendiente de las revisiones, y la elección de cuáles
 atributos se desean mostrar por cada revisión.
 
 En la figura \ref{fig:response_revisions} se puede apreciar una respuesta del servidor en la consulta de revisiones:
@@ -194,15 +198,32 @@ En la figura \ref{fig:response_revisions} se puede apreciar una respuesta del se
 	\label{fig:response_revisions}
 \end{figure}
 
-Por otro lado, existen mas rutas de acceso al API para la consulta de diversas métricas predefinidas, tales como: promedio, conteo de revisiones y moda.
+Las rutas anteriormente mencionadas son rutas de acceso de consulta, es decir, sólo muestran datos recolectados y que se encuentran almacenados en la base de datos. Por otro lado, existen mas rutas de acceso al API para la consulta de diversas métricas predefinidas, tales como: promedio, conteo de revisiones y moda.
 
-El cálculo de estas métricas toma como parámetros múltiples atributos, tales como: el título del artículo o la fecha de extracción, para poder filtrar el numero total revisiones de la consulta.
-Estos parámetros pasan por un proceso de aceptación, en donde solo son aceptados aquellos que estén ya incluidos en una lista llamada lista blanca, mientras que el resto son ignorados.
-Después de esta etapa, se genera una tarea de Celery para poder ser procesada en segundo plano hasta obtener el resultado.
+Para el cálculo de estas métricas, se toman como parámetros múltiples atributos, tales como: el título del artículo o la fecha de extracción. Dichos atributos son usados principalmente para reducir o filtrar las revisiones que se van a seleccionar para el cálculo de las métricas. 
 
-En la tabla \ref{tab:count} se puede apreciar con detalle, por medio de sus historias, los filtros aceptados por cada métrica.
+Antes de que los parámetros recibidos en la consulta sean utilizados, los mismos pasan por un proceso de aceptación, en donde sólo son aceptados aquellos que estén ya incluidos en una lista, la cual es denominada \textit{Lista Blanca}, mientras que el resto son ignorados.
+
+Después de esta etapa, se genera una tarea de Celery con el tipo de consulta a realizar y los parámetros recibidos que fueron aceptados a través de la lista blanca. Esta tarea pasa a ser procesada en segundo plano.
+
+Dentro de esta tarea, los atributos recibidos como paramétros son usados en sus diferentes funciones, dependiendo de la consulta que fue realizada. 
+
+Para el uso de los filtros en una consulta, algunos de los atributos pasan por un proceso en el cual son convertidos a condicionales para que las revisiones puedan ser seleccionadas correctamente. Entre dichos atributos, se tienen las fechas y el tamaño de la revisión. Para las fechas, se considera una fecha única o un intervalo de fechas en base a los parámetros que fueron recibidos, y se añaden los condicionales correspondientes. Para el tamaño sucede un proceso similar, donde se considera un segundo argumento opcional para crear las condiciones. 
+
+Con las condiciones ya ajustadas(en caso de que fuera necesario), se anexan a un objeto, que es pasado como parámetro a la función que se conectará con la base de datos, y hará la consulta. 
+
+La consulta de conteo de revisiones, tiene por finalidad seleccionar todas las revisiones que cumplan con las condiciones de los parámetros recibidos. Todos los argumentos de esta consulta son utilizados como filtros para las revisiones a seleccionar. En la tabla \ref{tab:count} se puede apreciar con detalle, por medio de su historia, los filtros aceptados por dicha consulta.
 
 \input{tables/count}
+
+La consulta del promedio de las revisiones, calcula el promedio de revisiones por unidad de tiempo(en este caso, días) que existe en un intervalo determinado por el usuario a través de los parámetros. Adicionalmente al intervalo de fechas para para seleccionar el promedio, se pueden aplicar los diversos filtros disponibles, para afinar aún mas la selección de las revisiones, por ejemplo, para poder ver el promedio de revisiones de un usuario en un fin de semana determinado. En la tabla \ref{tab:average} se presentan con mayor con detalle, por medio de su historia, los filtros aceptados, así como los argumentos obligatorios de la consulta.
+
+\input{tables/average}
+
+La consulta de la moda de las revisiones, calcula el valor que se repite con mayor frecuencia de un atributo seleccionado por el usuario. Dicha consulta se realiza sobre un conjunto de revisiones que puede ser filtrado, tal como las consultas anteriores, lo que permite una mayor especificación de las revisiones a considerar para el cálculo de la moda, por ejemplo, calcular cuál es el mayor contribuyente a un artículo en un año determinado. Para mas detalles de los filtros y argumentos de la consulta, se presenta la tabla \ref{tab:mode}.
+
+\input{tables/mode}
+
 
 Por último, el API provee la ruta \texttt{/api/v1/query} que permite ejecutar consultas a la base de datos directamente de los parámetros recibidos por la petición.
 El cuerpo de las peticiones realizadas sobre esta ruta debe tener un formato JSON, en conjunto con el atributo de cabecera

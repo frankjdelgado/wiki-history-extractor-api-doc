@@ -3,24 +3,24 @@
 \hline
 \multicolumn{2}{|r|}{\textbf{Historia}} \\
 \hline
-\textbf{Sección} & Extracción\\
-\hline
 \endfirsthead
 
 \multicolumn{2}{c}%
 {{\bfseries \tablename\ \thetable{} -- continuación de la página anterior}} \\
 \hline \multicolumn{2}{|r|}{\textbf{Historia}} \\ \hline
-\textbf{Sección} & Extracción\\
-\hline
 \endhead
-\textbf{Desarrollador} & Marvin Bernal, Francisco Delgado \\
+
+\textbf{Desarrollador} & Marvin Bernal \\
 \hline
 \textbf{Nombre} & Extracción de revisiones por API \\
 \hline
+\textbf{Sección} & Extracción\\
+\hline
 \textbf{Descripción} & Extracción de todas las revisiones de un artículo
-	wiki dado a través del API que ofrece mediawiki. \par
+	wiki dado su título a través del API que ofrece mediawiki \par
 	Se realiza una petición sobre el URL
-	\texttt{https://en.wikipedia.org/w/api.php} para obtener todos los
+	\texttt{https://en.wikipedia.org/w/api.php} y se agregan parámetros
+	extra, incluyendo el título del artículo, para obtener todos los
 	metadatos posibles de una revisión.
 	\par
 	Cada petición al API obtiene un máximo de 50 revisiones se llevan
@@ -29,72 +29,8 @@
 \hline
 \textbf{Observaciones} & Se extraen los siguientes datos: id de la revisión, tipo de revisión,
 fecha, nombre de usuario, id de usuario, tamaño, comentarios,
-contenido y etiquetas. \par El título del artículo no es variable. \par El idioma(locale) del artículo no es variable. \\
-\hline
-\hline
-\textbf{Desarrollador} & Marvin Bernal \\
-\hline
-\textbf{Nombre} & Extracción en caso de error del servidor \\
-\hline
-\textbf{Descripción} & Se modifica el método de extracción, para contemplar el escenario
-donde el servidor presenta un error que lo inhabite o es desactivado manualmente.
-\par Se añade un campo para tener la última revisión extraida, para que en el proceso de extracción se compare dicho campo con las revisiones extraidas, y poder seguir extrayendo a partir de dicha revisión. \\
-\hline
-\textbf{Observaciones} & Se añade el siguiente dato a la solicitud de extracción: rvstartid.\\
-
-\hline
-\hline
-\textbf{Desarrollador} & Marvin Bernal \\
-\hline
-\textbf{Nombre} & Extracción en orden ascendente \\
-\hline
-\textbf{Descripción} & Se modifica el método de extracción, para realizar las extracciones de las mas antiguas a las mas nuevas, para facilitar el proceso de extracción y prevenir saltos en casos de errores o interrupciones si se crean nuevas revisiones durante el proceso. \\
-\hline
-\textbf{Observaciones} & \\
-
-\hline
-\hline
-\textbf{Desarrollador} & Francisco Delgado \\
-\hline
-\textbf{Nombre} & Creación de artículos al extraer \\
-\hline
-\textbf{Descripción} & Al realizar las extracciones, se añade el artículo wiki a la colección de artículos de la base de datos. Si el artículo ya se encuentra, se modifica la ultima revisión extraida del artículo. \\
-\hline
-\textbf{Observaciones} & Añadida colección de artículos a la base de datos\\
-
-\hline
-\hline
-\textbf{Desarrollador} & Marvin Bernal \\
-\hline
-\textbf{Nombre} & Extracción por título\\
-\hline
-\textbf{Descripción} & Se modifica el método de extracción para aceptar título del artículo a extraer, del cual se obtiene el pageid\\
-\hline
-\textbf{Observaciones} & Se añade el siguiente dato a la solicitud: título\\
-
-\hline
-\hline
-\textbf{Desarrollador} & Francisco Delgado \\
-\hline
-\textbf{Nombre} & Incorporar extracción a tareas de Celery\\
-\hline
-\textbf{Descripción} & Se incorpora Celery a la extracción, para que le sea asignado un nodo trabajador a la tarea.\\
-\hline
-\textbf{Observaciones} & Añadido status a la tarea de extracción por celery, para poder seguir el estado de la tarea.\\
-
-
-\hline
-\hline
-\textbf{Desarrollador} & Francisco Delgado \\
-\hline
-\textbf{Nombre} & Extracción en otros idiomas\\
-\hline
-\textbf{Descripción} & Se añade el campo local a la extracción, para permitir trabajar con artículos wiki en otros idiomas.\\
-\hline
-\textbf{Observaciones} & Añadido dato locale al proceso de extracción\\
-
+contenido y etiquetas\\
 \hline
 \caption{Extracción de Revisiones}
 \label{tab:extract}
 \end{longtable}
-	
