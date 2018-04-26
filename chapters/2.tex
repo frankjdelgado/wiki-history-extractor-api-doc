@@ -20,7 +20,7 @@ Y por último, Docker, que sirve como una herramienta para emular un ambiente di
 se van a ejecutar los múltiples nodos tanto de la base de datos, como los servicios de Celery y RabbitMQ, y
 las múltiples instancias del servicio API.
 
-\subsection{Mongo}
+\subsection{MongoDB}
 
 MongoDB es una base de datos NoSQL (no solo SQL) orientada a documentos. Almacena
 datos en una representación binaria llamada BSON (Binary JSON), la cual extiende
@@ -47,10 +47,10 @@ esta manera se obtiene cierto nivel de tolerancia a fallos en caso de que un ser
 También es posible mantener copias adicionales para propósitos específicos como recuperación en casos de desastre,
 reportes o respaldos \cite{11}.
 
-En MongoDB se hace uso de grupos de réplica (replica sets) para almacenar las copias de datos en múltiples
-servidores de base de datos. Un grupo de replica previene los tiempos de inactividad de la base de datos
+En MongoDB se hace uso de grupos de réplicas (replica sets) para almacenar las copias de datos en múltiples
+servidores de base de datos. Un grupo de réplicas previene los tiempos de inactividad de la base de datos
 en caso de errores y ayuda a escalar las operaciones de lectura. La recuperación de un miembro del grupo de
-replica se realiza de forma automática. En un grupo de replica cualquier miembro puede actuar como nodo principal
+réplicas se realiza de forma automática. En un grupo de réplicas cualquier miembro puede actuar como nodo principal
 y el resto como secundario, por lo tanto, en caso de fallas de red o de hardware, un miembro del grupo
 puede tomar el puesto de nodo primario después de haber sido elegido siguiendo un conjunto de reglas predefinidas.
 
@@ -70,7 +70,7 @@ empate y el ganador es elegido de inmediato.
 
 En la figura \ref{fig:heartbeat} se puede observar como los nodos del grupo se envían mensajes de diagnostico (heartbeats) para determinar si sus vecinos son accesibles o no.
 En caso de que uno de estos heartbeat no obtenga una respuesta en 10 segundos, se marca dicho
-destinarlo como inaccesibles.
+destino como inaccesible.
 
 \begin{figure}[H]
 	\centering

@@ -16,10 +16,25 @@
 \hline
 \textbf{Sección} & Consulta\\
 \hline
-\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/count}
+\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/mode}
 recibe como parámetros los atributos para restringir o filtrar el
-rango a tomar en cuenta como resultado. Los argumentos
-disponibles hasta el momento son:
+rango a tomar en cuenta como resultado, adicionalmente se usa el parámetro \texttt{attribute} para señalar el atributo sobre el cual calcular la moda, que consiste en el valor con mayor número de repeticiones entre el conjunto de valores obtenidos.  
+Entre los valores posibles que puede asumir \texttt{attribute} se encuentran:
+\par
+\tabitem title: el título del artículo con mayor cantidad de revisiones.
+\par
+\tabitem pageid: el id del artículo con mayor cantidad de revisiones.
+\par
+\tabitem user: nombre del autor que mas revisiones haya realizado.
+\par
+\tabitem userid: id del autor que mas revisiones haya realizado.
+\par
+\tabitem date: la fecha en la cual se hayan realizado mas revisiones.
+\par
+\tabitem size: el tamaño de revisión mas repetido.\\
+
+\hline
+\textbf{Descripción} & Adicionalmente, se pueden utilizar argumentos de filtrado, para especificar el conjunto de revisiones sobre el cuál se realiza el cálculo. Los argumentos disponibles hasta el momento son:
 \par
 \tabitem title: título del artículo extraído.
 \par
@@ -62,8 +77,12 @@ del artículo.
 solicitud contra una lista blanca con los parámetros permitidos.
 Luego, con los parámetros resultantes, se realiza el
 procesamiento a través de una tarea asignada, para luego
-devolver el resultado.\\
+devolver el resultado.
+
+\par 
+Se recomienda precaución al seleccionar los argumentos de filtrado, para evitar resultados redundantes. Por ejemplo, si se selecciona el atributo \texttt{user} como filtro y \texttt{attribute} tiene como valor \texttt{'user'}, el resultado será en el mejor caso el valor recibido por el filtro \texttt{user}, pues el conjunto seleccionado solo consistirá en revisiones realizadas por dicho usuario.
+\\
 \hline
-\caption{Contabilización de Revisiones}
+\caption{Moda de Revisiones}
 \label{tab:mode}
 \end{longtable}
