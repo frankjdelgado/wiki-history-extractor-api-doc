@@ -1,0 +1,37 @@
+\begin{longtable}{|l|m{4in}|}
+
+\hline
+\multicolumn{2}{|r|}{\textbf{Historia}} \\
+\hline
+\endfirsthead
+
+\multicolumn{2}{c}%
+{{\bfseries \tablename\ \thetable{} -- continuación de la página anterior}} \\
+\hline \multicolumn{2}{|r|}{\textbf{Historia}} \\ \hline
+\endhead
+
+\textbf{Desarrollador} & Francisco Delgado \\
+\hline
+\textbf{Nombre} & Endpoint para la consultas directas a la base de datos \\
+\hline
+\textbf{Sección} & Consulta\\
+\hline
+\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/query}
+recibe el contenido de la consulta a realizar en formato JSON, a través del cuerpo de la solicitud que se realiza. Dicho cuerpo debe tener un formato adecuado para realizar la consulta en base al módulo Pymongo.
+\par Además de esto, existen 2 argumentos opcionales:
+\par
+\tabitem collection: la colección sobre la cuál se hará la consulta.
+ Su valor por defecto es la colección \texttt{revisions}.
+\par
+\tabitem date\_format: el formato se fecha que será usado en la consulta. 
+Su valor por defecto es \texttt{\%Y-\%m-\%dT\%H:\%M:\%S}. 
+Donde cada letra excepto la T representa el valor de unidad de tiempo correspondiente en inglés, por ejemplo Y para Año (Year). 
+La letra T representa la finalización de la sección de la fecha y el inicio de la sección del tiempo en el formato.
+
+\\
+\hline
+\textbf{Observaciones} & \\
+\hline
+\caption{Consultas Directas a la Base de Datos}
+\label{tab:query}
+\end{longtable}

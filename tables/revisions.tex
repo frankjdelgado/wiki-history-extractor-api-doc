@@ -1,0 +1,69 @@
+\begin{longtable}{|l|m{4in}|}
+
+\hline
+\multicolumn{2}{|r|}{\textbf{Historia}} \\
+\hline
+\endfirsthead
+
+\multicolumn{2}{c}%
+{{\bfseries \tablename\ \thetable{} -- continuación de la página anterior}} \\
+\hline \multicolumn{2}{|r|}{\textbf{Historia}} \\ \hline
+\endhead
+
+\textbf{Desarrollador} & Marvin Bernal \\
+\hline
+\textbf{Nombre} & Endpoint para consulta de revisiones \\
+\hline
+\textbf{Sección} & Consulta\\
+\hline
+\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/revisions}
+recibe como parámetros los atributos para restringir o filtrar el
+rango a tomar en cuenta como resultado. Los argumentos
+disponibles hasta el momento son:
+\par
+\tabitem comment: comentario de la revisión.
+\par
+\tabitem anon: la revisión fue fecha por un autor anónimo.
+\par
+\tabitem pageid: id del artículo extraído.
+\par
+\tabitem user: nombre del usuario que realiza la revisiones.
+\par
+\tabitem userid: id del usuario que realiza la revisiones.
+\par
+\tabitem tags: etiqueta o etiquetas que contengan las
+revisiones.
+\par
+\tabitem revid: id de la revisión.
+\par
+\tabitem contentformat: el formato del contenido.
+\par
+\tabitem contentmodel: el modelo del contenido.
+\par
+\tabitem extraction\_date: la fecha en que se extrajo la revisión.
+\par
+\tabitem parentid: id de la revisión padre.
+\par
+\tabitem title: título del artículo wiki.
+\par
+\tabitem minor: la revisión fue una edición menor.
+\par
+\tabitem size: el tamaño de la revisión realizada.
+
+\par Adicionalmente la consulta se realiza de forma paginada y puede ser ordenada por fechas. 
+Se puede manejar la paginación y el ordenamiento con los siguiente argumentos:
+\par
+\tabitem page\_size: cantidad de revisiones por página.
+El valor por defecto es 20, máximo valor es 200.
+\par
+\tabitem page: página de revisiones a mostrar.
+El valor por defecto es 1.
+\par
+\tabitem sort: se indica si las revisiones se muestran en orden descendente o ascendente. Los posibles valores son \texttt{asc} o \texttt{desc}
+\\
+\hline
+\textbf{Observaciones} & \\
+\hline
+\caption{Consulta de Revisiones}
+\label{tab:revisions}
+\end{longtable}

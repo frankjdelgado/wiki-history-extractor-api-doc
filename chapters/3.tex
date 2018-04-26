@@ -142,12 +142,12 @@ Se toma como URL por defecto la dirección https://en.wikipedia.org/w/api.php, e
 
 	\item \textbf{rvlimit}: permite la paginación de los resultados e indica la cantidad de resultados que se quieren obtener por página.
 
-	\item \textbf{newer}: permite ordenar las revisiones de forma ascendete o descendiente acorde a la fecha de creación. Se ordenan de forma descendente usando el valor \texttt{newer}, de esta manera es más rápido extraer las revisiones mas recientes.
+	\item \textbf{newer}: permite ordenar las revisiones de forma ascendente o descendiente acorde a la fecha de creación. Se ordenan de forma descendente usando el valor \texttt{newer}, de esta manera es más rápido extraer las revisiones mas recientes.
 \end{itemize}
 
-Justo antes de enviar la solicitud al API de wikipedia, se verifica que el artículo a consultar ya este almacenado en la base de datos, en caso de no estarlo, se almacena indicando la fecha de extracción.
-Posteriormente, se extraen sus revisiones, y puesto que la respuesta del API coloca las revisiones mas recientes al principio, el extractor culmina su ejecución una vez determina que alcanzo una revisión que ya ha sido almacenada.
-Al almacenar las revisiones en la base de datos, se actualiza el documento del artículo con la fecha de la ultima extracción y el identificador de la revisión extraída, y por ultimo, se actualiza el progreso de la tarea.
+Justo antes de enviar la solicitud al API de wikipedia, se verifica que el artículo a consultar ya esté almacenado en la base de datos, en caso de no estarlo, se almacena indicando la fecha de extracción.
+Posteriormente, se extraen sus revisiones, y puesto que la respuesta del API coloca las revisiones mas recientes al principio, el extractor culmina su ejecución una vez determina que alcanzó una revisión que ya ha sido almacenada.
+Al almacenar las revisiones en la base de datos, se actualiza el documento del artículo con la fecha de la última extracción y el identificador de la revisión extraída, y por último, se actualiza el progreso de la tarea.
 
 En la figura \ref{fig:response_status} se puede apreciar un ejemplo de la consulta del progreso de las tareas:
 
@@ -183,6 +183,10 @@ Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciada en la figu
 	\label{fig:response_articles}
 \end{figure}
 
+En la tabla \ref{tab:articles} se puede apreciar la historia de la ruta.
+
+\input{tables/articles}
+
 Por su parte, la ruta \texttt{revisions} tiene como finalidad devolver la información pertinente de las revisiones que han sido extraídas. En comparación con la información de la ruta \texttt{articles}, la información en \texttt{revisions} es mucho mas detallada, y abarca desde el nombre del usuario que hizo la revisión, hasta la fecha en que se realizó y el contenido completo de la revisión. Como sucede con los artículos, la información de las revisiones es presentada gracias a una consulta a la colección \texttt{revisions} de la base de datos. De igual manera, la consulta de las revisiones no necesita calcular métricas, y por ello la consulta es realizada directamente.
 
 Para esta ruta, adicionalmente a los parámetros de búsqueda, está el parámetro \texttt{sort} que permite, por fecha de extracción, el
@@ -198,6 +202,10 @@ En la figura \ref{fig:response_revisions} se puede apreciar una respuesta del se
 	\label{fig:response_revisions}
 \end{figure}
 
+En la tabla \ref{tab:revisions} se puede apreciar con mas detalle los argumentos que pueden ser usados para filtrado, paginación y ordenamiento.
+
+\input{tables/revisions}
+
 Las rutas anteriormente mencionadas son rutas de acceso de consulta, es decir, sólo muestran datos recolectados y que se encuentran almacenados en la base de datos. Por otro lado, existen mas rutas de acceso al API para la consulta de diversas métricas predefinidas, tales como: promedio, conteo de revisiones y moda.
 
 Para el cálculo de estas métricas, se toman como parámetros múltiples atributos, tales como: el título del artículo o la fecha de extracción. Dichos atributos son usados principalmente para reducir o filtrar las revisiones que se van a seleccionar para el cálculo de las métricas. 
@@ -206,7 +214,7 @@ Antes de que los parámetros recibidos en la consulta sean utilizados, los mismo
 
 Después de esta etapa, se genera una tarea de Celery con el tipo de consulta a realizar y los parámetros recibidos que fueron aceptados a través de la lista blanca. Esta tarea pasa a ser procesada en segundo plano.
 
-Dentro de esta tarea, los atributos recibidos como paramétros son usados en sus diferentes funciones, dependiendo de la consulta que fue realizada. 
+Dentro de esta tarea, los atributos recibidos como parámetros son usados en sus diferentes funciones, dependiendo de la consulta que fue realizada. 
 
 Para el uso de los filtros en una consulta, algunos de los atributos pasan por un proceso en el cual son convertidos a condicionales para que las revisiones puedan ser seleccionadas correctamente. Entre dichos atributos, se tienen las fechas y el tamaño de la revisión. Para las fechas, se considera una fecha única o un intervalo de fechas en base a los parámetros que fueron recibidos, y se añaden los condicionales correspondientes. Para el tamaño sucede un proceso similar, donde se considera un segundo argumento opcional para crear las condiciones. 
 
@@ -250,7 +258,10 @@ Un ejemplo, del uso de estos parámetros es el que se muestra en la figura \ref{
 \end{figure}
 
 Por medio de esta ruta es posible realizar cualquier tipo de consulta sobre la base de datos, y así, obtener métricas
-adicionales para su análisis posterior.
+adicionales para su análisis posterior. En la tabla \ref{tab:query} se puede ver mas detalles con respecto a los parámetros.
+
+\input{tables/query}
+
 
 \input{chapters/revisit}
 
