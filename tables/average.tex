@@ -14,11 +14,9 @@
 \hline
 \textbf{Nombre} & Endpoint para el cálculo del promedio de revisiones \\
 \hline
-\textbf{Sección} & Consulta\\
-\hline
-\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/count}
+\textbf{Descripción} & Parte del API de la solución distribuida donde el endpoint \texttt{/avg}
 recibe como parámetros los atributos para restringir o filtrar el
-rango a tomar en cuenta como resultado. Los argumentos
+rango a tomar en cuenta como resultado, adicionalmente es necesario un intervalo de fechas para el cálculo del promedio. Los argumentos
 disponibles hasta el momento son:
 \par
 \tabitem title: título del artículo extraído.
@@ -42,20 +40,13 @@ todas las revisiones de menor tamaño que el valor de
 de la solicitud, se filtrarán todas las revisiones cuyo
 tamaño sea exactamente el valor de \texttt{size}.
 \par
-\tabitem date: la fecha exacta en que fueron realizadas las
-revisiones. El formato de fecha utilizado es: \texttt{YYYY-MM-DD}.
-\par
 \tabitem datestart: la fecha inicial a partir de la cual fueron
 realizadas las revisiones en un intervalo de tiempo. El
-formato de fecha utilizado es: \texttt{YYYY-MM-DD}. En caso de
-que no exista el parámetro \texttt{dateend} en la solicitud, la fecha final del intervalo será la fecha actual.
+formato de fecha utilizado es: \texttt{YYYY-MM-DD}. Este argumento es obligatorio.
 \par
 \tabitem dateend: la fecha final hasta la cual fueron realizadas las
 revisiones en un intervalo de tiempo. El formato de
-fecha utilizado es: \texttt{YYYY-MM-DD}. En caso de que no
-exista el parámetro \texttt{datestart} en la solicitud, la fecha
-inicial del intervalo será la fecha de la primera revisión
-del artículo.
+fecha utilizado es: \texttt{YYYY-MM-DD}. Este argumento es obligatorio.
 \\
 \hline
 \textbf{Observaciones} & Primero se realiza una comprobación de los parámetros de la
@@ -64,6 +55,6 @@ Luego, con los parámetros resultantes, se realiza el
 procesamiento a través de una tarea asignada, para luego
 devolver el resultado.\\
 \hline
-\caption{Contabilización de Revisiones}
+\caption{Promedio de Revisiones}
 \label{tab:average}
 \end{longtable}

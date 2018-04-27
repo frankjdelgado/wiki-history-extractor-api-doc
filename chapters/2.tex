@@ -47,10 +47,12 @@ esta manera se obtiene cierto nivel de tolerancia a fallos en caso de que un ser
 También es posible mantener copias adicionales para propósitos específicos como recuperación en casos de desastre,
 reportes o respaldos \cite{11}.
 
-En MongoDB se hace uso de grupos de réplica (replica sets) para almacenar las copias de datos en múltiples
-servidores de base de datos. Un grupo de réplica previene los tiempos de inactividad de la base de datos
-en caso de errores y ayuda a escalar las operaciones de lectura. La recuperación de un miembro del grupo de
-réplica se realiza de forma automática. En un grupo de réplica cualquier miembro puede actuar como nodo principal
+En MongoDB se hace uso de grupos de réplica (replica sets) para almacenar las copias de datos en múltiples servidores de base de datos.
+Un grupo de réplica previene los tiempos de inactividad de la base de datos
+en caso de errores y ayuda a escalar las operaciones de lectura.
+La recuperación de un miembro del grupo de
+réplica se realiza de forma automática.
+En un grupo de réplica cualquier miembro puede actuar como nodo principal
 y el resto como secundario, por lo tanto, en caso de fallas de red o de hardware, un miembro del grupo
 puede tomar el puesto de nodo primario después de haber sido elegido siguiendo un conjunto de reglas predefinidas.
 

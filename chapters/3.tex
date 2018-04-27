@@ -142,12 +142,12 @@ Se toma como URL por defecto la dirección https://en.wikipedia.org/w/api.php, e
 
 	\item \textbf{rvlimit}: permite la paginación de los resultados e indica la cantidad de resultados que se quieren obtener por página.
 
-	\item \textbf{newer}: permite ordenar las revisiones de forma ascendete o descendiente acorde a la fecha de creación. Se ordenan de forma descendente usando el valor \texttt{newer}, de esta manera es más rápido extraer las revisiones mas recientes.
+	\item \textbf{newer}: permite ordenar las revisiones de forma ascendente o descendiente acorde a la fecha de creación. Se ordenan de forma descendente usando el valor \texttt{newer}, de esta manera es más rápido extraer las revisiones mas recientes.
 \end{itemize}
 
-Justo antes de enviar la solicitud al API de wikipedia, se verifica que el artículo a consultar ya este almacenado en la base de datos, en caso de no estarlo, se almacena indicando la fecha de extracción.
-Posteriormente, se extraen sus revisiones, y puesto que la respuesta del API coloca las revisiones mas recientes al principio, el extractor culmina su ejecución una vez determina que alcanzo una revisión que ya ha sido almacenada.
-Al almacenar las revisiones en la base de datos, se actualiza el documento del artículo con la fecha de la ultima extracción y el identificador de la revisión extraída, y por ultimo, se actualiza el progreso de la tarea.
+Justo antes de enviar la solicitud al API de wikipedia, se verifica que el artículo a consultar ya esté almacenado en la base de datos, en caso de no estarlo, se almacena indicando la fecha de extracción.
+Posteriormente, se extraen sus revisiones, y puesto que la respuesta del API coloca las revisiones mas recientes al principio, el extractor culmina su ejecución una vez determina que alcanzó una revisión que ya ha sido almacenada.
+Al almacenar las revisiones en la base de datos, se actualiza el documento del artículo con la fecha de la última extracción y el identificador de la revisión extraída, y por último, se actualiza el progreso de la tarea.
 
 En la figura \ref{fig:response_status} se puede apreciar un ejemplo de la consulta del progreso de las tareas:
 
@@ -245,7 +245,10 @@ Un ejemplo, del uso de estos parámetros es el que se muestra en la figura \ref{
 \end{figure}
 
 Por medio de esta ruta es posible realizar cualquier tipo de consulta sobre la base de datos, y así, obtener métricas
-adicionales para su análisis posterior.
+adicionales para su análisis posterior. En la tabla \ref{tab:query} se puede ver mas detalles con respecto a los parámetros.
+
+\input{tables/query}
+
 
 \input{chapters/revisit}
 
