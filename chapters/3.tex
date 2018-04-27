@@ -171,9 +171,9 @@ En estas rutas de consulta es posible hacer uso de diversos parámetros de búsq
 entre ellas están: los parámetros de paginación \texttt{page} y \texttt{page\_size},
 y los parámetros de búsqueda que corresponden a los atributos del artículo,
 tales como: \texttt{title}, \texttt{first\_extraction\_date}, \texttt{last\_extraction\_date}, \texttt{last\_revision\_extracted} y \texttt{locale}.
-Adicionalmente, existen el parámetros como \texttt{sort}, que permite ordenar los resultados a través del valor de un atributo de la colección a consultar, ejemplo, por la fecha de extracción de un artículo.
+Adicionalmente, existe el parámetro \texttt{sort}, que permite ordenar los resultados a través del valor de un atributo de la colección a consultar, ejemplo, por la fecha de extracción de un artículo.
 
-La ruta \texttt{articles} tiene como finalidad devolver la información pertinente a los artículos que han sido extraídos a través del API, para ello, se realiza una consulta a la colección \texttt{articles} almacenada en la base de datos. Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciada en la figura \ref{fig:response_articles}.
+La ruta \texttt{articles} tiene como finalidad mostrar la información pertinente a los artículos que han sido extraídos a través del API, para lo cual se realiza una consulta a la colección \texttt{articles} almacenada en la base de datos. Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciada en la figura \ref{fig:response_articles}.
 
 \begin{figure}[H]
 	\centering
@@ -182,8 +182,8 @@ La ruta \texttt{articles} tiene como finalidad devolver la información pertinen
 	\label{fig:response_articles}
 \end{figure}
 
-Por otro lado, \texttt{revisions} permite consultar el contenido y los datos pertinente a las revisiones que han sido extraídas.
-En la figura \ref{fig:response_revisions} se puede apreciar una respuesta del servidor en la consulta de revisiones.
+Por su parte, la ruta \texttt{revisions} permite consultar el contenido y los datos pertinentes a las revisiones que han sido extraídas.
+En la figura \ref{fig:response_revisions} se puede apreciar una respuesta del servidor a la consulta de revisiones.
 
 \begin{figure}[H]
 	\centering
@@ -192,7 +192,7 @@ En la figura \ref{fig:response_revisions} se puede apreciar una respuesta del se
 	\label{fig:response_revisions}
 \end{figure}
 
-Por otro lado, existen mas rutas de acceso al API para la consulta de diversas métricas predefinidas, tales como: promedio, conteo de revisiones y moda.
+Adicionalmente, existen mas rutas de acceso al API para la consulta de diversas métricas predefinidas, tales como: promedio, conteo de revisiones y moda.
 
 Durante el cálculo de estas métricas se toman como parámetros múltiples atributos, tales como: el título del artículo o la fecha de extracción.
 Dichos atributos son usados para reducir o filtrar las revisiones que se van a consultar en el cálculo de  métricas.
