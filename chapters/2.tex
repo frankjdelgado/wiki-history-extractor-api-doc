@@ -20,7 +20,7 @@ Y por último, Docker, que sirve como una herramienta para emular un ambiente di
 se van a ejecutar los múltiples nodos tanto de la base de datos, como los servicios de Celery y RabbitMQ, y
 las múltiples instancias del servicio API.
 
-\subsection{Mongo}
+\subsection{MongoDB}
 
 MongoDB es una base de datos NoSQL (no solo SQL) orientada a documentos. Almacena
 datos en una representación binaria llamada BSON (Binary JSON), la cual extiende
@@ -48,9 +48,9 @@ También es posible mantener copias adicionales para propósitos específicos co
 reportes o respaldos \cite{11}.
 
 En MongoDB se hace uso de grupos de réplica (replica sets) para almacenar las copias de datos en múltiples
-servidores de base de datos. Un grupo de replica previene los tiempos de inactividad de la base de datos
+servidores de base de datos. Un grupo de réplica previene los tiempos de inactividad de la base de datos
 en caso de errores y ayuda a escalar las operaciones de lectura. La recuperación de un miembro del grupo de
-replica se realiza de forma automática. En un grupo de replica cualquier miembro puede actuar como nodo principal
+réplica se realiza de forma automática. En un grupo de réplica cualquier miembro puede actuar como nodo principal
 y el resto como secundario, por lo tanto, en caso de fallas de red o de hardware, un miembro del grupo
 puede tomar el puesto de nodo primario después de haber sido elegido siguiendo un conjunto de reglas predefinidas.
 
@@ -70,7 +70,7 @@ empate y el ganador es elegido de inmediato.
 
 En la figura \ref{fig:heartbeat} se puede observar como los nodos del grupo se envían mensajes de diagnostico (heartbeats) para determinar si sus vecinos son accesibles o no.
 En caso de que uno de estos heartbeat no obtenga una respuesta en 10 segundos, se marca dicho
-destinarlo como inaccesibles.
+nodo como inaccesible.
 
 \begin{figure}[H]
 	\centering
@@ -80,7 +80,7 @@ destinarlo como inaccesibles.
 \end{figure}
 
 
-Los nodos secundarios se encargan de leer los datos presentes en el nodo primario y crear sus propia replica o copia del mismo.
+Los nodos secundarios se encargan de leer los datos presentes en el nodo primario y una copia del mismo.
 Si, por alguna razón, el nodo primario deja de estar disponible, un nodo secundario elegible ejecutará una votación para elegir el siguiente nodo primario, tal como lo muestra la figura \ref{fig:failover}.
 El primer nodo secundario en llevar a cabo la elección y recibir la mayoría de los votos se convierte en el nuevo nodo primario.
 
@@ -94,7 +94,7 @@ El primer nodo secundario en llevar a cabo la elección y recibir la mayoría de
 \subsubsection{Particiones}
 
 El proceso de partición (sharding) es un método de escalamiento horizontal que distribuye datos entre múltiples máquinas.
-Cada conjunto de datos alojado en una máquina es llamado partición (shards), y su acceso es completamente transparente para las aplicaciones.
+Cada conjunto de datos alojado en una máquina es llamado partición (shard), y su acceso es completamente transparente para las aplicaciones.
 Este método permite atacar las limitaciones de hardware provenientes del uso de un solo servidor, tales como los cuellos de botella o capacidad de almacenamiento \cite{13}.
 
 En MongoDB, un grupo de partición (sharded cluster) consiste de tres componentes:
@@ -204,7 +204,7 @@ Esta concentrado en la ejecución de operaciones en tiempo real, y a su vez, tam
 
 Las colas de tareas son usadas como un mecanismo para la distribución de trabajo entre múltiples hilos o máquinas.
 Las entradas de estas colas son ejecutadas de forma concurrente en uno o más componentes llamados workers, quien constantemente verifican si existe una tarea en la cola para ser ejecutada.
-Estas tareas pueden ser ejecutadas en segundo plano o de forma sincrónica, es decir, que esperan a que la tarea anterior culmine.
+Estas tareas pueden ser ejecutadas en segundo plano o de forma síncrona, es decir, que esperan a que la tarea anterior culmine.
 
 Celery realiza la transmisión de mensajes haciendo uso de un agente intermediario llamado broker.
 Para iniciar una tarea un cliente agrega un mensaje a la cola, el broker toma este mensaje y se lo envía a algún worker disponible, por último, una vez el worker recibe el mensaje ejecuta la tarea.

@@ -2,7 +2,7 @@
 
 \subsection{Método de Desarrollo}
 
-Para llevar a cabo el cumplimiento de los objetivos planteados en el Capítulo 2, es necesario definir un esquema o metodología de trabajo que permita la elaboración de un conjunto de
+Para llevar a cabo el cumplimiento de los objetivos, es necesario definir un esquema o metodología de trabajo que permita la elaboración de un conjunto de
 lineamientos de manera estructurada y organizada.
 Por lo tanto, se hace uso de el método de Desarrollo Rápido de Aplicaciones (RAD), el cual permite la iteración rápida y continua de pequeños objetivos para alcanzar la meta final.
 
@@ -18,7 +18,7 @@ Estas historias describen los detalles técnicos e categorizan las tareas en sub
 
 Por medio de RAD, fue posible la implementación de la solución al problema previamente planteado a través del desarrollo de múltiples componentes relacionados entre si, para
 brindar un servicio web como un API.
-La figura \ref{fig:diagram_general} muestra la arquitectura general del servicio web, y como la misma interactuá con las aplicaciones clientes que lo consumen.
+La figura \ref{fig:diagram_general} muestra la arquitectura general del servicio web, y como interactuá con las aplicaciones clientes que lo consumen.
 
 \begin{figure}[H]
 	\centering
@@ -41,7 +41,7 @@ y las encola para su posterior ejecución.
 \item Uno o más nodos que ejecutan un proceso trabajador de Celery para la ejecución de las tareas almacenadas en RabbitMQ.
 Estos nodos mantienen una comunicación con RabbitMQ para actualizar el estado y progreso de las tareas.
 
-\item Y, por último, un componente de almacenamiento de artículos wiki y sus revisiones. Para ello se hace uso de MongoDB y esta implementado como un cluster de base de datos distribuidos
+\item Y, por último, un componente de almacenamiento de artículos wiki y sus revisiones. Para ello se hace uso de MongoDB y está implementado como un cluster de base de datos distribuidos
 entre múltiples máquinas conectadas entre sí que permiten la fragmentación de los datos.
 
 \end{itemize}
@@ -51,12 +51,12 @@ entre múltiples máquinas conectadas entre sí que permiten la fragmentación d
 El servidor web que atiende las solicitudes en primera instancia es Nginx,
 el cual funciona como un intermediario entre el cliente y el API que responde dicha solicitud.
 Nginx permite balancear la carga de trabajo entre múltiples servidores que contienen la aplicación mediante el algoritmo de round robin,
-de tal forma que cada servidor es utilizado de forma equitativa, tal como se muestra en la figura \ref{fig:round_robin}:
+de tal forma que cada servidor es utilizado de forma equitativa, tal como se muestra en la figura \ref{fig:round_robin}.
 
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=0.9\textwidth]{figures/round_robin}
-	\caption{Algoritmo de round robin para la distribución de peticiones de Nginx}
+	\caption{Algoritmo de distribución de peticiones de Nginx basado en método de Round Robin.}
 	\label{fig:round_robin}
 \end{figure}
 
@@ -79,7 +79,7 @@ La interacción entre el servicio y una aplicación cliente puede ser apreciada 
 \end{figure}
 
 Esta interacción se basa en la petición de un recurso o de un proceso, por parte de una aplicación cliente, a una ruta del servidor web (endpoint).
-Cada petición puede incluir parámetros opcionales para la paginación, filtración de resultados, como por ejemplo, el idioma del artículo a extraer.
+Cada petición puede incluir parámetros opcionales para la paginación, filtrado de resultados, como por ejemplo, el idioma del artículo a extraer.
 
 Las rutas de acceso que ofrece el API son las siguientes:
 
@@ -136,7 +136,7 @@ Se toma como URL por defecto la dirección https://en.wikipedia.org/w/api.php, e
 
 	\item \textbf{format}: formato de la respuesta obtenida, la cual puede ser XML o JSON.
 
-	\item \textbf{props}: la propiedad del articulo al cual se desea consultar, en este caso se usa el valor \texttt{revisions} para poder extraer el historial de modificaciones del mismo.
+	\item \textbf{props}: la propiedad del artículo al cual se desea consultar, en este caso se usa el valor \texttt{revisions} para poder extraer el historial de modificaciones del mismo.
 
 	\item \textbf{rvprop}: atributos de la propiedad extraída, los incluidos para esta extracción son los siguientes: ids, flags, timestamp, user, userid, size, sha1, contentmodel, comment, parsedcomment, content, tags.
 
@@ -165,16 +165,15 @@ La tabla \ref{tab:extract} muestra la historia asociada a la extracción de revi
 \subsubsection{Consultas}
 
 El API consta de métodos de acceso para consultar las revisiones extraídas y
-los artículos asociados a través de las rutas \texttt{/api/v1/revisions} y \texttt{/api/v1/articles} respectivamente. 
+los artículos asociados a través de las rutas \texttt{/api/v1/revisions} y \texttt{/api/v1/articles} respectivamente.
 
-La ruta \texttt{articles} tiene como finalidad devolver la información pertinente a los artículos que han sido extraídos a través del API. Para mostrar la información, se realiza una consulta a la base de datos, específicamente la colección \texttt{articles}. Debido a que esta operación no implica cálculo de métricas, esta consulta es realizada directamente, sin ser asignada a los nodos trabajadores de celery.
-
-Para consultar los artículos es posible hacer uso de diversos parámetros de búsqueda,
+En estas rutas de consulta es posible hacer uso de diversos parámetros de búsqueda,
 entre ellas están: los parámetros de paginación \texttt{page} y \texttt{page\_size},
 y los parámetros de búsqueda que corresponden a los atributos del artículo,
 tales como: \texttt{title}, \texttt{first\_extraction\_date}, \texttt{last\_extraction\_date}, \texttt{last\_revision\_extracted} y \texttt{locale}.
+Adicionalmente, existen el parámetros como \texttt{sort}, que permite ordenar los resultados a través del valor de un atributo de la colección a consultar, ejemplo, por la fecha de extracción de un artículo.
 
-Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciada en la figura \ref{fig:response_articles}:
+La ruta \texttt{articles} tiene como finalidad devolver la información pertinente a los artículos que han sido extraídos a través del API, para ello, se realiza una consulta a la colección \texttt{articles} almacenada en la base de datos. Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciada en la figura \ref{fig:response_articles}.
 
 \begin{figure}[H]
 	\centering
@@ -183,13 +182,8 @@ Un ejemplo de la respuesta obtenida por esta ruta puede ser apreciada en la figu
 	\label{fig:response_articles}
 \end{figure}
 
-Por su parte, la ruta \texttt{revisions} tiene como finalidad devolver la información pertinente de las revisiones que han sido extraídas. En comparación con la información de la ruta \texttt{articles}, la información en \texttt{revisions} es mucho mas detallada, y abarca desde el nombre del usuario que hizo la revisión, hasta la fecha en que se realizó y el contenido completo de la revisión. Como sucede con los artículos, la información de las revisiones es presentada gracias a una consulta a la colección \texttt{revisions} de la base de datos. De igual manera, la consulta de las revisiones no necesita calcular métricas, y por ello la consulta es realizada directamente.
-
-Para esta ruta, adicionalmente a los parámetros de búsqueda, está el parámetro \texttt{sort} que permite, por fecha de extracción, el
-ordenamiento ascendente o descendiente de las revisiones, y la elección de cuáles
-atributos se desean mostrar por cada revisión.
-
-En la figura \ref{fig:response_revisions} se puede apreciar una respuesta del servidor en la consulta de revisiones:
+Por otro lado, \texttt{revisions} permite consultar el contenido y los datos pertinente a las revisiones que han sido extraídas.
+En la figura \ref{fig:response_revisions} se puede apreciar una respuesta del servidor en la consulta de revisiones.
 
 \begin{figure}[H]
 	\centering
@@ -198,32 +192,33 @@ En la figura \ref{fig:response_revisions} se puede apreciar una respuesta del se
 	\label{fig:response_revisions}
 \end{figure}
 
-Las rutas anteriormente mencionadas son rutas de acceso de consulta, es decir, sólo muestran datos recolectados y que se encuentran almacenados en la base de datos. Por otro lado, existen mas rutas de acceso al API para la consulta de diversas métricas predefinidas, tales como: promedio, conteo de revisiones y moda.
+Por otro lado, existen mas rutas de acceso al API para la consulta de diversas métricas predefinidas, tales como: promedio, conteo de revisiones y moda.
 
-Para el cálculo de estas métricas, se toman como parámetros múltiples atributos, tales como: el título del artículo o la fecha de extracción. Dichos atributos son usados principalmente para reducir o filtrar las revisiones que se van a seleccionar para el cálculo de las métricas. 
+Durante el cálculo de estas métricas se toman como parámetros múltiples atributos, tales como: el título del artículo o la fecha de extracción.
+Dichos atributos son usados para reducir o filtrar las revisiones que se van a consultar en el cálculo de  métricas.
 
-Antes de que los parámetros recibidos en la consulta sean utilizados, los mismos pasan por un proceso de aceptación, en donde sólo son aceptados aquellos que estén ya incluidos en una lista, la cual es denominada \textit{Lista Blanca}, mientras que el resto son ignorados.
+Antes de que los parámetros de búsqueda sean utilizados, pasan por un proceso de aceptación, en donde sólo son tomados en cuenta aquellos parámetros incluidos en una lista denominada \textit{Lista Blanca}, mientras que el resto son ignorados.
 
-Después de esta etapa, se genera una tarea de Celery con el tipo de consulta a realizar y los parámetros recibidos que fueron aceptados a través de la lista blanca. Esta tarea pasa a ser procesada en segundo plano.
+Posteriormente, se genera una tarea que será procesada en segundo plano por medio de Celery, con el tipo de consulta a realizar y los parámetros de búsqueda.
 
-Dentro de esta tarea, los atributos recibidos como paramétros son usados en sus diferentes funciones, dependiendo de la consulta que fue realizada. 
+El formato de algunos atributos utilizados en el proceso de búsqueda de revisiones o artículos, tales como, fecha de extracción y tamaño de la revisión, es alterado para facilitar la consulta de revisiones por un rango o intervalo determinado.
+Para los atributos que representan una fecha, se condiciona la búsqueda en base a una fecha única o un intervalo de fechas por medio de los parámetros recibidos en la petición.
+Para atributos que representan el tamaño se ejecuta un proceso similar, donde se considera un segundo argumento opcional que indica intervalo a evaluar para condicinar la consulta.
 
-Para el uso de los filtros en una consulta, algunos de los atributos pasan por un proceso en el cual son convertidos a condicionales para que las revisiones puedan ser seleccionadas correctamente. Entre dichos atributos, se tienen las fechas y el tamaño de la revisión. Para las fechas, se considera una fecha única o un intervalo de fechas en base a los parámetros que fueron recibidos, y se añaden los condicionales correspondientes. Para el tamaño sucede un proceso similar, donde se considera un segundo argumento opcional para crear las condiciones. 
-
-Con las condiciones ya ajustadas(en caso de que fuera necesario), se anexan a un objeto, que es pasado como parámetro a la función que se conectará con la base de datos, y hará la consulta. 
-
-La consulta de conteo de revisiones, tiene por finalidad seleccionar todas las revisiones que cumplan con las condiciones de los parámetros recibidos. Todos los argumentos de esta consulta son utilizados como filtros para las revisiones a seleccionar. En la tabla \ref{tab:count} se puede apreciar con detalle, por medio de su historia, los filtros aceptados por dicha consulta.
+En la tabla \ref{tab:count} se puede apreciar, con detalle, y por medio de su historia, las condiciones de búsqueda aceptadas por dicha consulta.
 
 \input{tables/count}
 
-La consulta del promedio de las revisiones, calcula el promedio de revisiones por unidad de tiempo(en este caso, días) que existe en un intervalo determinado por el usuario a través de los parámetros. Adicionalmente al intervalo de fechas para para seleccionar el promedio, se pueden aplicar los diversos filtros disponibles, para afinar aún mas la selección de las revisiones, por ejemplo, para poder ver el promedio de revisiones de un usuario en un fin de semana determinado. En la tabla \ref{tab:average} se presentan con mayor con detalle, por medio de su historia, los filtros aceptados, así como los argumentos obligatorios de la consulta.
+La consulta del promedio revisiones se calcula haciendo uso de intervalos de tiempos (en este caso, días), determinados por el usuario en la petición al servicio.
+En la tabla \ref{tab:average} se presentan con mayor con detalle, por medio de su historia, los filtros aceptados, así como los argumentos obligatorios de la consulta.
 
 \input{tables/average}
 
-La consulta de la moda de las revisiones, calcula el valor que se repite con mayor frecuencia de un atributo seleccionado por el usuario. Dicha consulta se realiza sobre un conjunto de revisiones que puede ser filtrado, tal como las consultas anteriores, lo que permite una mayor especificación de las revisiones a considerar para el cálculo de la moda, por ejemplo, calcular cuál es el mayor contribuyente a un artículo en un año determinado. Para mas detalles de los filtros y argumentos de la consulta, se presenta la tabla \ref{tab:mode}.
+Las consultas sobre la ruta \texttt{/api/v1/mode} permiten calcular el valor de un atributo con mayor frecuencia.
+Dicha consulta se realiza sobre un conjunto de revisiones que pueden ser filtradas con parámetros de búsqueda, los cuales pueden ser apreciados en la tabla \ref{tab:mode}.
+Este tipo de consulta permite, por ejemplo, calcular cuál es el mayor contribuyente a un artículo en un año determinado.
 
 \input{tables/mode}
-
 
 Por último, el API provee la ruta \texttt{/api/v1/query} que permite ejecutar consultas a la base de datos directamente de los parámetros recibidos por la petición.
 El cuerpo de las peticiones realizadas sobre esta ruta debe tener un formato JSON, en conjunto con el atributo de cabecera
@@ -256,18 +251,18 @@ adicionales para su análisis posterior.
 
 \subsection{Almacenamiento}
 
-Como fue mencionado en el Capítulo 2, la base de datos utilizada para almacenar las revisiones y artículos wiki, es MongoDB.
+Como fue mencionado en el Capítulo 2, la base de datos utilizada para almacenar las revisiones y artículos wiki es MongoDB.
 A través del proceso de extracción se almacenan dos colecciones:
 \texttt{revisions}, que representa las revisiones o historial de modificaciones del artículo wiki;
 y \texttt{articles}, que se refiere a los artículos de dichas revisiones.
-La arquitectura elegida para esta solución contiene la cantidad de elementos mínimos para implementar un cluster de base de datos en MongoDB, y cuenta con: dos sets de réplicas de shards, un set de réplicas para el servidor de configuración, y por último, un servidor de consultar.
+La arquitectura elegida para esta solución contiene la cantidad de elementos mínimos para implementar un cluster de base de datos en MongoDB, y cuenta con: dos sets de réplicas de shards, un set de réplicas para el servidor de configuración, y por último, un servidor de consultas.
 
 La tabla \ref{tab:database} representa la historia asociada al almacenamiento de los datos en MongoDB.
 
 \input{tables/database}
 
 Las colecciones están distribuidas entre dos fragmentos o shards que contienen un subgrupo de los datos fragmentados en el cluster, y la unión de estos subgrupos conforman la totalidad de los datos almacenados por la aplicación.
-Esta separación de los datos puede ser apreciada en la figura \ref{fig:sharded_database} que se presenta a continuación:
+Esta separación de los datos puede ser apreciada en la figura \ref{fig:sharded_database}.
 
 \begin{figure}[H]
 	\centering
@@ -362,7 +357,7 @@ declaración de volúmenes para mantener la persistencia de datos y
 la exposición de los puertos de RabbitMQ, MongoDB y Nginx;
 lo cual permite a las aplicaciones externas acceder a estos servicios, y en el caso de Nginx, permite que otras aplicaciones puedan ejecutar peticiones al API.
 
-Pare de la configuración de los servicios y contendedores de Docker puede ser apreciada a continuación:
+Parte de la configuración de los servicios y contendedores de Docker puede ser apreciada a continuación:
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=docker-compose-2,caption={Declaración de servicios con Docker Compose},breaklines=true,label={code:dockercompose}]

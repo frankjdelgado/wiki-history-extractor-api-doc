@@ -74,11 +74,11 @@ mencionadas. Con la presencia de varios nodos en el sistema es posible procesar 
 artículos de forma paralela, evitando cuellos de botella, y ademas, dividir la carga de almacenamiento
 entre los componentes del sistema.
 
-Este escalamiento horizontal, tal como lo explica el teorema CAP, trae consigo problemas
+Este escalamiento horizontal, tal como lo explica el teorema CAP\cite{6}, trae consigo problemas
 adicionales e  intrínsecos de todo sistema distribuido. Es imposible para un servicio garantizar las tres
 siguientes características: consistencia, disponibilidad y tolerancia a fallos. A pesar de que estas
 propiedades son esenciales, es necesario identificar qué características deben ser acopladas a
-esta nueva solución y cual debe ser sacrificada \cite{6}.
+esta nueva solución y cuál debe ser sacrificada.
 
 Por otra parte, teniendo en cuenta que con un escalamiento horizontal existen N
 nodos independientes, es innecesario mantener una comunicación entre ellos para
@@ -96,7 +96,7 @@ sistema de comunicación a emplear, y estimar su fiabilidad en casos adecuados a
 se determinará en relación al número de nodos para la solución.
 
 Por último, se debe tomar en cuenta la arquitectura y la forma en la cual los datos
-serán distribuidos entre los componentes del sistema. Determinar bajo que estrategia
+serán distribuidos entre los componentes del sistema. Determinar bajo qué estrategia
 los datos serán fragmentados y si será posible ofrecer tolerancia a fallos, consistencia y/o alta
 disponibilidad. Esto se debe a que la inclusión de miembros adicionales en un sistema trae
 como consecuencia un incremento en la complejidad de la infraestructura y su mantenimiento.
@@ -118,7 +118,7 @@ artículo.
 
 Debido a las limitaciones de un sistema centralizado, surge la necesidad implementar una nueva solución
 que permita ampliar las capacidades de almacenamiento y disminuir los cuellos de botella que se puedan
-producir durante la extracción de los historiales. Por medio de de un escalamiento horizontal
+producir durante la extracción de los historiales. Por medio de un escalamiento horizontal
 es posible hacer uso de un grupo de computadores que comparten la carga de todas las tareas a ejecutar e
 incrementar la cantidad de datos que se pueden almacenar.
 

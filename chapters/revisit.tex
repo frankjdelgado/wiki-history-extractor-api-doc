@@ -1,8 +1,8 @@
 \subsection{Algoritmo de Revisita}
 
 Una vez el proceso de extracción esta completo,
-es necesario mantener una actualización constante de los historiales declaración articulo.
-Para ello se hace uso de un algoritmo, al cual llamaremos algoritmo de revisita, que determine, acorde a ciertos coeficientes, si
+es necesario mantener una actualización constante de los historiales del artículo.
+Para ello se hace uso de un algoritmo, al cual llamaremos algoritmo de revisita, que acorde a ciertos coeficientes, evalúe si
 es necesarios ejecutar una petición de extracción de los historiales de un artículo.
 Este algoritmo es ejecutado en segundo plano como una tarea programada, y para ello
 se hace uso del programa llamado Cron.
@@ -36,7 +36,7 @@ $ crontab -e
 
 El algoritmo de revisita hace uso de un modelo probabilístico que calcula el coeficiente del tiempo revisita de cada artículo wiki de manera independiente haciendo uso de la distribución probabilística exponencial.
 
-El objetivo es buscar un valor esperado de tiempo que mida la distancia entre dos revisiones para ejecutar una revisita de una articulo wiki.
+El objetivo es buscar un valor esperado de tiempo que mida la distancia entre dos revisiones para ejecutar una revisita de un artículo wiki.
 Para ello, se plantea utilizar la fórmula de la esperanza matemática proveniente de la distribución de probabilidad exponencial, la cual es adecuada para estos casos, puesto que la misma estudia la longitud de los intervalos de una variable.
 
 Siendo $x$  una variable aleatoria que sigue una distribución exponencial, la cual mide el intervalo de tiempo transcurrido entre dos revisiones de un artículo de wiki;

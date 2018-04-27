@@ -12,26 +12,26 @@
 
 \textbf{Desarrollador} & Francisco Delgado \\
 \hline
-\textbf{Nombre} & Configuración de Shards y Replicas  \\
+\textbf{Nombre} & Configuración de Shards y Réplicas  \\
 \hline
 \textbf{Sección} & Base de Datos \\
 \hline
 \textbf{Descripción} & Configuración de los diversos nodos que incluidos dentro del cluster
 de la base de datos.
 Se configuran dos servidores para la fragmentación de datos por medio de Hashed Sharding.
-Cada un de ellos forma parte de un grupo de replicas, por lo que se hace uso de tres servidores
+Cada un de ellos forma parte de un grupo de réplicas, por lo que se hace uso de tres servidores
 por nodo de fragmentación.
 \par
-Se elige un nodo principal por cada grupo de replica, en este nodo se inicializa la configuración del grupo por medio del comando \verb|rs.initiate()|.
+Se elige un nodo principal por cada grupo de réplica, en este nodo se inicializa la configuración del grupo por medio del comando \verb|rs.initiate()|.
 Posteriormente se agregan los dos miembros restantes del grupo usando \verb|rs.add('mongors1n2:27018')| y \verb|rs.add('mongors1n3:27018')|.
-Luego, con estos grupos de replicas ya creados, se generan los shards con el siguiente comando:
+Luego, con estos grupos de réplicas ya creados, se generan los shards con el siguiente comando:
 \verb|sh.addShard('mongors1/mongors1n1:27018')|. Y, finalmente, se habilita el sharding por medio del comando \verb|sh.enableSharding('wiki_history_extractor')|
 
-Una vez las replicas y shards, han sido configurados, se genera una replica extra para el servidor de configuración, el cual ayuda a la coordinación y consulta de los shards.
+Una vez las réplicas y shards, han sido configurados, se genera una réplica extra para el servidor de configuración, el cual ayuda a la coordinación y consulta de los shards.
 
 \\
 \hline
-\textbf{Observaciones} & Para los grupos de replicas no fue implementado un algoritmo de selección
+\textbf{Observaciones} & Para los grupos de réplicas no fue implementado un algoritmo de selección
 de nodo maestro, por lo cual se hace uso del comportamiento por defecto de
 MongoDB para elegirlo.\\
 \hline
