@@ -32,3 +32,7 @@ La arquitectura del sistema distribuido desarrollado, descrito en este documento
 una solución escalable a los problemas previamente planteados, en donde la capacidad
 de un sistema centralizado es insuficiente ante la demanda progresiva de las aplicaciones de
 extracción, consulta y procesamiento de historiales de artículos wiki.
+
+Como trabajos futuros, se propone implementar una solución para la inclusión automática de nodos adicionales al clúster del API.
+También es posible implementar nuevos algoritmos para la partición de los datos entre los nodos que conforman los shards de MongoDB, y así mejorar su distribución.
+Adicionalmente, se propone la inclusión de las técnicas y diseño de bases de datos cache para mejorar la escalabilidad con nuevos nodos de menor capacidad de almacenamiento que atiendan la consulta de los datos más usados,y además, mejorar su disponibilidad y la velocidad con la que son servidos.
