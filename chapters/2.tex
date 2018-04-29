@@ -221,28 +221,27 @@ Este proceso se puede observar en la figura \ref{fig:celery}:
 
 \subsubsection{Flower}
 
-Una vez que el servicio está funcionando, atendiendo las peticiones que son enviadas y respondiendo a las mismas, es necesario tener alguna herramienta para para ver el estado de las múltiples tareas que están siendo ejecutadas. Para ello se usa Flower, una herramienta de monitoreo de Celery que utiliza una interfaz web y que permite realizar diversidad de acciones, entre las cuales están:
+Celery provee una herramienta de monitereo de tareas por medio de una interfaz web,
+la cual hace un seguimiento de todas las peticiones recibidas por RabbitMQ y la respuesta generada por los nodos trabajadores que las atienden.
+Esta herramienta es llamada Flower, y permite llevar a cabo las siguientes acciones:
 
 \begin{itemize}
 
-\item Ver el historial de las tareas que se han ejecutado.
+\item Visualizar el historial de las tareas que se han ejecutado.
 
-\item Ver el estado y progreso de las tareas en ejecución, tareas planificadas y tareas canceladas.
+\item Visualizar el estado y progreso de las tareas en ejecución, tareas planificadas y tareas canceladas.
 
-\item Mostrar los detalles relacionados a las tareas(argumentos recibidos, tiempo de inicio de la tarea, tiempo de ejecución, etc).
+\item Mostrar los detalles relacionados a cada tarea, tales como: argumentos recibidos, marca de tiempo de inicio, tiempo de ejecución, entre otros.
 
 \item Cancelar tareas.
 
-\item Ver el estado de los nodos trabajadores.
+\item Reiniciar y culminar la actividad de un trabajador.
 
-\item Reiniciar y apagar instancias de los trabajadores.
+\item Visualizar y modificar la colas de tareas.
 
-\item Ver y modificar las colas de tareas de los trabajadores.
-
-\item Aplicar limites de tiempo o rendimiento a las tareas.
+\item Aplicar límites de tiempo y de rendimiento a cada tarea.
 
 \end{itemize}
-
 
 
 \subsection{RabbitMQ}
