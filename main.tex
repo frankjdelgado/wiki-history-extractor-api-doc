@@ -19,9 +19,25 @@
 \usepackage{datetime}
 \usepackage{listingsutf8}
 \usepackage{mwe}
+\newcommand\Monthname[1][EMPTY]{%
+  \ifnum1=#1Enero\else
+  \ifnum2=#1Febrero\else
+  \ifnum3=#1Marzo\else
+  \ifnum4=#1Abril\else
+  \ifnum5=#1Mayo\else
+  \ifnum6=#1Junio\else
+  \ifnum7=#1Julio\else
+  \ifnum8=#1Agosto\else
+  \ifnum9=#1Septiembre\else
+  \ifnum10=#1Octubre\else
+  \ifnum11=#1Noviembre\else
+  \ifnum12=#1Diciembre\else
+  \fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi
+}
+\usepackage[nodayofweek]{datetime}
 
 \newdateformat{monthyeardate}{
-  \monthname[\THEMONTH], \THEYEAR
+  \Monthname[\THEMONTH], \THEYEAR
 }
 \lstdefinelanguage{docker}{
   keywords={FROM, RUN, COPY, ADD, ENTRYPOINT, CMD,  ENV, WORKDIR, EXPOSE, LABEL, USER, VOLUME, STOPSIGNAL, ONBUILD, MAINTAINER},
