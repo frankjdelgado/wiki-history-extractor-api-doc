@@ -200,13 +200,13 @@ Adicionalmente, existen mas rutas de acceso al API para la consulta de diversas 
 Durante el cálculo de estas métricas se toman como parámetros múltiples atributos, tales como: el título del artículo o la fecha de extracción.
 Dichos atributos son usados para reducir o filtrar las revisiones que se van a consultar en el cálculo de  métricas.
 
-Antes de que los parámetros de búsqueda sean utilizados, pasan por un proceso de aceptación, en donde sólo son tomados en cuenta aquellos parámetros incluidos en una lista denominada \textit{Lista Blanca}, mientras que el resto son ignorados.
+Antes que los parámetros de búsqueda sean utilizados, pasan por un proceso de aceptación, en donde sólo son tomados en cuenta aquellos parámetros incluidos en una lista denominada \textit{Lista Blanca}, mientras que el resto son ignorados.
 
 Posteriormente, se genera una tarea que será procesada en segundo plano por medio de Celery, con el tipo de consulta a realizar y los parámetros de búsqueda.
 
 El formato de algunos atributos utilizados en el proceso de búsqueda de revisiones o artículos, tales como, fecha de extracción y tamaño de la revisión, es alterado para facilitar la consulta de revisiones por un rango o intervalo determinado.
 Para los atributos que representan una fecha, se condiciona la búsqueda en base a una fecha única o un intervalo de fechas por medio de los parámetros recibidos en la petición.
-Para atributos que representan el tamaño se ejecuta un proceso similar, donde se considera un segundo argumento opcional que indica intervalo a evaluar para condicinar la consulta.
+Para atributos que representan el tamaño se ejecuta un proceso similar, donde se considera un segundo argumento opcional que indica el intervalo a evaluar para condicinar la consulta.
 
 En la tabla \ref{tab:count} se puede apreciar, con detalle, y por medio de su historia, las condiciones de búsqueda aceptadas por dicha consulta.
 
@@ -217,7 +217,7 @@ En la tabla \ref{tab:average} se presentan con mayor con detalle, por medio de s
 
 \input{tables/average}
 
-Las consultas sobre la ruta \texttt{/api/v1/mode} permiten calcular el valor de un atributo con mayor frecuencia.
+Las consultas sobre la ruta \texttt{/api/v1/mode} permiten calcular el valor mas frecuente de un atributo determinado.
 Dicha consulta se realiza sobre un conjunto de revisiones que pueden ser filtradas con parámetros de búsqueda, los cuales pueden ser apreciados en la tabla \ref{tab:mode}.
 Este tipo de consulta permite, por ejemplo, calcular cuál es el mayor contribuyente a un artículo en un año determinado.
 

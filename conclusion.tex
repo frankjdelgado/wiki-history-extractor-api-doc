@@ -3,37 +3,37 @@
 El análisis de los historiales de los artículos wiki basados en Wikimedia permite
 descubrir diversos indicadores y características que no pueden ser detalladas a simple
 vista.
-Sin embargo, para llevar a cabo estos análisis, es necesario almacenarlos en una base
-de datos, los cuales, debido a la gran cantidad de datos que pueda envolver, resulta
+Para llevar a cabo estos análisis, es necesario almacenarlos en una base
+de datos. Sin embargo, debido a la gran cantidad de datos que puede envolver, resulta
 en una tarea complicada de ejecutar debido a las limitaciones de hardware de la
 máquina.
 Estas limitaciones pueden variar desde el espacio de almacenamiento hasta disponibilidad
-de servicios y recuperación de fallos, para lo casos de las aplicaciones o servicios como
+de servicios y recuperación de fallos, para los casos de las aplicaciones o servicios como
 Wiki-Metrics-UCV.
 Hoy en día, la necesidad de diseñar aplicaciones con una arquitectura distribuida
-ha incrementado, puesto que, en muchos casos, facilita la resolución de estos problemas
-a menor costo económico que, por ejemplo, mejorar la capacidad individual de una sola máquina.
+ha incrementado, puesto que, en muchos casos, reduce o elimina estas limitantes
+a un menor costo económico que, por ejemplo, mejorar la capacidad individual de una sola máquina.
 
 Aunque la implementación de una arquitectura distribuida puede ser complicada,
-hoy en día existen herramientas facilitan esta tarea en gran medida.
+actualmente existen herramientas que facilitan esta tarea en gran medida.
 Tal es el caso del sistema de administración de bases de datos MongoDB, cuya gestión
-de datos permite implementar, de manera sencilla, aspectos como la replicación de
-de datos, que influye directamente en la habilidad de prestar un servicio de alta disponibilidad,
+de datos permite implementar, de manera sencilla, aspectos como la replicación de datos, 
+que influye directamente en la habilidad de prestar un servicio de alta disponibilidad,
 y la fragmentación de la base de datos entre múltiples máquinas.
 
 El uso de MongoDB, en conjunto con herramientas como Celery y RabbitMQ, proporcionan
 una gran ayuda a la hora de mitigar las limitaciones que conlleva el uso de un sistema centralizado, y el cumplimiento de los objetivos planteados para este Trabajo Especial de Grado.
 
-Por medio de Celery es posible ejecutar múltiples tareas, cómo la extracción de métricas de los
+Por medio de Celery es posible ejecutar múltiples tareas, como la extracción de métricas de los
 datos almacenados, evitando, por ejemplo, el colapso de un servicio web, e incluso, brinda
-de manera moderada la habilidad de recuperarse de fallos en tiempos de ejecución, puesto que gracias a RabbitMQ,
+de manera moderada la habilidad de recuperarse de fallos en tiempo de ejecución, puesto que gracias a RabbitMQ,
 es posible llevar un registro de su progreso y de las tareas pendientes a ejecutar.
 
 El desarrollo de un nuevo algoritmo para la actualización automática de las revisiones ya almacenadas, toma en cuenta nuevos parámetros que permiten una evaluación más adecuada de cada artículo.
 De esta forma se redujo la cantidad de peticiones innecesarias sobre el API de MediaWiki, incrementando la eficiencia del sistema.
 
 La inclusión de Flask, para el desarrollo del API, permite a las aplicaciones de terceros consultar y extraer
-los historiales del artículo wiki deseado, además de brindar las herramientas necesarias la ejecución
+los historiales del artículo wiki deseado, además de brindar las herramientas necesarias para la ejecución
 de consultas más especializadas y la visualización de métricas previamente definidas ya incluidas en el sistema.
 
 La arquitectura del sistema distribuido, descrito en este documento, brinda
@@ -48,10 +48,10 @@ Por otro lado, la ejecución de las tareas de Celery depende del servicio que pr
 Por lo tanto, en caso de que este servicio presente fallas, el resto de los nodos involucrados en el sistema se paraliza.
 
 Con respecto a la base de datos, dado que la misma se encuentra particionada entre diversos nodos separados geográficamente, el tiempo de respuesta para cada consulta puede ser elevado.
-Lo mismo se aplica para los diversos nodos que ejecutan el API, su ubicación en referencia al origen de las peticiones de consultas, afecta el tiempo de respuesta
+Lo mismo se aplica para los diversos nodos que ejecutan el API, su ubicación en referencia al origen de las peticiones de consultas, afecta el tiempo de respuesta.
 
 Tomando en cuenta estas limitaciones, se propone implementar nuevos algoritmos para la partición de datos entre los nodos que conforman las particiones de MongoDB, y así mejorar su distribución.
 
-Adicionalmente, se propone la inclusión de las técnicas y diseño de bases de datos cache para mejorar la escalabilidad con nuevos nodos de menor capacidad de almacenamiento que atiendan la consulta de los datos más usados, y además, mejorar su disponibilidad y la velocidad con la que son servidos.
+Adicionalmente, se propone la inclusión de las técnicas y diseño de bases de datos caché para mejorar la escalabilidad con nuevos nodos de menor capacidad de almacenamiento que atiendan la consulta de los datos más usados, y además, mejorar su disponibilidad y la velocidad con la que son servidos.
 
 Finalmente, se recomienda la descentralización de RabbitMQ a través de un escalamiento horizontal que permita la tolerancia a fallos, y a su vez, incrementar la disponibilidad del servicio.
