@@ -116,7 +116,8 @@ En la figura \ref{fig:extract_url_format} se puede apreciar dos ejemplos del uso
 La ejecución de esta tarea se lleva a cabo por medio de Celery y RabbitMQ.
 Con estas tecnologías, múltiples computadores ejecutan un proceso de Celery, los
 cuales están conectados entre si gracias a RabbitMQ, escuchando constantemente los mensajes entrantes de este servicio.
-Una vez recibida la petición por el API, se genera una tarea de extracción por medio de Celery, la cual tiene un identificador único. Esta tarea es encolada en una lista de
+Una vez recibida la petición por el API, se genera una tarea de extracción por medio de Celery, la cual tiene un identificador único.
+Esta tarea es encolada en una lista de
 espera que es atendida por uno de los trabajadores conectados a RabbitMQ y es ejecutada en segundo plano.
 Posteriormente, el API crea una respuesta a la petición generando una ruta para consultar el progreso
 del proceso de extracción, la cual luce como se muestra en la figura \ref{fig:extract_response}:
@@ -148,6 +149,8 @@ Se toma como URL por defecto la dirección https://en.wikipedia.org/w/api.php, e
 Justo antes de enviar la solicitud al API de wikipedia, se verifica que el artículo a consultar ya esté almacenado en la base de datos, en caso de no estarlo, se almacena indicando la fecha de extracción.
 Posteriormente, se extraen sus revisiones, y puesto que la respuesta del API coloca las revisiones mas recientes al principio, el extractor culmina su ejecución una vez determina que alcanzó una revisión que ya ha sido almacenada.
 Al almacenar las revisiones en la base de datos, se actualiza el documento del artículo con la fecha de la última extracción y el identificador de la revisión extraída, y por último, se actualiza el progreso de la tarea.
+Por cada página de revision extraída, el sistema espera un segundo para ejecutar la siguiente llamada al API, de esta manera se respetan los líneamientos recomendados por Mediawiki para la consulta de los datos y evitar
+la sobrecarga de su servicio. 
 
 En la figura \ref{fig:response_status} se puede apreciar un ejemplo de la consulta del progreso de las tareas:
 

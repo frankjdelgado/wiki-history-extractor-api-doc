@@ -33,6 +33,17 @@ una solución escalable a los problemas previamente planteados, en donde la capa
 de un sistema centralizado es insuficiente ante la demanda progresiva de las aplicaciones de
 extracción, consulta y procesamiento de historiales de artículos wiki.
 
-Como trabajos futuros, se propone implementar una solución para la inclusión automática de nodos adicionales al clúster del API.
-También es posible implementar nuevos algoritmos para la partición de los datos entre los nodos que conforman los shards de MongoDB, y así mejorar su distribución.
-Adicionalmente, se propone la inclusión de las técnicas y diseño de bases de datos cache para mejorar la escalabilidad con nuevos nodos de menor capacidad de almacenamiento que atiendan la consulta de los datos más usados,y además, mejorar su disponibilidad y la velocidad con la que son servidos.
+En caso de tener una gran cantidad de revisiones que extraer, los lineamientos de uso del API de MediaWiki limitan el uso de múltiples nodos para agilizar el proceso.
+A pesar de que existen múltiples nodos de extracción trabajando de forma paralela, puede que la duración del proceso de extracción se extienda demasiado, dado que existe 1 segundo de intervalo por cada página de revisiones.
+
+Por otro lado, la ejecución de las tareas de Celery depende del servicio que provee RabbitMQ, el cual es centralizado.
+Por lo tanto, en caso de que este servicio presente fallas, el resto de los nodos involucrados en el sistema se paraliza.
+
+En el caso de la base de datos, dado que la misma se encuentra particionada entre diversos nodos separados geográficamente, el tiempo de respuesta para cada consulta puede ser elevado.
+Lo mismo se aplica para los diversos nodos que ejecutan el API, su ubicación en referencia al origen de las peticiones de consultas, afecta el tiempo de respuesta
+
+Tomando en cuenta estas limitaciones, se propone implementar nuevos algoritmos para la partición de datos entre los nodos que conforman las particiones de MongoDB, y así mejorar su distribución.
+
+Adicionalmente, se propone la inclusión de las técnicas y diseño de bases de datos cache para mejorar la escalabilidad con nuevos nodos de menor capacidad de almacenamiento que atiendan la consulta de los datos más usados, y además, mejorar su disponibilidad y la velocidad con la que son servidos.
+
+Finalmente, se recomienda la descentralización de RabbitMQ a través de un escalamiento horizontal que permita la tolerancia a fallos, y a su vez, incrementar la disponibilidad del servicio.
