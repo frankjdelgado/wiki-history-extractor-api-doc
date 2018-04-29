@@ -22,13 +22,21 @@ de datos, que influye directamente en la habilidad de prestar un servicio de alt
 y la fragmentación de la base de datos entre múltiples máquinas.
 
 El uso de MongoDB, en conjunto con herramientas como Celery y RabbitMQ, proporcionan
-una gran ayuda a la hora de mitigar las limitaciones que conlleva el uso de un sistema centralizado.
+una gran ayuda a la hora de mitigar las limitaciones que conlleva el uso de un sistema centralizado, y el cumplimiento de los objetivos planteados para este Trabajo Especial de Grado.
+
 Por medio de Celery es posible ejecutar múltiples tareas, cómo la extracción de métricas de los
 datos almacenados, evitando, por ejemplo, el colapso de un servicio web, e incluso, brinda
 de manera moderada la habilidad de recuperarse de fallos en tiempos de ejecución, puesto que gracias a RabbitMQ,
-es posible llevar un registro de las tareas pendientes a ejecutar por el servicio y su progreso.
+es posible llevar un registro de su progreso y de las tareas pendientes a ejecutar.
 
-La arquitectura del sistema distribuido desarrollado, descrito en este documento, brinda
+El desarrollo de un nuevo algoritmo para la actualización automática de las revisiones ya almacenadas, toma en cuenta nuevos parámetros que permiten una evaluación más adecuada de cada artículo.
+De esta forma se redujo la cantidad de peticiones innecesarias sobre el API de MediaWiki, incrementando la eficiencia del sistema.
+
+La inclusión de Flask, para el desarrollo del API, permite a las aplicaciones de terceros consultar y extraer
+los historiales del artículo wiki deseado, además de brindar las herramientas necesarias la ejecución
+de consultas más especializadas y la visualización de métricas previamente definidas ya incluidas en el sistema.
+
+La arquitectura del sistema distribuido, descrito en este documento, brinda
 una solución escalable a los problemas previamente planteados, en donde la capacidad
 de un sistema centralizado es insuficiente ante la demanda progresiva de las aplicaciones de
 extracción, consulta y procesamiento de historiales de artículos wiki.
@@ -39,7 +47,7 @@ A pesar de que existen múltiples nodos de extracción trabajando de forma paral
 Por otro lado, la ejecución de las tareas de Celery depende del servicio que provee RabbitMQ, el cual es centralizado.
 Por lo tanto, en caso de que este servicio presente fallas, el resto de los nodos involucrados en el sistema se paraliza.
 
-En el caso de la base de datos, dado que la misma se encuentra particionada entre diversos nodos separados geográficamente, el tiempo de respuesta para cada consulta puede ser elevado.
+Con respecto a la base de datos, dado que la misma se encuentra particionada entre diversos nodos separados geográficamente, el tiempo de respuesta para cada consulta puede ser elevado.
 Lo mismo se aplica para los diversos nodos que ejecutan el API, su ubicación en referencia al origen de las peticiones de consultas, afecta el tiempo de respuesta
 
 Tomando en cuenta estas limitaciones, se propone implementar nuevos algoritmos para la partición de datos entre los nodos que conforman las particiones de MongoDB, y así mejorar su distribución.
