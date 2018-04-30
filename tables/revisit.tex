@@ -16,8 +16,11 @@
 \hline
 \textbf{Sección} & Extracción \\
 \hline
-\textbf{Descripción} & Algoritmo para la extracción de nuevas revisiones de los artículos almacenados.
-Calcula la esperanza de que un artículo tenga una o mas revisiones pendientes no almacenadas en la base de datos.
+\textbf{Descripción} & Algoritmo para la extracción de nuevas revisiones de los artículos almacenados. Calcula la esperanza matemática de cada artículo en base a la función probabilística exponencial, 
+para estimar cuando un artículo tenga una o mas revisiones pendientes no almacenadas en la base de datos. 
+\par Para el cálculo de la esperanza se toma el 10\% más reciente de revisiones, 
+y el tiempo transcurrido entre estas. 
+Con estos datos, se calcula la esperanza y se verifica si el tiempo desde la última revisión es mayor a la misma. En caso positivo, el artículo es encolado para su extracción.
 \\
 \hline
 \textbf{Observaciones} & Se ejecuta en segundo plano por medio de un cronjob diariamente.\\
